@@ -2,6 +2,18 @@
 
 All notable changes to Teamplay are documented here.
 
+## 0.5.0 — 2026-07-26
+
+- Added a mandatory Teamplay Run Report to every invocation, including
+  read-only, failed, blocked, and no-subagent runs.
+- Added registered agent type, configured model and reasoning provenance,
+  assignment, selection reason, result, handoff flow, evidence, omissions, and
+  routing observations to the final report contract.
+- Prohibited model self-identification, guessed token usage, and hidden
+  chain-of-thought from being presented as operational evidence.
+- Added `references/reporting.md` and `templates/final-report.md` for consistent
+  reports that can support later routing improvements.
+
 ## 0.4.0 — 2026-07-26
 
 - Reworked the top of the README around three beginner questions: why to use

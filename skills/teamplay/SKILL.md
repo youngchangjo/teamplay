@@ -1,7 +1,7 @@
 ---
 name: teamplay
 description: Let the current main Codex agent lead an adaptive GPT-5.6 engineering team using Luna fast specialists, Terra standard implementers and reviewers, optional Sol deep implementation, and an evidence-based final gate. Use when the user says "$teamplay", "use Teamplay", asks for an adaptive multi-agent team, or wants implementation, independent review, and QA divided among model-specific subagents.
-version: 0.4.0
+version: 0.5.0
 ---
 
 # Teamplay
@@ -11,13 +11,15 @@ agents with better work.
 
 ## Required references
 
-Before routing a Teamplay request, read all three files:
+Before routing a Teamplay request, read all four files:
 
 - `references/routing.md`
 - `references/role-contracts.md`
 - `references/evidence-contract.md`
+- `references/reporting.md`
 
-Use the packet templates when delegating research, implementation, review, or QA.
+Use the packet templates when delegating research, implementation, review, or
+QA. Use `templates/final-report.md` to close every Teamplay run.
 
 ## Entry contract
 
@@ -137,6 +139,32 @@ Separate:
 - remaining blockers and user-authorized next actions.
 
 Never call a build-only result a runtime, device, deployment, or release pass.
+
+Every Teamplay run must end with a `Teamplay Run Report`, including read-only,
+failed, blocked, or no-subagent runs. Follow `references/reporting.md` and
+`templates/final-report.md`.
+
+The report must make later routing improvements possible without exposing hidden
+chain-of-thought. Record concise decisions and observable evidence, not private
+reasoning. At minimum include:
+
+- requested entry point and resolved preset;
+- current main agent as Lead, with its model or reasoning only when runtime
+  metadata confirms them;
+- every spawned agent instance, registered `agent_type`, configured model and
+  reasoning effort, assignment, selection reason, and result;
+- roles considered but intentionally omitted, with a concise reason;
+- handoff order, retries, escalations, and review or QA repair loops;
+- changed paths or delivered artifacts;
+- exact verification, review, QA, and gate verdicts;
+- remaining blockers, unverified surfaces, and user-authorized next actions;
+- routing observations useful for improving Teamplay later.
+
+If no subagent was used, say so and record why the main Lead handled the task
+directly. Never infer actual model execution from an agent's prose. Label model
+information as `configured` unless runtime metadata independently confirms it.
+Report duration or token usage only when the runtime exposes those values; do
+not estimate them.
 
 ## Routing presets
 

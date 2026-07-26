@@ -1,7 +1,7 @@
 ---
 name: teamplay-deep
 description: Run Teamplay with the deep preset for complex implementation, architecture, difficult debugging, or thorough review. Use when the user says "$teamplay-deep" or asks Teamplay to investigate and implement deeply without taking the fast path.
-version: 0.4.0
+version: 0.5.0
 ---
 
 # Teamplay Deep
@@ -26,3 +26,6 @@ Deep means:
 
 Do not silently downgrade to the fast path. Deep does not require mutation when
 the user's request is read-only, and it does not authorize unrelated expansion.
+
+End with the core Teamplay Run Report and record which discovery, challenge,
+implementation, review, and QA lanes actually ran.

@@ -1,7 +1,7 @@
 ---
 name: teamplay-fast
 description: Run Teamplay with the fast preset for small, clear, low-risk changes. Use when the user says "$teamplay-fast", asks Teamplay to move quickly, or wants the Luna max fast implementation lane with bounded review.
-version: 0.4.0
+version: 0.5.0
 ---
 
 # Teamplay Fast
@@ -27,3 +27,6 @@ Fast does not weaken safety. If the task exposes broader design, security,
 privacy, auth, payment, data integrity, migration, deployment, destructive, or
 irreversible risk, stop the fast path and have the lead announce the required
 escalation. Never force fast completion through a higher-risk boundary.
+
+End with the core Teamplay Run Report and record whether Fast completed as
+requested or escalated to another lane.

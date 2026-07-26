@@ -80,6 +80,21 @@ normal task uses only two to four specialists. Read-heavy work can run in
 parallel; code writing stays with one agent by default to avoid shared-worktree
 conflicts.
 
+Every run ends with a **Teamplay Run Report**. It tells you which specialists
+were used, their configured models and reasoning levels, why they were selected,
+how work moved through implementation, review, and QA, and what should be tuned
+next time. If no subagent was needed, the report says that too.
+
+Example:
+
+```text
+Teamplay Run Report
+Preset: deep · Status: COMPLETE
+Team: Scout (Luna low) → Deep Coder (Sol max) → Reviewer (Terra high) → QA (Luna high)
+Result: 4 files changed · review passed after 1 repair · 12 tests passed
+Routing note: Deep Coder was selected because the change crossed concurrency boundaries.
+```
+
 ## Specialist roster
 
 The Lead is not a subagent preset. It is the current main Codex agent using the
@@ -155,6 +170,27 @@ $teamplay Treat this migration as high risk and require the final gate.
 Explicit constraints narrow the requested work, but they do not grant permission
 for releases, deletion, purchases, account changes, or other external actions.
 
+## Run reports
+
+The final report always separates configured model routing from runtime proof.
+An agent's own statement about its model is not accepted as evidence. When the
+runtime does not expose the main model, the report says `runtime metadata not
+exposed` instead of guessing.
+
+Each report includes:
+
+- entry point, resolved preset, and overall status;
+- every agent instance, configured model and effort, assignment, reason, and
+  result;
+- handoff order, parallel work, escalation, retries, and repair loops;
+- changed paths, artifacts, review, QA, gate, and release evidence;
+- omitted roles, unverified surfaces, and user-authorized next actions;
+- observable routing notes that can guide later Teamplay improvements.
+
+The report always appears inline in the final response. When you provide a
+report path or the task already has an evidence directory, Teamplay also saves a
+copy there; it does not add report files to unrelated repositories by default.
+
 ## Operating principles
 
 - The lead states assumptions and success criteria before implementation.
@@ -199,12 +235,14 @@ teamplay/
 │   ├── references/
 │   │   ├── routing.md
 │   │   ├── role-contracts.md
-│   │   └── evidence-contract.md
+│   │   ├── evidence-contract.md
+│   │   └── reporting.md
 │   └── templates/
 │       ├── task-packet.md
 │       ├── research-packet.md
 │       ├── review-packet.md
-│       └── qa-packet.md
+│       ├── qa-packet.md
+│       └── final-report.md
 ├── skills/teamplay-fast/
 │   └── SKILL.md
 ├── skills/teamplay-deep/
@@ -229,7 +267,7 @@ max_concurrent_threads_per_session = 4
 
 ## Distribution notes
 
-The current release is `0.4.0`. Before publishing it publicly, test installation
+The current release is `0.5.0`. Before publishing it publicly, test installation
 on a clean Codex profile. Model availability, reasoning levels, custom agent
 discovery, and sandbox behavior are runtime capabilities. Run the installed
 validation and a small read-only smoke task on each supported Codex surface.

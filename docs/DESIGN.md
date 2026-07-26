@@ -17,6 +17,7 @@ match the actual task without spawning an agent swarm.
    alone.
 6. Keep implementation, review, QA, gate, and release evidence separate.
 7. Use task-focused review axes instead of accumulating overlapping personas.
+8. End every run with a structured routing and evidence report.
 
 ## Entry points
 
@@ -49,6 +50,22 @@ pass.
 Reasoning effort scales work within a model; it does not make a smaller model
 universally stronger than a larger tier. Teamplay therefore treats Luna max as
 the fast bounded implementation lane, not the default for all coding.
+
+## Run observability
+
+Every invocation ends with a Teamplay Run Report. The report records the entry
+point, resolved preset, current main Lead, every spawned role and configured
+model, assignment, handoff flow, evidence layers, omissions, and observable
+routing signals.
+
+Configured agent files are the source for expected child model and reasoning
+values. Actual runtime model claims are labeled confirmed only when runtime
+metadata exposes them; agent self-identification is not proof. Duration and
+token usage are omitted when unavailable rather than estimated.
+
+This creates comparable operational records without exposing hidden
+chain-of-thought. Maintainers can later look for repeated escalation, rework,
+review findings, QA blockers, or unnecessary roles before changing the router.
 
 ## Research basis
 

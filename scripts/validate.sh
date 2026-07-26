@@ -60,16 +60,18 @@ for path in agent_files:
 assert parsed == expected, f"roster mismatch:\nactual={parsed}\nexpected={expected}"
 
 version = (package / "VERSION").read_text().strip()
-assert version == "0.4.0", version
+assert version == "0.5.0", version
 skill = (package / "skills/teamplay/SKILL.md").read_text()
 assert skill.startswith("---\nname: teamplay\n")
-assert "\nversion: 0.4.0\n---\n" in skill
+assert "\nversion: 0.5.0\n---\n" in skill
 assert "current main agent" in skill
 assert "Never spawn or delegate to a separate `teamplay-lead`" in skill
+assert "Every Teamplay run must end with a `Teamplay Run Report`" in skill
 for required in (
     "references/routing.md",
     "references/role-contracts.md",
     "references/evidence-contract.md",
+    "references/reporting.md",
 ):
     assert required in skill, f"skill missing reference: {required}"
 
@@ -87,7 +89,7 @@ shortcut_presets = {
 for shortcut, preset in shortcut_presets.items():
     shortcut_skill = (package / f"skills/{shortcut}/SKILL.md").read_text()
     assert shortcut_skill.startswith(f"---\nname: {shortcut}\n")
-    assert "\nversion: 0.4.0\n---\n" in shortcut_skill
+    assert "\nversion: 0.5.0\n---\n" in shortcut_skill
     assert "../teamplay/SKILL.md" in shortcut_skill
     assert f"requested_preset: {preset}" in shortcut_skill
 
@@ -100,6 +102,7 @@ for relative in (
     "skills/teamplay/templates/research-packet.md",
     "skills/teamplay/templates/review-packet.md",
     "skills/teamplay/templates/qa-packet.md",
+    "skills/teamplay/templates/final-report.md",
 ):
     assert (package / relative).is_file(), f"missing distribution file: {relative}"
 

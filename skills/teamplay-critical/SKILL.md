@@ -1,7 +1,7 @@
 ---
 name: teamplay-critical
 description: Run Teamplay with the critical preset for security, privacy, auth, payment, data integrity, migration, deployment, release, destructive, or irreversible work. Use when the user says "$teamplay-critical" or explicitly requires the strongest Teamplay evidence gate.
-version: 0.4.0
+version: 0.5.0
 ---
 
 # Teamplay Critical
@@ -29,3 +29,7 @@ Do not silently downgrade, skip a required evidence layer, or convert a blocked
 physical, external, deployment, or release surface into a pass. Critical does
 not itself authorize publication, release, account changes, purchases, deletion,
 or other destructive actions.
+
+End with the core Teamplay Run Report. Every required Critical evidence layer
+must have a separate verdict; missing evidence must remain `PARTIAL` or
+`BLOCKED`.
