@@ -1,13 +1,85 @@
 # Teamplay
 
-Adaptive multi-model engineering teams for Codex.
+**Give Codex one task. Teamplay builds the right AI engineering team for it.**
 
-Teamplay is a Codex skill and a set of custom agent presets that assemble the
-smallest useful engineering team for each task. It does not spawn every role on
-every run. A Sol team lead classifies the work, delegates bounded assignments,
-and combines independent implementation, review, and QA evidence.
+Teamplay lets one lead choose the best GPT-5.6 model and specialist for each
+part of a coding task. You describe the outcome once. Teamplay decides who
+should investigate, write code, review the diff, run QA, or check a high-risk
+release.
 
-## Team
+## Why use Teamplay?
+
+A single coding agent often has to search the repository, make a plan, edit the
+code, review its own work, and run every test in one long context. That can make
+the conversation noisy and the review less independent.
+
+Teamplay separates those jobs:
+
+- a **Lead** understands the request and chooses the smallest useful team;
+- a **Coder** matched to the task difficulty makes the change;
+- an independent **Reviewer** checks the real diff;
+- **QA** verifies tests, builds, UI, devices, or integrations when applicable;
+- a **Gate** is added only for security, data, migration, deployment, or release
+  risk.
+
+You do not need to select individual agents or know which model should do each
+step.
+
+## Start in 30 seconds
+
+```bash
+git clone https://github.com/youngchangjo/teamplay.git
+cd teamplay
+./scripts/install.sh
+```
+
+Restart Codex or open a new task, then use:
+
+```text
+$teamplay Add a search filter and verify that it works.
+```
+
+If you are unsure which level to choose, always start with `$teamplay`.
+
+## Choose a level
+
+| Use this | Best for | What Teamplay does | Example |
+|---|---|---|---|
+| **`$teamplay`** | Most tasks; you are not sure | Automatically chooses the smallest useful team | `$teamplay Add export to CSV.` |
+| **`$teamplay-fast`** | Copy, config, snapshots, or a small clear bug | Uses the fast Luna coder and a bounded review; escalates if risk appears | `$teamplay-fast Fix this button label.` |
+| **`$teamplay-deep`** | Difficult bugs, refactors, architecture, or several connected modules | Investigates first, challenges the plan when needed, then performs deeper implementation, review, and QA | `$teamplay-deep Refactor the sync pipeline.` |
+| **`$teamplay-critical`** | Auth, privacy, payment, data migration, deployment, release, or destructive work | Requires deep implementation, focused review, QA, and a final evidence gate | `$teamplay-critical Migrate production user data.` |
+
+There is no separate “standard” command. `$teamplay` normally chooses the
+standard Terra coder for ordinary product work and selects another lane only
+when the task calls for it.
+
+Safety rules still apply:
+
+- Fast escalates instead of forcing an unsafe quick result.
+- Deep never silently downgrades itself to Fast.
+- Critical reports `PARTIAL` or `BLOCKED` when required evidence is unavailable;
+  it does not pretend that a missing device, deployment, or release check passed.
+
+## What happens after your prompt?
+
+```text
+Your request
+    ↓
+Lead understands the goal and risk
+    ↓
+Only the needed specialists are selected
+    ↓
+Coder → independent Reviewer → QA → optional final Gate
+    ↓
+One combined result with clear evidence and remaining blockers
+```
+
+Ten roles are available, but a normal task uses only three to five. Read-heavy
+work can run in parallel; code writing stays with one agent by default to avoid
+shared-worktree conflicts.
+
+## Agent roster
 
 | Role | Model | Reasoning | Used when |
 |---|---|---:|---|
@@ -22,20 +94,6 @@ and combines independent implementation, review, and QA evidence.
 | `teamplay-qa` | GPT-5.6 Luna | high | Build, test, runtime, UI, or integration proof is possible |
 | `teamplay-gate` | GPT-5.6 Sol | high | Security, data, payment, migration, deployment, or release risk is material |
 
-The default route is adaptive:
-
-```text
-Small fix       Lead -> Fast Coder -> Reviewer
-Normal feature  Scout? -> Lead -> Standard Coder -> Reviewer -> QA
-External API    Researcher -> Lead -> Standard Coder -> Reviewer -> QA
-Ambiguous work  Scout? -> Lead -> Plan Challenger -> Standard/Deep Coder -> Reviewer -> QA
-High risk       Scout?/Researcher? -> Lead -> Plan Challenger -> Deep Coder -> Reviewer -> QA -> Gate
-Read-only ask   Lead, with Scout, Researcher, or Challenger only when useful
-```
-
-Ten roles are installed, but a normal run activates only three to five. The
-catalog is a routing menu, not a fixed ceremony.
-
 ## Why custom agent presets?
 
 Codex sessions may expose only a subset of models through direct model
@@ -43,7 +101,7 @@ overrides. Agent presets in `~/.codex/agents/` can bind a role to an available
 model and reasoning level. Teamplay uses that mechanism to make the roster
 explicit and reproducible.
 
-## Install
+## Installation details
 
 Run from the repository root:
 
@@ -80,28 +138,9 @@ for skill in teamplay teamplay-fast teamplay-deep teamplay-critical; do
 done
 ```
 
-## Usage
+## Extra control
 
-Choose an entry point and describe the outcome. No trailing mode argument is
-required:
-
-```text
-$teamplay Fix the token refresh race and verify the regression.
-$teamplay-fast Update this copy and its snapshot.
-$teamplay-deep Refactor the synchronization pipeline and verify it thoroughly.
-$teamplay-critical Perform this data migration with every evidence gate.
-```
-
-Entry points:
-
-| Skill | Preset | Behavior |
-|---|---|---|
-| `$teamplay` | auto | Select the smallest useful roster |
-| `$teamplay-fast` | fast | Prefer Luna max Fast Coder and bounded review |
-| `$teamplay-deep` | deep | Favor discovery, challenge, deeper implementation, review, and QA |
-| `$teamplay-critical` | critical | Require Deep Coder, focused review, QA, and Gate for mutations |
-
-Natural-language constraints can still override or narrow the router:
+You can add normal-language constraints without using configuration syntax:
 
 ```text
 $teamplay Review the plan only; do not implement.
@@ -109,10 +148,8 @@ $teamplay Implement this, but skip runtime QA because the device is unavailable.
 $teamplay Treat this migration as high risk and require the final gate.
 ```
 
-The Fast preset escalates instead of forcing an unsafe completion when it finds
-security, data, migration, destructive, or irreversible risk. Deep does not
-silently downgrade to Fast. Critical reports blocked or partial when a required
-evidence surface is unavailable rather than weakening the gate.
+Explicit constraints narrow the requested work, but they do not grant permission
+for releases, deletion, purchases, account changes, or other external actions.
 
 ## Operating principles
 

@@ -2,6 +2,13 @@
 
 All notable changes to Teamplay are documented here.
 
+## Unreleased
+
+- Reworked the top of the README around three beginner questions: why to use
+  Teamplay, how to start, and which level to choose.
+- Added plain-language level comparisons, concrete examples, safety behavior,
+  and a simple end-to-end workflow before the technical agent roster.
+
 ## 0.3.0 — 2026-07-26
 
 - Added `$teamplay-fast`, `$teamplay-deep`, and `$teamplay-critical` as thin
