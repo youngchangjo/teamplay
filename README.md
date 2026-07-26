@@ -27,7 +27,9 @@ step.
 
 For UI work, QA actively uses the in-app Browser for web flows and Computer Use
 for native apps, Simulator windows, and system UI. It captures visible
-before/after evidence instead of stopping at a successful build.
+before/after evidence instead of stopping at a successful build. To keep normal
+development fast, dedicated QA runs only at a meaningful milestone or final
+gate—not after every small edit.
 
 ## Start in 30 seconds
 
@@ -110,9 +112,9 @@ orchestration, Sol high is recommended but not required.
 | `teamplay-scout` | GPT-5.6 Luna | low | The relevant code or surface is unclear |
 | `teamplay-researcher` | GPT-5.6 Terra | medium | Current official docs, standards, or upstream behavior matters |
 | `teamplay-plan-challenger` | GPT-5.6 Terra | high | Requirements or the plan need an independent challenge |
-| `teamplay-coder-fast` | GPT-5.6 Luna | max | A small, clear, low-risk change fits established patterns |
-| `teamplay-coder` | GPT-5.6 Terra | high | A normal product feature spans a few files or established layers |
-| `teamplay-coder-deep` | GPT-5.6 Sol | max | Complex, cross-cutting, security, concurrency, data, or migration work |
+| `teamplay-coder-fast` | GPT-5.6 Luna | max | Owns one complete small, clear, low-risk outcome |
+| `teamplay-coder` | GPT-5.6 Terra | high | Owns one complete product vertical slice across required layers |
+| `teamplay-coder-deep` | GPT-5.6 Sol | max | Owns one complete complex, cross-cutting, security, concurrency, data, or migration goal |
 | `teamplay-reviewer` | GPT-5.6 Terra | high | A code diff needs independent review |
 | `teamplay-qa` | GPT-5.6 Luna | high | Build, test, in-app Browser, Computer Use, runtime, UI, device, or integration proof is possible |
 | `teamplay-gate` | GPT-5.6 Sol | high | Security, data, payment, migration, deployment, or release risk is material |
@@ -174,6 +176,37 @@ $teamplay Treat this migration as high risk and require the final gate.
 Explicit constraints narrow the requested work, but they do not grant permission
 for releases, deletion, purchases, account changes, or other external actions.
 
+## Faster delivery
+
+Teamplay assigns outcomes, not tiny file-by-file chores.
+
+- One Coder owns a complete vertical slice, including every directly required
+  UI, domain, data, integration, test, documentation, and configuration change.
+- Routine adjacent files and conventional implementation choices do not require
+  another Lead handoff.
+- Scout is skipped when the Coder can discover the code inside a known area.
+- Plan Challenger is skipped for clear, ordinary-risk work using established
+  patterns.
+- Reviewer checks the stable completed slice once and batches findings into one
+  repair packet.
+- Dedicated Browser, Computer Use, Simulator, device, and integration QA runs at
+  a major gate rather than after every small edit.
+
+The intended cadence is:
+
+```text
+complete implementation slice
+→ independent review
+→ one batched repair when needed
+→ focused re-review
+→ one major QA gate
+→ optional critical Gate
+```
+
+Teamplay still uses one writer by default in a shared worktree. Multiple Coders
+are used only for independently deliverable slices with disjoint ownership or
+isolated worktrees; coordination overhead is not treated as speed.
+
 ## Run reports
 
 The final report always separates configured model routing from runtime proof.
@@ -199,6 +232,19 @@ copy there; it does not add report files to unrelated repositories by default.
 
 Teamplay does not treat “the build passed” as proof that a UI works.
 
+It also does not run expensive UI QA after every change. The Lead starts QA at
+one of these larger gates:
+
+- an integrated feature is stable;
+- a complete user-visible flow is ready;
+- the branch is ready to merge;
+- a release candidate is ready;
+- critical work needs final evidence before Gate.
+
+During implementation, Coders still run narrow unit tests, lint, typecheck, and
+targeted smoke checks. Related Browser, Computer Use, Simulator, device, and
+integration scenarios are then bundled into one QA gate run.
+
 - Web apps and browser flows use `browser:control-in-app-browser`, preferring the
   in-app Browser when available and no different browser was explicitly chosen.
 - Native macOS apps, iOS Simulator windows, installed apps, and system dialogs
@@ -207,6 +253,9 @@ Teamplay does not treat “the build passed” as proof that a UI works.
 - QA records the URL or app, exact actions, expected and actual visible state,
   screenshots or equivalent artifacts, and what the selected surface cannot
   prove.
+- Passing evidence for an unchanged target may be reused. After a repair, QA
+  reruns affected failed scenarios first instead of repeating every expensive
+  scenario automatically.
 - Browser simulation, native Simulator, installed app, physical device,
   deployment, and release evidence remain separate finish lines.
 - Consequential UI actions still follow confirmation and user-authorization
@@ -259,7 +308,8 @@ teamplay/
 │   │   ├── role-contracts.md
 │   │   ├── evidence-contract.md
 │   │   ├── reporting.md
-│   │   └── qa-surfaces.md
+│   │   ├── qa-surfaces.md
+│   │   └── delivery-speed.md
 │   └── templates/
 │       ├── task-packet.md
 │       ├── research-packet.md
@@ -290,7 +340,7 @@ max_concurrent_threads_per_session = 4
 
 ## Distribution notes
 
-The current release is `0.6.0`. Before publishing it publicly, test installation
+The current release is `0.8.0`. Before publishing it publicly, test installation
 on a clean Codex profile. Model availability, reasoning levels, custom agent
 discovery, and sandbox behavior are runtime capabilities. Run the installed
 validation and a small read-only smoke task on each supported Codex surface.

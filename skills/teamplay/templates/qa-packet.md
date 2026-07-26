@@ -3,6 +3,8 @@
 ```yaml
 role: teamplay-qa
 objective:
+qa_gate: integrated-feature | user-visible-milestone | pre-merge | pre-release | critical-final-evidence
+gate_reason:
 target:
   repository:
   branch:
@@ -24,6 +26,9 @@ scenarios:
     actions: []
     expected:
 evidence_directory:
+prior_evidence:
+  reusable: []
+  invalidated: []
 required_output:
   - overallStatus
   - scenarioResults
@@ -31,6 +36,11 @@ required_output:
   - interactionEvidence
   - visualEvidence
   - surfaceLimitations
+  - qaGate
+  - testedTarget
+  - reusedEvidence
+  - invalidatedEvidence
+  - executionCount
   - blockers
   - missingPrerequisites
 ```

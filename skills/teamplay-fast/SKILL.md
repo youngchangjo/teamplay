@@ -1,7 +1,7 @@
 ---
 name: teamplay-fast
 description: Run Teamplay with the fast preset for small, clear, low-risk changes. Use when the user says "$teamplay-fast", asks Teamplay to move quickly, or wants the Luna max fast implementation lane with bounded review.
-version: 0.6.0
+version: 0.8.0
 ---
 
 # Teamplay Fast
@@ -20,7 +20,9 @@ Fast means:
 - keep the current main agent as Teamplay Lead;
 - prefer `teamplay-coder-fast` for a required mutation;
 - use `teamplay-reviewer` for meaningful code changes;
-- run cheap, directly relevant verification when available;
+- let the coder run cheap, directly relevant checks;
+- omit dedicated QA unless the user requests it or the work reaches a material
+  user-visible or risk gate;
 - omit roles that have no concrete assignment.
 
 Fast does not weaken safety. If the task exposes broader design, security,
@@ -29,4 +31,4 @@ irreversible risk, stop the fast path and have the lead announce the required
 escalation. Never force fast completion through a higher-risk boundary.
 
 End with the core Teamplay Run Report and record whether Fast completed as
-requested or escalated to another lane.
+requested or escalated to another lane, and why dedicated QA ran or was omitted.

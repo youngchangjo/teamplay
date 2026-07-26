@@ -1,7 +1,7 @@
 ---
 name: teamplay-deep
 description: Run Teamplay with the deep preset for complex implementation, architecture, difficult debugging, or thorough review. Use when the user says "$teamplay-deep" or asks Teamplay to investigate and implement deeply without taking the fast path.
-version: 0.6.0
+version: 0.8.0
 ---
 
 # Teamplay Deep
@@ -22,7 +22,8 @@ Deep means:
 - use Plan Challenger when design, ambiguity, or cross-cutting interfaces matter;
 - select Standard Coder or Deep Coder from the actual implementation depth;
 - require focused independent review for meaningful code changes;
-- run faithful QA on available requested surfaces.
+- run faithful QA once at the completed integration or user-visible milestone,
+  not after each subtask.
 
 Do not silently downgrade to the fast path. Deep does not require mutation when
 the user's request is read-only, and it does not authorize unrelated expansion.

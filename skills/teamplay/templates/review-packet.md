@@ -4,6 +4,7 @@
 role: teamplay-reviewer
 review_focus: outcome-completeness | correctness-regression | security-concurrency | general
 objective:
+completed_slice_outcome:
 baseline:
   repository:
   base_sha:
@@ -19,4 +20,5 @@ required_output:
   - blockers
   - inspectedDiff
   - evidenceChecked
+  - batchedRepairFindings
 ```

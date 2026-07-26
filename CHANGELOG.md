@@ -2,6 +2,35 @@
 
 All notable changes to Teamplay are documented here.
 
+## 0.8.0 — 2026-07-26
+
+- Expanded Coder ownership from file-sized tasks to complete user-visible or
+  integratable vertical slices.
+- Allowed Coders to handle every directly required layer, test, snapshot,
+  document, and configuration file within the approved outcome.
+- Reduced routine Lead handoffs by letting Coders resolve reversible low-risk
+  details from repository conventions.
+- Skipped Scout and Plan Challenger when they do not materially unblock clear,
+  ordinary-risk work.
+- Moved review to stable completed slices and batched findings into one repair
+  packet and focused re-review.
+- Added `references/delivery-speed.md`, expanded task and review packets, and
+  added slice and handoff observations to the final report.
+
+## 0.7.0 — 2026-07-26
+
+- Moved dedicated QA execution to named major gates instead of running it after
+  every edit, commit, or small repair.
+- Defined integrated-feature, user-visible-milestone, pre-merge, pre-release,
+  and critical-final-evidence QA gates.
+- Kept unit tests, lint, typecheck, and narrow smoke checks with Coders for fast
+  implementation feedback.
+- Added scenario coalescing, exact target identity, focused failure reruns, and
+  valid evidence reuse to reduce repeated Browser, Computer Use, Simulator,
+  device, and integration work.
+- Added QA gate name, execution count, reused evidence, and invalidated evidence
+  to packets and final reports.
+
 ## 0.6.0 — 2026-07-26
 
 - Made QA actively use `browser:control-in-app-browser` for web and browser

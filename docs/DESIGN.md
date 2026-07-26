@@ -20,6 +20,8 @@ match the actual task without spawning an agent swarm.
 8. End every run with a structured routing and evidence report.
 9. Prefer faithful interactive QA over build-only inference when a UI surface is
    available.
+10. Run dedicated QA at major gates, not after every edit or repair.
+11. Delegate coherent vertical slices rather than file-sized micro-tasks.
 
 ## Entry points
 
@@ -84,6 +86,27 @@ Browser and Computer Use evidence are deliberately separate. An in-app Browser
 pass is not native Simulator or physical-device proof, and a Simulator pass is
 not installed-device, deployment, or release proof. Each QA scenario records its
 surface, decisive actions, visual artifacts, and limitations.
+
+QA execution is intentionally gated. Coders own fast feedback such as unit
+tests, lint, typecheck, and narrow smoke checks. The Lead consolidates Browser,
+Computer Use, Simulator, device, and integration scenarios at an integrated
+feature, user-visible milestone, pre-merge, pre-release, or critical final
+evidence gate. Focused failed scenarios run after repairs; a full gate repeats
+only when broader evidence became stale or final acceptance requires it.
+
+## Delivery speed rationale
+
+The main source of avoidable latency is excessive decomposition: separate
+agents for routine discovery, one-file implementation fragments, intermediate
+reviews, and repeated QA. Teamplay instead gives one appropriately sized Coder a
+complete user-visible or integratable slice and lets it change every directly
+required layer inside the approved boundary.
+
+Scout and Researcher are used only when their answers materially unblock the
+slice. Plan Challenger is reserved for ambiguity, architecture, and risk.
+Review happens after the slice is stable, findings are batched into one repair
+packet, and QA runs at a major gate. This reduces handoffs while preserving
+independent review and faithful final evidence.
 
 ## Research basis
 

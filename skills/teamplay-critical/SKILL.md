@@ -1,7 +1,7 @@
 ---
 name: teamplay-critical
 description: Run Teamplay with the critical preset for security, privacy, auth, payment, data integrity, migration, deployment, release, destructive, or irreversible work. Use when the user says "$teamplay-critical" or explicitly requires the strongest Teamplay evidence gate.
-version: 0.6.0
+version: 0.8.0
 ---
 
 # Teamplay Critical
@@ -21,7 +21,8 @@ For a mutating implementation, Critical requires:
 - `teamplay-plan-challenger`;
 - `teamplay-coder-deep`;
 - one or more task-focused `teamplay-reviewer` passes;
-- `teamplay-qa` on every applicable requested verification surface;
+- one consolidated `teamplay-qa` run on every applicable requested verification
+  surface after the critical implementation is stable;
 - `teamplay-gate` after review and QA.
 
 Add Scout or Researcher when discovery or current external evidence is required.

@@ -4,6 +4,29 @@ Teamplay QA should verify user-visible behavior on the most faithful available
 surface. Unit tests and builds are necessary evidence when applicable, but they
 do not replace interactive UI proof.
 
+## When QA runs
+
+QA is a milestone executor, not a per-edit watcher. The Lead spawns QA only at a
+named major gate:
+
+- integrated feature gate: connected implementation is stable enough for an
+  end-to-end scenario;
+- user-visible milestone gate: a complete UI flow is ready for visual proof;
+- pre-merge gate: the intended branch or SHA is ready for acceptance;
+- pre-release gate: the release candidate and external surfaces are ready;
+- critical final evidence gate: high-risk implementation has completed review
+  and needs final proof before Gate.
+
+Coder-run unit tests, lint, typecheck, and narrow smoke checks are not separate
+QA gates. QA may prepare scenarios earlier, but it should not drive Browser,
+Computer Use, Simulator, device, or expensive integration runs until the Lead
+declares the gate.
+
+Coalesce related scenarios into one run. Reuse passing evidence only when the
+exact tested target and relevant behavior remain unchanged. After repairs,
+rerun affected failed scenarios first. Repeat the full gate only when broader
+evidence was invalidated or the final acceptance gate requires a clean run.
+
 ## Surface selection
 
 Use this order:
@@ -79,3 +102,11 @@ For each scenario capture:
 - verdict;
 - screenshot or equivalent artifact reference;
 - surface limitations and missing stronger proof.
+
+For the gate capture:
+
+- gate name and why it was reached;
+- exact tested target identity;
+- number of QA executions;
+- reused evidence and why it remained valid;
+- invalidated evidence and the change that invalidated it.

@@ -60,10 +60,10 @@ for path in agent_files:
 assert parsed == expected, f"roster mismatch:\nactual={parsed}\nexpected={expected}"
 
 version = (package / "VERSION").read_text().strip()
-assert version == "0.6.0", version
+assert version == "0.8.0", version
 skill = (package / "skills/teamplay/SKILL.md").read_text()
 assert skill.startswith("---\nname: teamplay\n")
-assert "\nversion: 0.6.0\n---\n" in skill
+assert "\nversion: 0.8.0\n---\n" in skill
 assert "current main agent" in skill
 assert "Never spawn or delegate to a separate `teamplay-lead`" in skill
 assert "Every Teamplay run must end with a `Teamplay Run Report`" in skill
@@ -73,6 +73,7 @@ for required in (
     "references/evidence-contract.md",
     "references/reporting.md",
     "references/qa-surfaces.md",
+    "references/delivery-speed.md",
 ):
     assert required in skill, f"skill missing reference: {required}"
 
@@ -90,7 +91,7 @@ shortcut_presets = {
 for shortcut, preset in shortcut_presets.items():
     shortcut_skill = (package / f"skills/{shortcut}/SKILL.md").read_text()
     assert shortcut_skill.startswith(f"---\nname: {shortcut}\n")
-    assert "\nversion: 0.6.0\n---\n" in shortcut_skill
+    assert "\nversion: 0.8.0\n---\n" in shortcut_skill
     assert "../teamplay/SKILL.md" in shortcut_skill
     assert f"requested_preset: {preset}" in shortcut_skill
 
@@ -105,6 +106,7 @@ for relative in (
     "skills/teamplay/templates/qa-packet.md",
     "skills/teamplay/templates/final-report.md",
     "skills/teamplay/references/qa-surfaces.md",
+    "skills/teamplay/references/delivery-speed.md",
 ):
     assert (package / relative).is_file(), f"missing distribution file: {relative}"
 
@@ -122,8 +124,31 @@ for required_qa_contract in (
     "Ambient open-tab context alone is not an instruction",
     "A Simulator does not prove a physical device",
     "visualEvidence",
+    "Run only when the Teamplay Lead declares a named QA gate",
+    "reusedEvidence",
 ):
     assert required_qa_contract in qa_agent, f"QA contract missing: {required_qa_contract}"
+
+coder_contracts = {
+    "teamplay-coder-fast.toml": (
+        "complete outcome",
+        "do not stop after the first file",
+    ),
+    "teamplay-coder.toml": (
+        "coherent end-to-end vertical slice",
+        "Do not stop after one layer",
+        "reasonable low-risk assumptions",
+    ),
+    "teamplay-coder-deep.toml": (
+        "coherent end-to-end goal",
+        "integratable vertical slice",
+        "unnecessary Lead handoffs",
+    ),
+}
+for coder_file, required_phrases in coder_contracts.items():
+    coder_text = (package / "agents" / coder_file).read_text()
+    for phrase in required_phrases:
+        assert phrase in coder_text, f"{coder_file} missing speed contract: {phrase}"
 
 if mode == "--installed":
     installed_agents = codex_dir / "agents"
