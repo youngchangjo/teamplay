@@ -1,7 +1,7 @@
 ---
 name: teamplay-deep
 description: Run Teamplay with the deep preset for complex implementation, architecture, difficult debugging, or thorough review. Use when the user says "$teamplay-deep" or asks Teamplay to investigate and implement deeply without taking the fast path.
-version: 0.5.0
+version: 0.6.0
 ---
 
 # Teamplay Deep

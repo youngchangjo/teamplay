@@ -1,7 +1,7 @@
 ---
 name: teamplay-critical
 description: Run Teamplay with the critical preset for security, privacy, auth, payment, data integrity, migration, deployment, release, destructive, or irreversible work. Use when the user says "$teamplay-critical" or explicitly requires the strongest Teamplay evidence gate.
-version: 0.5.0
+version: 0.6.0
 ---
 
 # Teamplay Critical

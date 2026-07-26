@@ -1,7 +1,7 @@
 ---
 name: teamplay
 description: Let the current main Codex agent lead an adaptive GPT-5.6 engineering team using Luna fast specialists, Terra standard implementers and reviewers, optional Sol deep implementation, and an evidence-based final gate. Use when the user says "$teamplay", "use Teamplay", asks for an adaptive multi-agent team, or wants implementation, independent review, and QA divided among model-specific subagents.
-version: 0.5.0
+version: 0.6.0
 ---
 
 # Teamplay
@@ -11,12 +11,13 @@ agents with better work.
 
 ## Required references
 
-Before routing a Teamplay request, read all four files:
+Before routing a Teamplay request, read all five files:
 
 - `references/routing.md`
 - `references/role-contracts.md`
 - `references/evidence-contract.md`
 - `references/reporting.md`
+- `references/qa-surfaces.md`
 
 Use the packet templates when delegating research, implementation, review, or
 QA. Use `templates/final-report.md` to close every Teamplay run.
@@ -84,6 +85,9 @@ Use only roles with concrete work:
 - `teamplay-reviewer`: review every non-trivial code change. It may be skipped
   for prose-only or trivial mechanical edits when the lead records why.
 - `teamplay-qa`: executable verification is available or specifically requested.
+  For UI work, route QA to the in-app Browser, Browser, or Computer Use surface
+  according to `references/qa-surfaces.md`; do not stop at unit or build output
+  when an interactive surface is available and relevant.
 - `teamplay-gate`: material security, payment, privacy, migration, deployment,
   release, destructive, or irreversible risk remains after review and QA.
 
@@ -110,6 +114,9 @@ which roles were intentionally omitted. Keep the update concise.
   conservative with parallel write-heavy work.
 - Respect dependencies: challenge before coding; review after the diff exists;
   QA after the intended implementation is stable; gate after review and QA.
+- Give QA the exact target URL, app, Simulator or device, primary flow, boundary
+  cases, expected observables, and evidence directory when known. Require it to
+  name the actual surface and its proof limitations.
 - Do not poll running agents aggressively. Use bounded waits and back off when
   no new mailbox state arrives. A timeout alone is not a failure.
 
@@ -157,6 +164,8 @@ reasoning. At minimum include:
 - handoff order, retries, escalations, and review or QA repair loops;
 - changed paths or delivered artifacts;
 - exact verification, review, QA, and gate verdicts;
+- interactive QA surfaces used, decisive actions, screenshots or other visual
+  evidence, and what those surfaces did not prove;
 - remaining blockers, unverified surfaces, and user-authorized next actions;
 - routing observations useful for improving Teamplay later.
 

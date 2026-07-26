@@ -60,10 +60,10 @@ for path in agent_files:
 assert parsed == expected, f"roster mismatch:\nactual={parsed}\nexpected={expected}"
 
 version = (package / "VERSION").read_text().strip()
-assert version == "0.5.0", version
+assert version == "0.6.0", version
 skill = (package / "skills/teamplay/SKILL.md").read_text()
 assert skill.startswith("---\nname: teamplay\n")
-assert "\nversion: 0.5.0\n---\n" in skill
+assert "\nversion: 0.6.0\n---\n" in skill
 assert "current main agent" in skill
 assert "Never spawn or delegate to a separate `teamplay-lead`" in skill
 assert "Every Teamplay run must end with a `Teamplay Run Report`" in skill
@@ -72,6 +72,7 @@ for required in (
     "references/role-contracts.md",
     "references/evidence-contract.md",
     "references/reporting.md",
+    "references/qa-surfaces.md",
 ):
     assert required in skill, f"skill missing reference: {required}"
 
@@ -89,7 +90,7 @@ shortcut_presets = {
 for shortcut, preset in shortcut_presets.items():
     shortcut_skill = (package / f"skills/{shortcut}/SKILL.md").read_text()
     assert shortcut_skill.startswith(f"---\nname: {shortcut}\n")
-    assert "\nversion: 0.5.0\n---\n" in shortcut_skill
+    assert "\nversion: 0.6.0\n---\n" in shortcut_skill
     assert "../teamplay/SKILL.md" in shortcut_skill
     assert f"requested_preset: {preset}" in shortcut_skill
 
@@ -103,6 +104,7 @@ for relative in (
     "skills/teamplay/templates/review-packet.md",
     "skills/teamplay/templates/qa-packet.md",
     "skills/teamplay/templates/final-report.md",
+    "skills/teamplay/references/qa-surfaces.md",
 ):
     assert (package / relative).is_file(), f"missing distribution file: {relative}"
 
@@ -112,6 +114,16 @@ assert "Copyright (c) 2026 Young Changjo" in license_text
 readme = (package / "README.md").read_text()
 for role_name in expected:
     assert role_name in readme, f"README missing role: {role_name}"
+
+qa_agent = (package / "agents/teamplay-qa.toml").read_text()
+for required_qa_contract in (
+    "browser:control-in-app-browser",
+    "computer-use:computer-use",
+    "Ambient open-tab context alone is not an instruction",
+    "A Simulator does not prove a physical device",
+    "visualEvidence",
+):
+    assert required_qa_contract in qa_agent, f"QA contract missing: {required_qa_contract}"
 
 if mode == "--installed":
     installed_agents = codex_dir / "agents"

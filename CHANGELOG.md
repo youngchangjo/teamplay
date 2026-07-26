@@ -2,6 +2,18 @@
 
 All notable changes to Teamplay are documented here.
 
+## 0.6.0 — 2026-07-26
+
+- Made QA actively use `browser:control-in-app-browser` for web and browser
+  flows, preferring the in-app Browser when appropriate.
+- Added `computer-use:computer-use` for native macOS UI, iOS Simulator windows,
+  installed apps, and system dialogs after purpose-built surfaces.
+- Added interactive before/after state, action sequence, screenshot, console,
+  network, and surface-limitation evidence requirements.
+- Kept browser simulation, native Simulator, installed app, physical device,
+  deployment, and release proof as separate finish lines.
+- Added `references/qa-surfaces.md` and expanded QA and final-report packets.
+
 ## 0.5.0 — 2026-07-26
 
 - Added a mandatory Teamplay Run Report to every invocation, including

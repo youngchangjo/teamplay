@@ -25,6 +25,10 @@ Teamplay separates those jobs:
 You do not need to select individual agents or know which model should do each
 step.
 
+For UI work, QA actively uses the in-app Browser for web flows and Computer Use
+for native apps, Simulator windows, and system UI. It captures visible
+before/after evidence instead of stopping at a successful build.
+
 ## Start in 30 seconds
 
 ```bash
@@ -110,7 +114,7 @@ orchestration, Sol high is recommended but not required.
 | `teamplay-coder` | GPT-5.6 Terra | high | A normal product feature spans a few files or established layers |
 | `teamplay-coder-deep` | GPT-5.6 Sol | max | Complex, cross-cutting, security, concurrency, data, or migration work |
 | `teamplay-reviewer` | GPT-5.6 Terra | high | A code diff needs independent review |
-| `teamplay-qa` | GPT-5.6 Luna | high | Build, test, runtime, UI, or integration proof is possible |
+| `teamplay-qa` | GPT-5.6 Luna | high | Build, test, in-app Browser, Computer Use, runtime, UI, device, or integration proof is possible |
 | `teamplay-gate` | GPT-5.6 Sol | high | Security, data, payment, migration, deployment, or release risk is material |
 
 ## Why custom agent presets?
@@ -191,6 +195,24 @@ The report always appears inline in the final response. When you provide a
 report path or the task already has an evidence directory, Teamplay also saves a
 copy there; it does not add report files to unrelated repositories by default.
 
+## Interactive QA
+
+Teamplay does not treat “the build passed” as proof that a UI works.
+
+- Web apps and browser flows use `browser:control-in-app-browser`, preferring the
+  in-app Browser when available and no different browser was explicitly chosen.
+- Native macOS apps, iOS Simulator windows, installed apps, and system dialogs
+  use purpose-built tools first and `computer-use:computer-use` for visible UI
+  interaction and screenshots.
+- QA records the URL or app, exact actions, expected and actual visible state,
+  screenshots or equivalent artifacts, and what the selected surface cannot
+  prove.
+- Browser simulation, native Simulator, installed app, physical device,
+  deployment, and release evidence remain separate finish lines.
+- Consequential UI actions still follow confirmation and user-authorization
+  rules; QA never purchases, publishes, creates credentials, accepts legal
+  terms, or permanently deletes data just to finish a scenario.
+
 ## Operating principles
 
 - The lead states assumptions and success criteria before implementation.
@@ -236,7 +258,8 @@ teamplay/
 │   │   ├── routing.md
 │   │   ├── role-contracts.md
 │   │   ├── evidence-contract.md
-│   │   └── reporting.md
+│   │   ├── reporting.md
+│   │   └── qa-surfaces.md
 │   └── templates/
 │       ├── task-packet.md
 │       ├── research-packet.md
@@ -267,7 +290,7 @@ max_concurrent_threads_per_session = 4
 
 ## Distribution notes
 
-The current release is `0.5.0`. Before publishing it publicly, test installation
+The current release is `0.6.0`. Before publishing it publicly, test installation
 on a clean Codex profile. Model availability, reasoning levels, custom agent
 discovery, and sandbox behavior are runtime capabilities. Run the installed
 validation and a small read-only smoke task on each supported Codex surface.

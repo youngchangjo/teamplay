@@ -18,6 +18,8 @@ match the actual task without spawning an agent swarm.
 6. Keep implementation, review, QA, gate, and release evidence separate.
 7. Use task-focused review axes instead of accumulating overlapping personas.
 8. End every run with a structured routing and evidence report.
+9. Prefer faithful interactive QA over build-only inference when a UI surface is
+   available.
 
 ## Entry points
 
@@ -66,6 +68,22 @@ token usage are omitted when unavailable rather than estimated.
 This creates comparable operational records without exposing hidden
 chain-of-thought. Maintainers can later look for repeated escalation, rework,
 review findings, QA blockers, or unnecessary roles before changing the router.
+
+## Interactive QA rationale
+
+QA uses purpose-built semantic, build, and simulator tools where available, then
+actively exercises visible behavior:
+
+- `browser:control-in-app-browser` owns websites, local web apps, responsive
+  layouts, and browser-visible flows. The runtime default prefers the in-app
+  Browser when the user has not explicitly selected another browser.
+- `computer-use:computer-use` owns native app windows, iOS Simulator UI, system
+  dialogs, and other visible interactions not exposed by a more specific tool.
+
+Browser and Computer Use evidence are deliberately separate. An in-app Browser
+pass is not native Simulator or physical-device proof, and a Simulator pass is
+not installed-device, deployment, or release proof. Each QA scenario records its
+surface, decisive actions, visual artifacts, and limitations.
 
 ## Research basis
 
