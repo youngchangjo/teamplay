@@ -2,10 +2,10 @@
 
 **Give Codex one task. Teamplay builds the right AI engineering team for it.**
 
-Teamplay lets one lead choose the best GPT-5.6 model and specialist for each
-part of a coding task. You describe the outcome once. Teamplay decides who
-should investigate, write code, review the diff, run QA, or check a high-risk
-release.
+Your current main Codex agent stays in charge as the Teamplay Lead. It chooses
+the best GPT-5.6 specialist for each part of a coding task. You describe the
+outcome once. Teamplay decides who should investigate, write code, review the
+diff, run QA, or check a high-risk release.
 
 ## Why use Teamplay?
 
@@ -15,7 +15,7 @@ the conversation noisy and the review less independent.
 
 Teamplay separates those jobs:
 
-- a **Lead** understands the request and chooses the smallest useful team;
+- your current main agent acts as **Lead** and chooses the smallest useful team;
 - a **Coder** matched to the task difficulty makes the change;
 - an independent **Reviewer** checks the real diff;
 - **QA** verifies tests, builds, UI, devices, or integrations when applicable;
@@ -75,15 +75,19 @@ Coder → independent Reviewer → QA → optional final Gate
 One combined result with clear evidence and remaining blockers
 ```
 
-Ten roles are available, but a normal task uses only three to five. Read-heavy
-work can run in parallel; code writing stays with one agent by default to avoid
-shared-worktree conflicts.
+The main agent remains Lead and nine specialist subagent roles are available. A
+normal task uses only two to four specialists. Read-heavy work can run in
+parallel; code writing stays with one agent by default to avoid shared-worktree
+conflicts.
 
-## Agent roster
+## Specialist roster
+
+The Lead is not a subagent preset. It is the current main Codex agent using the
+model and reasoning level you already selected for the session. For demanding
+orchestration, Sol high is recommended but not required.
 
 | Role | Model | Reasoning | Used when |
 |---|---|---:|---|
-| `teamplay-lead` | GPT-5.6 Sol | high | Every Teamplay run |
 | `teamplay-scout` | GPT-5.6 Luna | low | The relevant code or surface is unclear |
 | `teamplay-researcher` | GPT-5.6 Terra | medium | Current official docs, standards, or upstream behavior matters |
 | `teamplay-plan-challenger` | GPT-5.6 Terra | high | Requirements or the plan need an independent challenge |
@@ -181,7 +185,6 @@ teamplay/
 ├── docs/
 │   └── DESIGN.md
 ├── agents/
-│   ├── teamplay-lead.toml
 │   ├── teamplay-scout.toml
 │   ├── teamplay-researcher.toml
 │   ├── teamplay-plan-challenger.toml
@@ -226,7 +229,7 @@ max_concurrent_threads_per_session = 4
 
 ## Distribution notes
 
-The current release is `0.3.0`. Before publishing it publicly, test installation
+The current release is `0.4.0`. Before publishing it publicly, test installation
 on a clean Codex profile. Model availability, reasoning levels, custom agent
 discovery, and sandbox behavior are runtime capabilities. Run the installed
 validation and a small read-only smoke task on each supported Codex surface.

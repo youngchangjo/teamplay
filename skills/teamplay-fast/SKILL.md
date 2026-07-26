@@ -1,7 +1,7 @@
 ---
 name: teamplay-fast
 description: Run Teamplay with the fast preset for small, clear, low-risk changes. Use when the user says "$teamplay-fast", asks Teamplay to move quickly, or wants the Luna max fast implementation lane with bounded review.
-version: 0.3.0
+version: 0.4.0
 ---
 
 # Teamplay Fast
@@ -17,7 +17,7 @@ requested_preset: fast
 
 Fast means:
 
-- use `teamplay-lead`;
+- keep the current main agent as Teamplay Lead;
 - prefer `teamplay-coder-fast` for a required mutation;
 - use `teamplay-reviewer` for meaningful code changes;
 - run cheap, directly relevant verification when available;

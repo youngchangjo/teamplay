@@ -1,7 +1,7 @@
 ---
 name: teamplay-critical
 description: Run Teamplay with the critical preset for security, privacy, auth, payment, data integrity, migration, deployment, release, destructive, or irreversible work. Use when the user says "$teamplay-critical" or explicitly requires the strongest Teamplay evidence gate.
-version: 0.3.0
+version: 0.4.0
 ---
 
 # Teamplay Critical
@@ -17,7 +17,7 @@ requested_preset: critical
 
 For a mutating implementation, Critical requires:
 
-- `teamplay-lead`;
+- the current main agent acting as Teamplay Lead;
 - `teamplay-plan-challenger`;
 - `teamplay-coder-deep`;
 - one or more task-focused `teamplay-reviewer` passes;

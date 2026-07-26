@@ -12,6 +12,10 @@ install -d "$TARGET_AGENTS_DIR"
 install -d "$TARGET_SKILL_DIR/references"
 install -d "$TARGET_SKILL_DIR/templates"
 
+# Teamplay 0.4.0 moved Lead ownership to the current main agent. Remove only the
+# obsolete Teamplay-owned preset from earlier installations.
+rm -f "$TARGET_AGENTS_DIR/teamplay-lead.toml"
+
 for AGENT_FILE in "$PACKAGE_DIR"/agents/teamplay-*.toml; do
   install -m 0644 "$AGENT_FILE" "$TARGET_AGENTS_DIR/$(basename "$AGENT_FILE")"
 done

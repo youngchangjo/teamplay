@@ -26,7 +26,6 @@ codex_dir = Path(sys.argv[2])
 mode = sys.argv[3]
 
 expected = {
-    "teamplay-lead": ("gpt-5.6-sol", "high"),
     "teamplay-scout": ("gpt-5.6-luna", "low"),
     "teamplay-researcher": ("gpt-5.6-terra", "medium"),
     "teamplay-plan-challenger": ("gpt-5.6-terra", "high"),
@@ -61,10 +60,12 @@ for path in agent_files:
 assert parsed == expected, f"roster mismatch:\nactual={parsed}\nexpected={expected}"
 
 version = (package / "VERSION").read_text().strip()
-assert version == "0.3.0", version
+assert version == "0.4.0", version
 skill = (package / "skills/teamplay/SKILL.md").read_text()
 assert skill.startswith("---\nname: teamplay\n")
-assert "\nversion: 0.3.0\n---\n" in skill
+assert "\nversion: 0.4.0\n---\n" in skill
+assert "current main agent" in skill
+assert "Never spawn or delegate to a separate `teamplay-lead`" in skill
 for required in (
     "references/routing.md",
     "references/role-contracts.md",
@@ -86,7 +87,7 @@ shortcut_presets = {
 for shortcut, preset in shortcut_presets.items():
     shortcut_skill = (package / f"skills/{shortcut}/SKILL.md").read_text()
     assert shortcut_skill.startswith(f"---\nname: {shortcut}\n")
-    assert "\nversion: 0.3.0\n---\n" in shortcut_skill
+    assert "\nversion: 0.4.0\n---\n" in shortcut_skill
     assert "../teamplay/SKILL.md" in shortcut_skill
     assert f"requested_preset: {preset}" in shortcut_skill
 

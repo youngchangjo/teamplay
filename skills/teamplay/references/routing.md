@@ -12,6 +12,9 @@
 Shortcut skills must load the core Teamplay skill. They do not duplicate the
 orchestration workflow.
 
+In every route, `Lead` means the current main conversation agent. Teamplay never
+spawns a Lead subagent.
+
 ## Decision table
 
 | Signal | Add role | Reason |

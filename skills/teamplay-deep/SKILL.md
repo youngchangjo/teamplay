@@ -1,7 +1,7 @@
 ---
 name: teamplay-deep
 description: Run Teamplay with the deep preset for complex implementation, architecture, difficult debugging, or thorough review. Use when the user says "$teamplay-deep" or asks Teamplay to investigate and implement deeply without taking the fast path.
-version: 0.3.0
+version: 0.4.0
 ---
 
 # Teamplay Deep
@@ -17,7 +17,7 @@ requested_preset: deep
 
 Deep means:
 
-- use `teamplay-lead`;
+- keep the current main agent as Teamplay Lead;
 - add Scout or Researcher when discovery or external facts matter;
 - use Plan Challenger when design, ambiguity, or cross-cutting interfaces matter;
 - select Standard Coder or Deep Coder from the actual implementation depth;

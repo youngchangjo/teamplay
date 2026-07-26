@@ -1,9 +1,10 @@
 # Teamplay design rationale
 
-Teamplay is a manager-style Codex orchestration skill. One lead owns the user
-conversation and final synthesis, while narrow agents perform bounded work.
-The installed roster is intentionally larger than the active roster so routing
-can match the actual task without spawning an agent swarm.
+Teamplay is a manager-style Codex orchestration skill. The current main agent
+owns the user conversation, acts as Lead, and performs final synthesis; Lead is
+never spawned as a subagent. Narrow specialist agents perform bounded work. The
+installed roster is intentionally larger than the active roster so routing can
+match the actual task without spawning an agent swarm.
 
 ## Selection principles
 
@@ -34,8 +35,9 @@ pass.
 
 ## Model rationale
 
-- Sol high leads because orchestration needs strong judgment but should not pay
-  xhigh cost on every ordinary task.
+- The Lead keeps the model and reasoning effort selected for the current main
+  session. Sol high is recommended for demanding orchestration, but Teamplay
+  does not override the user's main-model choice.
 - Luna low handles bounded local discovery.
 - Terra medium handles current external research where source evaluation matters.
 - Luna max handles small, well-specified implementation efficiently.
@@ -75,6 +77,8 @@ usage.
 
 - Custom agent discovery can vary across Codex surfaces and versions. Restart or
   open a new task after installation and run `scripts/validate.sh --installed`.
+- Lead does not depend on custom-agent discovery because it is the current main
+  agent. Only the nine specialist presets need to be discovered after install.
 - A valid TOML file proves configuration syntax, not which model actually ran.
   Route using the registered agent type and runtime metadata where available;
   do not trust model self-identification in prose.

@@ -2,12 +2,18 @@
 
 All notable changes to Teamplay are documented here.
 
-## Unreleased
+## 0.4.0 — 2026-07-26
 
 - Reworked the top of the README around three beginner questions: why to use
   Teamplay, how to start, and which level to choose.
 - Added plain-language level comparisons, concrete examples, safety behavior,
   and a simple end-to-end workflow before the technical agent roster.
+- Moved Teamplay Lead ownership to the current main conversation agent.
+- Removed the `teamplay-lead` custom subagent preset and its extra nested handoff.
+- Kept the user's selected main model and reasoning effort; Sol high is now a
+  recommendation rather than a hard-wired Lead configuration.
+- Added an exact installer migration that removes only the obsolete
+  `~/.codex/agents/teamplay-lead.toml` file from earlier versions.
 
 ## 0.3.0 — 2026-07-26
 

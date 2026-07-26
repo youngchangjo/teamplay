@@ -1,10 +1,12 @@
 # Role contracts
 
-## Team Lead — Sol high
+## Team Lead — current main agent
 
 Owns interpretation, routing, task packets, conflict resolution, and final
-status. It may handle a read-only or truly trivial task directly. It must not
-turn orchestration into an unnecessary agent swarm.
+status. The Lead is the current main conversation agent, not a spawned subagent.
+It keeps the user's selected main model and reasoning effort, may handle a
+read-only or truly trivial task directly, and must not turn orchestration into
+an unnecessary agent swarm.
 
 ## Scout — Luna low
 

@@ -1,7 +1,7 @@
 ---
 name: teamplay
-description: Dynamically assemble a GPT-5.6 Codex engineering team using a Sol high lead, Luna fast specialists, Terra standard implementers and reviewers, optional Sol deep implementation, and an evidence-based final gate. Use when the user says "$teamplay", "use Teamplay", asks for an adaptive multi-agent team, or wants implementation, independent review, and QA divided among model-specific subagents.
-version: 0.3.0
+description: Let the current main Codex agent lead an adaptive GPT-5.6 engineering team using Luna fast specialists, Terra standard implementers and reviewers, optional Sol deep implementation, and an evidence-based final gate. Use when the user says "$teamplay", "use Teamplay", asks for an adaptive multi-agent team, or wants implementation, independent review, and QA divided among model-specific subagents.
+version: 0.4.0
 ---
 
 # Teamplay
@@ -23,16 +23,15 @@ Use the packet templates when delegating research, implementation, review, or QA
 
 When this skill is invoked:
 
-1. If you are not the `teamplay-lead`, spawn exactly one `teamplay-lead` with a
-   self-contained message containing the user's request, relevant paths,
-   constraints, current repository state when known, and requested routing
-   preset or hints. Use `fork_turns: "none"`. Wait for the lead and relay its
-   final result.
-2. If the `teamplay-lead` role is unavailable, stop before implementation and
-   tell the user to restart Codex or open a new task so newly installed agent
-   presets can be discovered. Do not silently substitute another model.
-3. If you are already the `teamplay-lead`, do not spawn another lead. Apply the
-   workflow below.
+1. You, the current main agent handling the user's conversation, are the
+   Teamplay Lead. Keep ownership of interpretation, routing, user updates,
+   conflict resolution, and final synthesis.
+2. Never spawn or delegate to a separate `teamplay-lead`. Teamplay intentionally
+   has no Lead subagent preset.
+3. Use the model and reasoning effort already selected for the current main
+   session. Teamplay does not silently replace or override the user's main model.
+4. Apply the Lead workflow below and spawn only the bounded specialist roles it
+   selects.
 
 ## Lead workflow
 
@@ -143,7 +142,7 @@ Never call a build-only result a runtime, device, deployment, or release pass.
 
 - `auto`: default `$teamplay` behavior. Select the smallest useful roster from
   the classification dimensions.
-- `fast`: requested by `$teamplay-fast`. Prefer the lead and
+- `fast`: requested by `$teamplay-fast`. Prefer
   `teamplay-coder-fast`, plus a reviewer for meaningful code changes. Add cheap
   relevant verification. If broader design, security, data, migration,
   destructive, or irreversible risk appears, stop the fast path and escalate;
