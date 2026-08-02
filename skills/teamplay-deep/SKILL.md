@@ -1,7 +1,7 @@
 ---
 name: teamplay-deep
 description: Run cost-first Teamplay with stronger specification, invariants, and evidence while keeping Luna max as the default Coder. Sol is prohibited; Terra xhigh remains explicit or evidenced post-Luna exception only. Use when the user invokes "$teamplay-deep" or asks for difficult cross-cutting work.
-version: 0.12.1
+version: 0.12.2
 ---
 
 # Teamplay Deep

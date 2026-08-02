@@ -11,9 +11,10 @@ for quality. Creating another frontier child for implementation duplicates
 expensive judgment context. Teamplay instead uses the main Lead to close
 decisions and a lower-cost Luna max child to produce the locked result.
 
-Official pages checked on 2026-08-03 showed Luna at 1/2.5 of Terra for each API
-and Codex token category. Prices are volatile evidence rather than routing
-constants, but this cost relationship is the reason Luna is the default.
+Official pages checked on 2026-08-03 showed Luna at 20% and Terra at 50% of Sol
+for every API and Codex input/cached/output category. Prices are volatile
+evidence rather than routing constants, but this cost relationship is the reason
+Luna is the default.
 
 Max reasoning is retained. The economy comes from model selection, broad
 outcome ownership, session reuse, and avoiding duplicate agents—not from
@@ -24,6 +25,12 @@ zero allocation budget and no reserved percentage; each Terra outcome requires
 its own T1 or T2 authorization. Without a valid exception, a run routes every
 implementation outcome to Luna. Falling below the floor triggers an audit of
 overly broad exceptions, never an attempt to fill a Terra percentage.
+
+For equal token volumes, all-Luna child implementation is estimated at 80%
+lower token cost than all-Sol, while Terra is 50% lower. Illustrative Luna/Terra
+token mixes yield 77-80% child savings, but Terra keeps zero allocation budget.
+Whole-workflow savings are lower because the main Lead's specification, review,
+QA, and Gate cost remains unchanged. These are estimates, not billing claims.
 
 ## No Sol children
 

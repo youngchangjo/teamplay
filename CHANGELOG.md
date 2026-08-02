@@ -2,6 +2,40 @@
 
 All notable changes to Teamplay are documented here.
 
+## 0.12.2 — 2026-08-03
+
+- Status: `complete`; Sol-baseline economics, estimated-savings scenarios,
+  Korean README localization, installation, and public/private validation pass.
+- Reframe API and Codex price tables around Sol as the 100% baseline while
+  preserving Sol's routing prohibition.
+- Add explicit per-token implementation savings and whole-workflow scenarios
+  with assumptions and limitations; Terra remains a zero-budget exception, not
+  a percentage allocation.
+- Add `README.ko.md` with the same authority, routing, lifecycle, review/QA/Gate,
+  visuals, validation, and economics contracts as the English README.
+- Official evidence rechecked on 2026-08-03: API Sol/Terra/Luna
+  `$5/$0.50/$30`, `$2.50/$0.25/$15`, `$1/$0.10/$6`; Codex credits
+  `125/12.5/750`, `62.5/6.25/375`, `25/2.5/150` per 1M
+  input/cached/output. Sol is the 100% comparison baseline only and remains
+  prohibited as a Teamplay child.
+- Added token-normalized child estimates: Luna 80% savings and Terra 50% savings
+  versus all-Sol; illustrative Luna/Terra token mixes produce 77-80% child
+  savings. Added whole-workflow scenarios that keep Main-Lead cost unchanged.
+- Explicitly label all scenarios as estimates rather than billing claims; actual
+  savings require observed token mix, retries/reasoning, context reuse, direct
+  Lead work, Fast premium, and an independently verified billing surface.
+- Added bidirectional English/Korean links and validator parity checks for model
+  allocation, Sol-baseline prices, savings assumptions, Mermaid, Lead rationale,
+  role inventory, no-Sol/no-Gate policy, and authority.
+- Validation evidence: `./scripts/validate.sh --bundle`, `./scripts/install.sh`,
+  `./scripts/validate.sh --installed`, local `teamplay_deepseek` static and full
+  preflight, shell parsing, `git diff --check`, and installed-byte comparison pass.
+- Limitation and next gate: Markdown/Mermaid are statically checked without a
+  rendered screenshot; no live usage or billing result was measured. Open a new
+  Codex task to refresh the 0.12.2 registry. No push, merge, or release was
+  performed.
+- Canonical specification: `docs/specs/TP-COST-FIRST-001-r3.md`.
+
 ## 0.12.1 — 2026-08-03
 
 - Status: `complete`; Lead-owned Gate correction, README visualization,

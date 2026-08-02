@@ -1,5 +1,7 @@
 # Teamplay
 
+[English](README.md) | [한국어](README.ko.md)
+
 Teamplay saves coding cost by assigning specification-locked implementation to
 GPT-5.6 Luna at max reasoning while the current main Codex agent keeps product
 judgment, integration, final code review, acceptance QA, and final Gate judgment.
@@ -74,12 +76,13 @@ Teamplay is not a general “pick the smartest model” router. Its purpose is t
 reuse the capable main conversation for decisions and quality control, then buy
 implementation throughput at the cheaper Luna rate.
 
-Official rates checked on 2026-08-03:
+Official rates checked on 2026-08-03, with Sol as the 100% baseline:
 
-| Surface | Luna input / cached / output | Terra input / cached / output | Luna cost |
-|---|---:|---:|---:|
-| API, USD per 1M tokens | $1 / $0.10 / $6 | $2.50 / $0.25 / $15 | 1/2.5 of Terra |
-| Codex, credits per 1M tokens | 25 / 2.5 / 150 | 62.5 / 6.25 / 375 | 1/2.5 of Terra |
+| Model | API USD per 1M input / cached / output | Codex credits per 1M input / cached / output | Cost versus Sol | Per-token savings versus Sol |
+|---|---:|---:|---:|---:|
+| Sol | $5 / $0.50 / $30 | 125 / 12.5 / 750 | 100% | 0% |
+| Terra | $2.50 / $0.25 / $15 | 62.5 / 6.25 / 375 | 50% | 50% |
+| Luna | $1 / $0.10 / $6 | 25 / 2.5 / 150 | 20% | 80% |
 
 Prices change. Recheck the official
 [model comparison](https://developers.openai.com/api/docs/models/compare) and
@@ -89,6 +92,42 @@ relationship, not hard-coded price values.
 
 Luna still runs at max reasoning. Teamplay saves by model choice and session
 reuse, not by lowering the implementation child's reasoning effort.
+
+### Estimated savings versus an all-Sol implementation baseline
+
+Because Luna, Terra, and Sol have the same ratio for input, cached input, and
+output, the token-normalized child implementation estimate is straightforward:
+
+```text
+child cost versus Sol = 20% × Luna token share + 50% × Terra token share
+child savings versus Sol = 100% - child cost versus Sol
+```
+
+| Illustrative child token routing | Child cost versus all-Sol | Estimated child savings |
+|---|---:|---:|
+| 100% Luna, no Terra exception | 20% | **80%** |
+| 95% Luna / 5% Terra | 21.5% | **78.5%** |
+| 90% Luna / 10% Terra | 23% | **77%** |
+
+The 5% and 10% rows are calculation examples, not Terra allocations. Terra's
+allocation budget remains zero and every Terra outcome still requires its own
+T1 or T2 authorization.
+
+The whole workflow saves less because the current main Lead's specification,
+review, QA, and Gate cost is unchanged. If child implementation represented a
+given share of the hypothetical all-Sol workflow cost, the approximate total
+savings would be:
+
+| Child implementation share of baseline total | Total savings at 80% child savings | Total savings at 77% child savings |
+|---|---:|---:|
+| 50% | 40% | 38.5% |
+| 70% | 56% | 53.9% |
+| 80% | 64% | 61.6% |
+
+These are estimates, not billing claims. Actual savings depend on observed
+input/cached/output tokens, reasoning and retry behavior, context reuse, the
+amount of direct Lead implementation, and any Fast premium. Use host-observed
+usage and an independently verified billing surface for an actual result.
 
 ## Model policy
 

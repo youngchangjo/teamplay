@@ -35,14 +35,20 @@ acceptance are locked, Luna max may own a large complete implementation slice.
 Prices are volatile evidence, not routing constants. Official pages checked on
 2026-08-03 listed these token rates:
 
-| Surface | Luna input / cached / output | Terra input / cached / output | Ratio |
-|---|---:|---:|---:|
-| API, USD per 1M tokens | $1 / $0.10 / $6 | $2.50 / $0.25 / $15 | Luna is 1/2.5 |
-| Codex, credits per 1M tokens | 25 / 2.5 / 150 | 62.5 / 6.25 / 375 | Luna is 1/2.5 |
+| Model | API USD per 1M input / cached / output | Codex credits per 1M input / cached / output | Cost vs Sol | Savings vs Sol |
+|---|---:|---:|---:|---:|
+| Sol | $5 / $0.50 / $30 | 125 / 12.5 / 750 | 100% | 0% |
+| Terra | $2.50 / $0.25 / $15 | 62.5 / 6.25 / 375 | 50% | 50% |
+| Luna | $1 / $0.10 / $6 | 25 / 2.5 / 150 | 20% | 80% |
 
 Recheck the official model comparison and Codex rate-card pages
 before making a current price claim. Fast may consume credits at a higher rate;
 it remains an explicit child-local speed choice.
+
+For the same token volumes, a child implementation routed entirely to Luna is
+estimated at 80% lower token cost than an all-Sol child baseline. Whole-workflow
+savings are lower because the main Lead's cost is unchanged; treat README
+scenarios as estimates, never provider billing proof.
 
 ## R0-R3 precedence
 

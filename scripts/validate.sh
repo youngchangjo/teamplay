@@ -77,11 +77,11 @@ for name, data in agents.items():
         assert features.get("fast_mode") is not True, f"unexpected Fast feature: {name}"
 
 version = (package / "VERSION").read_text().strip()
-assert version == "0.12.1", version
+assert version == "0.12.2", version
 
 skill = (package / "skills/teamplay/SKILL.md").read_text()
 assert skill.startswith("---\nname: teamplay\n")
-assert "\nversion: 0.12.1\n---\n" in skill
+assert "\nversion: 0.12.2\n---\n" in skill
 for phrase in (
     "references/execution-policy.md",
     "references/session-continuity.md",
@@ -118,18 +118,20 @@ shortcut_presets = {
 for shortcut, preset in shortcut_presets.items():
     text = (package / f"skills/{shortcut}/SKILL.md").read_text()
     assert text.startswith(f"---\nname: {shortcut}\n")
-    assert "\nversion: 0.12.1\n---\n" in text
+    assert "\nversion: 0.12.2\n---\n" in text
     assert "../teamplay/SKILL.md" in text
     assert f"requested_preset: {preset}" in text
 
 required_files = (
     "README.md",
+    "README.ko.md",
     "LICENSE",
     "CHANGELOG.md",
     "docs/DESIGN.md",
     "docs/POLICY_MOVEMENT_V0.10.md",
     "docs/specs/TP-COST-FIRST-001-r1.md",
     "docs/specs/TP-COST-FIRST-001-r2.md",
+    "docs/specs/TP-COST-FIRST-001-r3.md",
     "docs/specs/TP-CODER-LIFECYCLE-001-r2.md",
     "skills/teamplay/references/execution-policy.md",
     "skills/teamplay/references/session-continuity.md",
@@ -441,6 +443,12 @@ for phrase in (
     "$2.50 / $0.25 / $15",
     "25 / 2.5 / 150",
     "62.5 / 6.25 / 375",
+    "Sol | $5 / $0.50 / $30 | 125 / 12.5 / 750 | 100% | 0%",
+    "Luna | $1 / $0.10 / $6 | 25 / 2.5 / 150 | 20% | 80%",
+    "Estimated savings versus an all-Sol implementation baseline",
+    "100% Luna, no Terra exception | 20% | **80%**",
+    "These are estimates, not billing claims",
+    "[한국어](README.ko.md)",
     "## At a glance",
     "```mermaid",
     "Main Lead final Gate",
@@ -459,6 +467,26 @@ assert "`teamplay-gate`" not in readme
 assert not (package / "agents/teamplay-gate.toml").exists()
 installer = (package / "scripts/install.sh").read_text()
 assert 'rm -f "$TARGET_AGENTS_DIR/teamplay-gate.toml"' in installer
+
+readme_ko = (package / "README.ko.md").read_text()
+for phrase in (
+    "[English](README.md)",
+    "본체 Lead: 사양 -> 통합 -> 리뷰 -> QA -> Gate",
+    "배정 예산 0, 예약 비율 없음",
+    "왜 Luna를 먼저 쓰나",
+    "Sol을 100% 기준으로 비교했습니다",
+    "Luna | $1 / $0.10 / $6 | 25 / 2.5 / 150 | 20% | 80%",
+    "전부 Sol로 구현했을 때와 비교한 예상 절감",
+    "Luna 100%, Terra 예외 없음 | 20% | **80%**",
+    "청구 금액이 아니라 가정에 따른 추정",
+    "왜 본체가 리뷰·QA·Gate를 하나",
+    "```mermaid",
+    "설치되는 Teamplay 역할에는 Sol도 Gate도 없습니다",
+):
+    assert phrase in readme_ko, f"Korean README missing contract: {phrase}"
+for role_name in expected:
+    assert role_name in readme_ko, f"Korean README missing role: {role_name}"
+assert "`teamplay-gate`" not in readme_ko
 
 if mode == "--installed":
     installed_agents = codex_dir / "agents"
