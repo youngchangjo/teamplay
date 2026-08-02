@@ -1,14 +1,16 @@
 ---
 name: teamplay
 description: Route specification-locked implementation to GPT-5.6 Luna max or Sol max while the current main Codex agent retains integration, final spec review, and acceptance QA. Use when the user invokes Teamplay, asks for Luna implementation workers, requests optional Fast children, or wants model-aware parallel implementation.
-version: 0.11.0
+version: 0.11.1
 ---
 
 # Teamplay
 
 Teamplay separates product judgment from implementation throughput. The current
 main agent is always Lead. Children implement or advise; the Lead integrates the
-real diff and personally owns final review and QA.
+real diff and personally owns final review and QA. When a Coder remains stalled
+after the bounded same-session recovery path, the Lead directly finishes the
+unchanged whole outcome instead of multiplying or micro-splitting Coders.
 
 ## Read before routing
 
@@ -40,6 +42,8 @@ Use `templates/spec-brief.md` for one bounded ordinary outcome and
 - Keep the Lead's selected model, reasoning effort, and service tier unchanged.
 - The Lead owns specification interpretation, route choice, integration, final
   code review, acceptance QA, conflict resolution, and completion verdict.
+- The Lead may directly take over a stalled Coder's unchanged whole outcome
+  after the lifecycle contract's wait and same-session redirect.
 - Child Reviewer, QA, and Gate roles are advisory only.
 - Every Luna child uses max reasoning. Fast changes only the selected Luna
   child's service tier.
@@ -90,8 +94,10 @@ assignment for a focused check or repair.
 Closing a completed child to release a concurrency slot is resource management,
 not a restart boundary. Retain its agent ID and resume it if Lead review or QA
 produces an in-spec repair.
-Create a fresh Coder only at a documented restart boundary; record all
-spawn, message/reuse, resume, redirect, restart, and close events.
+Persistent non-progress after the redirect is a Lead takeover boundary, not a
+replacement-Coder or micro-packet boundary. Create a fresh Coder only at a
+documented restart boundary unrelated to a mid-outcome stall; record all spawn,
+wait, message/reuse, resume, redirect, restart, takeover, and close events.
 
 ### 5. Select model and pool
 
@@ -126,7 +132,28 @@ The task capsule is initial-assignment data. A same-session continuation uses
 templates/continuation-packet.md and does not resend the execution capsule or
 the full initial task.
 
-### 7. Integrate and review personally
+### 7. Recover a stalled Coder without fragmenting the outcome
+
+For silence or no evidenced mutation, first wait one bounded window tied to a
+named expected checkpoint. At the boundary, inspect the actual repository diff
+and latest host-observed agent state. Do not repeatedly poll, spawn a duplicate,
+or infer failure from long reasoning alone.
+
+If no usable progress exists, redirect the same agent ID once with the compact
+continuation packet. Request progress toward the original whole outcome or an
+explicit blocker by the next named boundary. An observable mutation checkpoint
+is allowed; component, file, command, and exact-edit packets are not.
+
+If the redirect also yields no usable progress or blocker, record
+`CODER_STALLED`, stop the child's mutation authority, and let the current main
+Lead directly finish the same locked whole outcome. Preserve valid partial work
+and prevent a late child response from mutating concurrently. Before editing,
+the Lead reopens the canonical specification and records the applicable
+requirement and acceptance checklist. Lead takeover does not consume a repair
+slot and does not waive later spec review or QA. If safe completion is not
+possible under the locked contract, use `REPLAN` or `BLOCKED`.
+
+### 8. Integrate and review personally
 
 After a stable implementation result, the Lead inspects the actual changed-file
 inventory and diff:
@@ -138,14 +165,14 @@ inventory and diff:
 Separate required defects from optional improvements. Advisory findings are
 inputs only; the Lead adjudicates them against the canonical specification.
 
-### 8. Repair within the bounded state
+### 9. Repair within the bounded state
 
 Use `references/delivery-speed.md`. Lead review and Lead QA share one maximum of
 two repair slots. One repair is the expected path. Replan when the same
 requirement fails twice, a frozen boundary changes, or another repair would
 exceed the shared budget.
 
-### 9. Execute acceptance QA personally
+### 10. Execute acceptance QA personally
 
 Use `references/qa-surfaces.md`. The Lead executes or directly observes decisive
 requirement-linked scenarios on the most faithful available surface. Keep
@@ -153,7 +180,7 @@ static, build, browser, Simulator, installed-app, physical-device, external,
 deployment, and release evidence separate. A child may prepare evidence but
 cannot issue the final QA verdict.
 
-### 10. Close honestly
+### 11. Close honestly
 
 Use `references/reporting.md` and `templates/final-report.md`. Report the spec
 revision, route, pool, implementation results, Lead review, Lead QA, advisory

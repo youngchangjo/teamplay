@@ -2,6 +2,31 @@
 
 All notable changes to Teamplay are documented here.
 
+## 0.11.1 — 2026-08-02
+
+- Status: `complete`; public bundle/installed validation and local private-route
+  synchronization pass.
+- Recovery target: wait for one named checkpoint, redirect the same Coder once,
+  then let the current main Lead take over the unchanged whole outcome when the
+  Coder remains unresponsive or makes no evidenced progress.
+- Guardrails: no file/component micro-packets, duplicate writers, or automatic
+  replacement Coder; Lead takeover must preserve the locked specification and
+  complete separate specification review and acceptance QA.
+- Added `wait` and `takeover` lifecycle evidence, `CODER_STALLED`, progress
+  fields in the continuation/report templates, revision-2 specification, and
+  three regression fixtures for named waiting, takeover, and post-takeover QA.
+- Preserved Luna max, child-local Fast, Sol routing, writer-pool limits, the
+  canonical execution capsule, and the shared two-slot review/QA repair budget.
+- Validation evidence: `./scripts/validate.sh --bundle`, `./scripts/install.sh`,
+  `./scripts/validate.sh --installed`, local `teamplay_deepseek` static and full
+  preflight, shell parsing, and `git diff --check` pass. Installed public skill
+  bytes match the bundle.
+- Limitation and next gate: no live stalled-Coder canary was run, so wait,
+  redirect, and takeover behavior remains statically enforced and per-run
+  evidence. Open a new Codex task to refresh the installed skill registry. No
+  push, merge, or release was performed.
+- Canonical specification: `docs/specs/TP-CODER-LIFECYCLE-001-r2.md`.
+
 ## 0.11.0 — 2026-08-02
 
 - Status: `complete`; public lifecycle policy, bundle/installed validation, and

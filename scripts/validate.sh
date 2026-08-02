@@ -74,11 +74,11 @@ for name, data in agents.items():
         assert features.get("fast_mode") is not True, f"unexpected Fast feature: {name}"
 
 version = (package / "VERSION").read_text().strip()
-assert version == "0.11.0", version
+assert version == "0.11.1", version
 
 skill = (package / "skills/teamplay/SKILL.md").read_text()
 assert skill.startswith("---\nname: teamplay\n")
-assert "\nversion: 0.11.0\n---\n" in skill
+assert "\nversion: 0.11.1\n---\n" in skill
 for phrase in (
     "references/execution-policy.md",
     "references/session-continuity.md",
@@ -89,6 +89,8 @@ for phrase in (
     "render-task-packet.py",
     "same session key",
     "continuation packet",
+    "CODER_STALLED",
+    "Lead directly finish",
     "Teamplay Run Report",
 ):
     assert phrase in skill, f"core skill missing: {phrase}"
@@ -101,7 +103,7 @@ shortcut_presets = {
 for shortcut, preset in shortcut_presets.items():
     text = (package / f"skills/{shortcut}/SKILL.md").read_text()
     assert text.startswith(f"---\nname: {shortcut}\n")
-    assert "\nversion: 0.11.0\n---\n" in text
+    assert "\nversion: 0.11.1\n---\n" in text
     assert "../teamplay/SKILL.md" in text
     assert f"requested_preset: {preset}" in text
 
@@ -111,6 +113,7 @@ required_files = (
     "CHANGELOG.md",
     "docs/DESIGN.md",
     "docs/POLICY_MOVEMENT_V0.10.md",
+    "docs/specs/TP-CODER-LIFECYCLE-001-r2.md",
     "skills/teamplay/references/execution-policy.md",
     "skills/teamplay/references/session-continuity.md",
     "skills/teamplay/references/routing.md",
@@ -127,10 +130,12 @@ required_files = (
     "tests/routing-fixtures.md",
     "tests/routing-results-v0.10.md",
     "tests/routing-results-v0.11.md",
+    "tests/routing-results-v0.11.1.md",
     "tests/render-results-v0.10.json",
     "tests/render-results-v0.11.json",
     "tests/lifecycle-fixtures.md",
     "tests/lifecycle-results-v0.11.md",
+    "tests/lifecycle-results-v0.11.1.md",
     "tests/baselines/prompt-pressure-v0.9.json",
     "tests/fixtures/task-standard.md",
     "tests/fixtures/task-fast.md",
@@ -139,6 +144,7 @@ required_files = (
     "tests/fixtures/task-fast-v0.11.md",
     "tests/fixtures/task-sol-v0.11.md",
     "tests/fixtures/continuation-v0.11.md",
+    "tests/fixtures/continuation-v0.11.1.md",
 )
 for relative in required_files:
     assert (package / relative).is_file(), f"missing distribution file: {relative}"
@@ -158,7 +164,7 @@ continuation_template = (
     package / "skills/teamplay/templates/continuation-packet.md"
 ).read_text()
 continuation_fixture = (
-    package / "tests/fixtures/continuation-v0.11.md"
+    package / "tests/fixtures/continuation-v0.11.1.md"
 ).read_text()
 for text, label in (
     (continuation_template, "continuation template"),
@@ -172,6 +178,9 @@ for text, label in (
         "resume",
         "redirect",
         "continuation_reason:",
+        "expected_checkpoint:",
+        "wait_boundary_reached:",
+        "observed_progress:",
         "requested_result:",
         "failed_requirement_ids:",
         "acceptance_reruns:",
@@ -266,11 +275,15 @@ for phrase in (
     "LC-04",
     "LC-05",
     "LC-06",
+    "LC-07",
+    "wait",
     "message/reuse",
     "resume",
     "redirect",
     "restart",
+    "takeover",
     "close",
+    "CODER_STALLED",
     "input_cached",
     "input_uncached",
     "output",
@@ -278,6 +291,8 @@ for phrase in (
     "provider billing",
     "reflexively poll",
     "Closing a child to release capacity does not authorize a replacement",
+    "locked whole outcome to the current main Lead",
+    "must not prescribe keystrokes",
 ):
     assert phrase in continuity, f"continuity contract missing: {phrase}"
 
@@ -285,6 +300,9 @@ final_report = (package / "skills/teamplay/templates/final-report.md").read_text
 for phrase in (
     "Outcome continuity",
     "Lifecycle diagnostics",
+    "Final implementation owner",
+    "CODER_STALLED",
+    "takeover",
     "message/reuse",
     "input_cached",
     "Billing inferred: no",
@@ -314,21 +332,33 @@ assert results.count("NOT_PROVEN") >= 3
 results_011 = (package / "tests/routing-results-v0.11.md").read_text()
 assert "14/14 preserved routing classifications" in results_011
 assert "7/7 lifecycle classifications" in results_011
+results_0111 = (package / "tests/routing-results-v0.11.1.md").read_text()
+assert "14/14 preserved routing classifications" in results_0111
+assert "7/7 lifecycle contract" in results_0111
+assert "10/10 lifecycle fixtures" in results_0111
 
 lifecycle_fixtures = (package / "tests/lifecycle-fixtures.md").read_text()
-for fixture in ("LF-01", "LF-02", "LF-03", "LF-04", "LF-05", "LF-06", "LF-07"):
+for fixture in (
+    "LF-01", "LF-02", "LF-03", "LF-04", "LF-05", "LF-06", "LF-07",
+    "LF-08", "LF-09", "LF-10",
+):
     assert fixture in lifecycle_fixtures, f"lifecycle fixture missing: {fixture}"
+assert "spawn, wait, message/reuse, resume, redirect, restart," in lifecycle_fixtures
+assert "takeover, and close" in lifecycle_fixtures
 lifecycle_results = (
-    package / "tests/lifecycle-results-v0.11.md"
+    package / "tests/lifecycle-results-v0.11.1.md"
 ).read_text()
 for phrase in (
-    "7/7 PASS",
+    "10/10 PASS",
     "LC-01",
     "LC-02",
     "LC-03",
     "LC-04",
     "LC-05",
     "LC-06",
+    "LC-07",
+    "CODER_STALLED",
+    "takeover",
     "input_cached",
     "input_uncached",
     "Billing",

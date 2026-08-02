@@ -1,4 +1,4 @@
-# Teamplay 0.11 design rationale
+# Teamplay 0.11.1 design rationale
 
 Teamplay is a specification-first manager pattern with model-aware
 implementation. The current main agent keeps product authority, integration,
@@ -69,10 +69,23 @@ delta, requested result, invalidated checks, and stop conditions. It deliberatel
 does not copy the capsule or resend the full initial task.
 
 A new Coder is justified only by a new independent outcome, a changed key after
-replan, an unavailable prior agent, or evidenced non-progress after one bounded
-redirect. A spec, authority, frozen-contract, or ownership change is a replan
-boundary. The scheduler waits for named conditions and avoids reflexive polling
-or duplicate work.
+replan, or an unavailable prior agent before meaningful outcome work begins. A
+spec, authority, frozen-contract, or ownership change is a replan boundary. The
+scheduler waits for named conditions and avoids reflexive polling or duplicate
+work.
+
+Silence is handled as a bounded recovery state, not as a reason to fragment the
+outcome. The Lead waits for one named checkpoint, inspects real diff and host
+state, and redirects the same agent once. Persistent no-response or no-progress
+becomes `CODER_STALLED`; child mutation stops and the Lead directly completes
+the unchanged whole outcome. This is cheaper and clearer than serially creating
+replacement Coders or shrinking the work into component and exact-edit packets.
+
+Lead takeover is deliberately compatible with Lead review authority. Before
+direct implementation, the Lead reopens the already locked requirements and
+acceptance checklist. After implementation, spec conformance, engineering
+integrity, and acceptance QA remain separate evidence gates; authorship cannot
+stand in for any of them.
 
 Closing a completed child can release a concurrency slot, but it does not create
 a new assignment boundary. Teamplay retains the agent identity and resumes it
@@ -80,10 +93,10 @@ for an in-spec repair until the outcome is accepted or replanned.
 
 ## Lifecycle diagnostics
 
-Run reports distinguish spawn, message/reuse, resume, redirect, restart, and
-close events. Host token diagnostics preserve cached input, uncached input,
-output, and reasoning as separate observations. They describe execution
-diagnostics, not provider billing or cost.
+Run reports distinguish spawn, wait, message/reuse, resume, redirect, restart,
+takeover, and close events. Host token diagnostics preserve cached input,
+uncached input, output, and reasoning as separate observations. They describe
+execution diagnostics, not provider billing or cost.
 
 ## Two specification levels
 
@@ -145,7 +158,7 @@ boundary means the plan was wrong and must be revised.
 
 ## Verifiable lean-harness target
 
-Teamplay preserves the 0.9 prompt-pressure baseline. Version 0.11 must show:
+Teamplay preserves the 0.9 prompt-pressure baseline. Version 0.11.1 must show:
 
 - one global policy block in each assembled prompt;
 - no copied global block in Coder TOMLs;
@@ -154,6 +167,8 @@ Teamplay preserves the 0.9 prompt-pressure baseline. Version 0.11 must show:
 - one session identity across implementation, coupled checks, feedback, and
   bounded repair;
 - explicit restart boundaries and capsule-free continuation;
+- bounded wait, one same-session redirect, and Lead takeover for a persistent
+  stall without micro-packets or replacement Coders;
 - distinct lifecycle events and non-billing token diagnostics;
 - no loss of authority, requirement coverage, Lead review, Lead QA, or evidence
   separation.

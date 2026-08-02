@@ -40,17 +40,26 @@
   and in-spec repair: PASS | PARTIAL | BLOCKED
 - Initial assignment capsule copies: 1
 - Same-session continuation capsule copies: 0
+- Final implementation owner: Coder | Lead takeover
+- Owner transition reason: none | `CODER_STALLED` | other documented boundary
 
 ## Lifecycle diagnostics
 
 | Event | Count | Agent identity/session key evidence | Limitation |
 |---|---:|---|---|
 | spawn |  |  |  |
+| wait |  |  |  |
 | message/reuse |  |  |  |
 | resume |  |  |  |
 | redirect |  |  |  |
 | restart |  |  |  |
+| takeover |  |  |  |
 | close |  |  |  |
+
+- Expected checkpoint and bounded wait condition:
+- Progress observed at wait boundary:
+- Stall verdict: `NONE | RECOVERED | CODER_STALLED`
+- Partial child work preserved or rejected against spec:
 
 Token diagnostics, when exposed by the host, are observations only:
 
@@ -73,6 +82,7 @@ Token diagnostics, when exposed by the host, are observations only:
 
 ## Lead review
 
+- Canonical specification/checklist reopened after takeover: N/A | evidence
 - Spec-conformance verdict:
 - Engineering-integrity verdict:
 - Required repairs:

@@ -23,13 +23,18 @@ a ratio is quoted or derived. Do not embed current prices in routing logic.
 - Keep implementation, coupled checks, Lead feedback, and in-spec repairs on
   the same Coder identity while the session key is unchanged.
 - Use message/reuse or resume for an unchanged key. Redirect once for bounded
-  non-progress before considering a restart, and wait only for a named result
-  or host condition; do not reflexively poll or duplicate active work.
+  non-progress after waiting for a named result or host condition and inspecting
+  the actual diff and agent state; do not reflexively poll or duplicate active
+  work.
 - Closing a child may free a concurrency slot, but it does not create a fresh
   assignment boundary. Retain and resume the same agent ID for in-spec repair.
-- Restart only for a new independent outcome, a changed key after replan, an
-  unavailable prior agent, or evidenced non-progress after the bounded
-  redirect.
+- If the redirect still yields no usable progress or blocker, record
+  `CODER_STALLED` and transfer the unchanged whole outcome to the Lead. Do not
+  create file/component packets or a serial replacement Coder.
+- Restart only for a new independent outcome, a changed key after replan, or an
+  unavailable prior agent before meaningful outcome work begins.
+- Lead takeover reopens the locked requirement and acceptance checklist before
+  editing. It is not a repair slot and never waives separate spec review or QA.
 
 ## Shared repair budget
 

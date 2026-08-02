@@ -1,7 +1,7 @@
 ---
 name: teamplay-deep
 description: Run Teamplay with stronger specification, invariants, and evidence while selecting Luna max or Sol max by consequential decision density. Use when the user invokes "$teamplay-deep" or asks for difficult cross-cutting work.
-version: 0.11.0
+version: 0.11.1
 ---
 
 # Teamplay Deep

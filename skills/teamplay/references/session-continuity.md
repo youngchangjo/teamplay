@@ -35,17 +35,21 @@ The event names below are distinct and are recorded in order:
 | Event | Meaning |
 |---|---|
 | spawn | Create the one Coder for the initial assignment. |
+| wait | Allow the active Coder one bounded window to reach a named checkpoint. |
 | message/reuse | Send focused follow-up to the still-available Coder with the same key. |
 | resume | Continue the same closed Coder with a compact packet and the same key. |
-| redirect | Give one bounded progress correction before considering a restart. |
+| redirect | Give one bounded same-session progress correction before takeover. |
 | restart | Create a fresh Coder only at an explicit boundary. |
+| takeover | End stalled child mutation and transfer the unchanged whole outcome to the Lead. |
 | close | Release an active slot while retaining the agent ID until acceptance or replan settles the outcome. |
 
 A fresh Coder is allowed only for a new independent outcome, a changed session
-key after replan, an unavailable prior agent, or evidenced non-progress that
-persists after one bounded redirect. A changed specification, authority,
-frozen contract, or ownership boundary always returns to the Lead for replan
-before mutation. Session reuse cannot preserve stale authority.
+key after replan, or an unavailable prior agent before meaningful outcome work
+begins. Persistent non-progress after one bounded redirect transfers the
+unchanged whole outcome to the Lead; it does not create a replacement-Coder or
+micro-packet boundary. A changed specification, authority, frozen contract, or
+ownership boundary always returns to the Lead for replan before mutation.
+Session reuse cannot preserve stale authority.
 
 The Lead does not reflexively poll or spawn a duplicate while the same Coder is
 active. Wait or resume is tied to a named expected event, result, or host
@@ -83,9 +87,9 @@ independent checks. Parallelism never justifies duplicate work on one outcome.
 
 ## LC-06: lifecycle and token diagnostics
 
-Run reports distinguish spawn, message/reuse, resume, redirect, restart, and
-close events, including the session key, agent identity, outcome, and
-host-observed evidence or limitation.
+Run reports distinguish spawn, wait, message/reuse, resume, redirect, restart,
+takeover, and close events, including the session key, agent identity, outcome,
+and host-observed evidence or limitation.
 
 Host token diagnostics use separate fields:
 
@@ -98,3 +102,35 @@ Each field is a host observation or unavailable. These counters describe
 diagnostics only; they never imply provider billing, price, credits, or cost.
 Record billing as not inferred unless an independently verified billing surface
 is read back.
+
+## LC-07: stalled Coder recovery and Lead takeover
+
+Silence or delayed mutation is not immediate failure. Before declaring a stall,
+the Lead records one expected checkpoint and one bounded wait condition, waits
+without reflexive polling, then inspects both the actual repository diff and the
+latest host-observed agent state.
+
+If there is still no usable response or evidenced progress, send one redirect
+to the same agent ID. The redirect asks for progress toward the original whole
+outcome or an explicit blocker by the next named boundary. It may name an
+observable mutation checkpoint, but it must not prescribe keystrokes, split the
+outcome by file or component, or create another Coder.
+
+If the same Coder still produces neither usable progress nor a blocker, record
+`CODER_STALLED`, stop or close its mutation authority, and transfer the same
+locked whole outcome to the current main Lead. A late child response cannot
+mutate concurrently after takeover. Preserve and inspect any valid partial work
+rather than discarding it merely because the child stalled.
+
+Lead takeover is an implementation-owner transition, not an automatic replan
+or repair slot. Before editing, the Lead reopens the canonical specification and
+records the applicable requirement and acceptance checklist. After editing, the
+Lead still performs the separate requirement-by-requirement spec review,
+engineering-integrity review, and acceptance QA on the real artifact. The
+Lead's authorship, a clean diff, or passing Coder checks cannot substitute for
+those gates.
+
+If the Lead cannot safely finish within the locked authority, specification, or
+available validation surface, return to `REPLAN` or `BLOCKED`. Never hide the
+stall by spawning serial replacement Coders or shrinking the original outcome
+into file, component, command, or exact-edit packets.

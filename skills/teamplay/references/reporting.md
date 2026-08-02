@@ -15,16 +15,25 @@ Report:
 8. advisory findings and Lead adjudication when used;
 9. runtime identity as host-observed `PASS` or honest `NOT_PROVEN`;
 10. external/release state, limitations, blockers, and next authority gate.
-11. lifecycle events: spawn, message/reuse, resume, redirect, restart, and
-    close, with the session key, Coder identity, outcome, and evidence state;
+11. lifecycle events: spawn, wait, message/reuse, resume, redirect, restart,
+    takeover, and close, with the session key, Coder identity, outcome, and
+    evidence state;
 12. host token diagnostics as separate input_cached, input_uncached, output,
     and reasoning fields, plus an explicit statement that billing is not
     inferred.
+13. any `CODER_STALLED` verdict, expected checkpoint, bounded wait condition,
+    observed progress, implementation-owner transition, and preserved partial
+    work.
 
 The initial assignment records one canonical execution capsule. A same-session
 continuation records zero capsule copies and references the unchanged session
 key. Lifecycle events are orchestration evidence, not proof that product
 behavior, runtime identity, deployment, or release state passed.
+
+A Lead takeover report must show that the unchanged locked specification and
+acceptance checklist were reopened before direct implementation, then report
+the later spec-conformance review and acceptance QA as distinct gates. Never
+present Lead authorship or passing implementation checks as those verdicts.
 
 ## Overall status
 

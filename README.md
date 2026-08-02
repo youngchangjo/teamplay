@@ -4,7 +4,7 @@ Teamplay lets the current main Codex agent keep product judgment, integration,
 final specification review, and acceptance QA while GPT-5.6 Luna or Sol owns a
 bounded implementation outcome.
 
-Version 0.11 is model-aware and lifecycle-bounded:
+Version 0.11.1 is model-aware and lifecycle-bounded:
 
 - Luna is always max and handles work whose behavior and contracts are decided;
 - Sol is selected before coding when consequential technical judgment remains;
@@ -18,6 +18,8 @@ Version 0.11 is model-aware and lifecycle-bounded:
   fixtures, docs, and configuration;
 - one unchanged session key reuses one Coder identity through implementation,
   Lead feedback, and bounded in-spec repair;
+- a stalled Coder gets one named wait and one same-session redirect before the
+  current main Lead takes over the unchanged whole outcome;
 - the current main Lead reviews the actual diff against the written spec and
   personally performs final QA.
 
@@ -157,18 +159,26 @@ one canonical execution capsule. A same-session continuation uses the compact
 contains no capsule copy or full-task resend.
 
 The only restart boundaries are a new independent outcome, a changed key after
-replan, an unavailable prior agent, or evidenced non-progress that persists
-after one bounded redirect. Spec, authority, frozen-contract, and ownership
-changes always return to the Lead before mutation. Scheduling waits for named
-conditions and does not reflexively poll or duplicate active work.
+replan, or an unavailable prior agent before meaningful outcome work begins.
+Spec, authority, frozen-contract, and ownership changes always return to the
+Lead before mutation. Scheduling waits for named conditions and does not
+reflexively poll or duplicate active work.
+
+When a Coder is silent or shows no evidenced mutation, the Lead first waits one
+bounded window for a named checkpoint, inspects the real diff and agent state,
+then redirects the same agent once. If progress still does not arrive, Teamplay
+records `CODER_STALLED`, stops child mutation, and the Lead finishes the same
+locked whole outcome. It does not spawn serial replacements or split the work
+into file, component, command, or exact-edit packets.
 
 Closing a completed child may free a concurrency slot, but it does not create a
 new assignment. Teamplay retains the agent ID and resumes the same Coder for an
 in-spec Lead review or QA repair.
 
-Lifecycle reports distinguish spawn, message/reuse, resume, redirect, restart,
-and close. Host diagnostics keep input_cached, input_uncached, output, and
-reasoning counters separate; counters are diagnostics and never billing proof.
+Lifecycle reports distinguish spawn, wait, message/reuse, resume, redirect,
+restart, takeover, and close. Host diagnostics keep input_cached,
+input_uncached, output, and reasoning counters separate; counters are
+diagnostics and never billing proof.
 
 ## Review, QA, and repairs
 
@@ -181,6 +191,10 @@ The Lead then executes or directly observes requirement-linked acceptance QA.
 Review and QA share at most two repair slots; one is the normal expectation. A
 second failure of the same requirement, a frozen-boundary change, or a third
 repair request forces replanning.
+
+After a stalled-Coder takeover, the Lead reopens the locked requirement and
+acceptance checklist before editing, then runs these same review and QA gates as
+separate stages. Lead authorship is not a review or QA verdict.
 
 ## Fast and current economics
 
