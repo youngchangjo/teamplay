@@ -17,17 +17,20 @@ assignment:
   session_key:
   initial_assignment: true
   route:
-    model:
-    reasoning_effort: max
+    economic_default: Luna max
+    model: gpt-5.6-luna | gpt-5.6-terra
+    reasoning_effort: max | xhigh
     service_tier: standard | fast
-    luna_predicates:
+    readiness:
       L1:
       L2:
       L3:
       L4:
       L5:
       L6:
-    sol_signal:
+    terra_exception: none | T1 explicit_user_terra | T2 evidenced_luna_capability_blocker
+    terra_exception_evidence:
+    sol_child_selected: false
   pool:
     size:
     wave:

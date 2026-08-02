@@ -6,7 +6,10 @@
 - Repository baseline:
 - Model and service tier per slice:
 - Coder count and isolation:
-- L1-L6 results or Sol signals per slice:
+- Economic default per slice: `Luna max`
+- L1-L6 delegation-readiness results per slice:
+- Terra exception and evidence per slice: `none | T1 | T2`
+- Sol child selected per slice: `no`
 
 ## Goal, non-goals, authority, and stop boundaries
 

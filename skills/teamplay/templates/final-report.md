@@ -18,8 +18,12 @@
 
 - R0 authority:
 - R1 specification readiness:
-- R2 model: Luna max Standard | Luna max Fast | Sol max
-- L1-L6 results or Sol signal:
+- R2 economic default: Luna max
+- R2 selected model: Luna max Standard | Luna max Fast | Terra xhigh
+- L1-L6 delegation-readiness results:
+- Terra exception: none | T1 explicit_user_terra | T2 evidenced_luna_capability_blocker
+- Terra exception evidence:
+- Sol child selected: no
 - R3 pool, isolation, and shared-surface owner:
 
 ## Rendered assignment evidence

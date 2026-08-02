@@ -25,9 +25,9 @@ risk, and unverifiable acceptance. The Lead resolves its advisory verdict.
 
 ## Luna Coder
 
-Mutating implementation owner selected only after L1-L6 pass. Standard and Fast
-share one role contract; Fast changes only the child tier. It stops when an
-eligibility predicate proves false.
+Default mutating implementation owner selected after L1-L6 readiness passes.
+Standard and Fast share one role contract; Fast changes only the child tier. It
+stops when a readiness check proves false.
 
 All mutating Coders own one coherent, independently integratable outcome across
 their directly coupled established layers. They keep one identity through
@@ -35,13 +35,15 @@ implementation, focused checks, Lead feedback, and bounded in-spec repair while
 the session key is unchanged. A file, command, test failure, or repair is not a
 new assignment, and a continuation does not resend the execution capsule.
 
-## Sol Coder
+## Terra exception Coder
 
-Mutating implementation owner selected proactively when a Luna predicate fails
-or Sol is directly requested. It may resolve only the locked technical decision
-space and does not own product interpretation.
+Maximum-strength Teamplay child, fixed at Terra xhigh. It is selected only when
+the user directly requests Terra or a prior Luna attempt provides the concrete
+capability-blocker evidence required by routing.md. Difficulty and a failed
+readiness check are not enough. It does not own product interpretation.
 
-The shared mutating-Coder continuity contract above applies equally to Sol.
+The shared mutating-Coder continuity contract above applies equally to Terra.
+No Teamplay role may select Sol at any effort.
 
 ## Reviewer
 

@@ -1,29 +1,84 @@
 # Teamplay
 
-Teamplay lets the current main Codex agent keep product judgment, integration,
-final specification review, and acceptance QA while GPT-5.6 Luna or Sol owns a
-bounded implementation outcome.
+Teamplay saves coding cost by assigning specification-locked implementation to
+GPT-5.6 Luna at max reasoning while the current main Codex agent keeps product
+judgment, integration, final code review, and acceptance QA.
 
-Version 0.11.1 is model-aware and lifecycle-bounded:
+```text
+Main Lead: specification -> integration -> review -> QA
+Luna max: implementation -> focused checks -> bounded repair
+```
 
-- Luna is always max and handles work whose behavior and contracts are decided;
-- Sol is selected before coding when consequential technical judgment remains;
-- one ordinary outcome uses a compact Spec Brief;
-- parallel or coordination-heavy work uses a Full Spec Lock;
-- shared child policy is rendered once from one canonical source;
-- one Coder is default, auto may choose two, and three requires an explicit
-  request plus proven isolation;
-- Reviewer, QA, and Gate children remain advisory;
-- one coherent outcome includes its directly coupled implementation, checks,
-  fixtures, docs, and configuration;
-- one unchanged session key reuses one Coder identity through implementation,
-  Lead feedback, and bounded in-spec repair;
-- a stalled Coder gets one named wait and one same-session redirect before the
-  current main Lead takes over the unchanged whole outcome;
-- the current main Lead reviews the actual diff against the written spec and
-  personally performs final QA.
+The economic rule is deliberately simple:
 
-## Install
+- Luna max is the default and first implementation Coder.
+- A task being hard, large, ambiguous, deep, critical, cross-cutting, or
+  security-sensitive does not select a stronger child.
+- The Lead resolves consequential decisions and locks the specification before
+  delegation.
+- Terra xhigh is the strongest Teamplay child and is an explicit or evidenced
+  post-Luna exception only.
+- Teamplay never creates a Sol child at any reasoning effort.
+
+## Why Luna first
+
+Teamplay is not a general “pick the smartest model” router. Its purpose is to
+reuse the capable main conversation for decisions and quality control, then buy
+implementation throughput at the cheaper Luna rate.
+
+Official rates checked on 2026-08-03:
+
+| Surface | Luna input / cached / output | Terra input / cached / output | Luna cost |
+|---|---:|---:|---:|
+| API, USD per 1M tokens | $1 / $0.10 / $6 | $2.50 / $0.25 / $15 | 1/2.5 of Terra |
+| Codex, credits per 1M tokens | 25 / 2.5 / 150 | 62.5 / 6.25 / 375 | 1/2.5 of Terra |
+
+Prices change. Recheck the official
+[model comparison](https://developers.openai.com/api/docs/models/compare) and
+[Codex rate card](https://help.openai.com/en/articles/20001106-codex-rate-card)
+before making a current cost claim. The routing contract uses the cost-first
+relationship, not hard-coded price values.
+
+Luna still runs at max reasoning. Teamplay saves by model choice and session
+reuse, not by lowering the implementation child's reasoning effort.
+
+## Model policy
+
+### Default: Luna max
+
+After the Lead locks requirements, consequential decisions, interfaces,
+ownership, and acceptance, Teamplay starts Luna max for the complete
+implementation outcome. File count is irrelevant: one Luna may change every
+directly required code, test, fixture, document, and configuration surface.
+
+If the task initially contains unresolved architecture, concurrency, migration,
+security, lifecycle, or product decisions, the Lead resolves them first. That
+work may require a Full Spec Lock, but it does not authorize an initial Terra or
+Sol Coder.
+
+### Exception ceiling: Terra xhigh
+
+Terra xhigh is allowed only when one record exists:
+
+- `T1 explicit_user_terra`: the user directly requests a Terra implementation
+  child.
+- `T2 evidenced_luna_capability_blocker`: Luna already attempted the same locked
+  whole outcome and returned concrete requirement/check evidence that
+  clarification or same-Luna repair cannot resolve economically.
+
+The words “hard,” “deep,” and “critical” do not satisfy T1. Slow reasoning,
+silence, no file mutation, an ordinary failed test, or one review defect does
+not satisfy T2. A stalled Luna transfers the unchanged outcome to the Lead after
+the bounded recovery path; it does not escalate models.
+
+### Sol: unavailable
+
+Teamplay never selects GPT-5.6 Sol for implementation, review, QA, Gate, rescue,
+or any preset. A request for a Sol child is rejected; Terra xhigh is the maximum
+available child route. Teamplay also never changes the model or effort already
+selected for the current main Lead.
+
+## Quick start
 
 ```bash
 git clone https://github.com/youngchangjo/teamplay.git
@@ -31,174 +86,48 @@ cd teamplay
 ./scripts/install.sh
 ```
 
-Restart Codex or open a new task to refresh custom-agent registration.
+Restart Codex or open a new task after installation so custom-agent
+registration refreshes.
 
-## Entry points
+Then ask normally:
 
-| Command | Route |
+```text
+$teamplay Implement this locked export specification.
+$teamplay-fast Implement these two independent outcomes with Fast Luna children.
+$teamplay-deep Implement this migration with a stronger specification and QA plan.
+$teamplay-critical Implement this auth change under the locked threat model.
+```
+
+All four start from Luna max. Deep and Critical strengthen the specification and
+evidence; they do not select Terra or Sol by name.
+
+## What the Lead does
+
+The current main conversation agent is always Teamplay Lead. It:
+
+1. reads repository instructions, `CHANGELOG.md`, code, and validation surfaces;
+2. confirms authority and locks a Spec Brief or Full Spec Lock;
+3. resolves consequential decisions before delegation;
+4. selects Luna max by default and the smallest safe writer pool;
+5. integrates and inspects the actual diff;
+6. reviews every requirement against the written specification;
+7. performs an engineering-integrity review;
+8. executes or directly observes acceptance QA;
+9. reports evidence, limitations, and external/release state separately.
+
+Children cannot approve their own implementation or issue the final completion
+verdict.
+
+## Presets
+
+| Command | Behavior |
 |---|---|
-| `$teamplay` | Luna max Standard when L1-L6 pass; otherwise authorized/spec-ready Sol max |
-| `$teamplay-fast` | Same route, with child-local Fast only when Luna is selected |
-| `$teamplay-deep` | Stronger invariants and evidence; same model route |
-| `$teamplay-critical` | Threat- and rollback-aware spec; optional advisory Gate |
+| `$teamplay` | Luna max Standard, one writer by default |
+| `$teamplay-fast` | Luna max with child-local Fast; Lead unchanged |
+| `$teamplay-deep` | Luna max with richer invariants, rollback, and evidence |
+| `$teamplay-critical` | Luna max with threat and recovery boundaries; optional Terra high advisory Gate |
 
-Examples:
-
-```text
-$teamplay Implement the written export Spec Brief.
-$teamplay-fast Use two Luna coders for these independent locked outcomes.
-$teamplay Use Sol for this bounded but ambiguous lifecycle defect.
-```
-
-## Routing order
-
-Teamplay always evaluates:
-
-```text
-R0 authority -> R1 specification -> R2 model -> R3 writer pool
-```
-
-Unauthorized or unresolved user-authority work is blocked before model choice.
-Sol is not an escape hatch for missing authority.
-
-### Luna max
-
-Luna is selected only when all six predicates pass:
-
-- requirements are closed;
-- acceptance is executable;
-- contracts are frozen;
-- consequential decision density is zero;
-- remaining risk is ordinary;
-- ownership and validation are bounded.
-
-File count is not a routing signal. A mechanical 30-file propagation can fit
-Luna; a two-file concurrency or ownership decision can require Sol.
-
-### Sol max
-
-Sol is selected proactively when a Luna predicate fails or the user directly
-requests Sol, provided authority and specification readiness pass. Typical
-signals are unresolved technical architecture, consequential interfaces,
-security/auth/payment/permission semantics, concurrency and lifecycle,
-migration/data integrity, rollback/recovery, or an ambiguous cross-component
-defect.
-
-Sol remains an implementation child. It does not take final product
-interpretation, review, QA, or completion ownership from the Lead.
-
-## Specification levels
-
-### Spec Brief
-
-Use [spec-brief.md](skills/teamplay/templates/spec-brief.md) for one bounded
-outcome. It records requirement anchors, ownership, frozen contracts, observable
-acceptance, allowed local judgment, and exact validation without a full matrix
-or per-file recipe.
-
-### Full Spec Lock
-
-Use [spec-contract.md](skills/teamplay/templates/spec-contract.md) for parallel
-writers, cross-owner coordination, consequential shared contracts, critical
-risk, migration/recovery, or coordinated QA. Touching a lockfile or manifest by
-itself does not force Full Lock when one Coder owns a predetermined result.
-
-## Writer pool
-
-| Size | Rule |
-|---:|---|
-| 1 | Default; shared mutable work also stays with one owner |
-| 2 | Auto only for independent outcomes with frozen contracts and independent checks |
-| 3 | Explicit user request plus disjoint ownership or isolated worktrees |
-
-Never use a fourth mutating Coder in one wave. Every shared mutable surface has
-one Coder owner or belongs to the Lead's serial integration step.
-
-## Roles
-
-| Role | Configuration | Purpose |
-|---|---|---|
-| Current main Lead | Current session unchanged | Spec, route, integration, final review, QA |
-| `teamplay-coder` | Luna max | Clear locked implementation outcome |
-| `teamplay-coder-fast` | Luna max + Fast | Same contract, accelerated child tier |
-| `teamplay-coder-deep` | Sol max | Consequential technical judgment inside a locked decision space |
-| `teamplay-scout` | Luna low, read-only | Targeted repository discovery |
-| `teamplay-researcher` | Terra medium, read-only | Current primary-source verification |
-| `teamplay-plan-challenger` | Terra high, read-only | Pre-lock contradiction challenge |
-| `teamplay-reviewer` | Terra high, read-only | Advisory spec and engineering findings |
-| `teamplay-qa` | Luna high | Advisory evidence collection |
-| `teamplay-gate` | Sol high, read-only | Advisory critical-risk audit |
-
-## One execution capsule
-
-Shared authority, ownership, evidence, and escalation policy lives only in
-[execution-policy.md](skills/teamplay/references/execution-policy.md). The Lead
-uses [render-task-packet.py](skills/teamplay/scripts/render-task-packet.py) to
-prepend the exact delimited policy block to a task capsule. The renderer reports
-capsule, task, and rendered-prompt SHA-256 values.
-
-Custom Coder prompts remain role-specific. They do not copy the global policy.
-Validation requires one exact capsule in the assembled prompt and rejects
-path-only or manually duplicated policy.
-
-The lifecycle rules are documented in
-[session-continuity.md](skills/teamplay/references/session-continuity.md);
-the canonical execution capsule remains the only shared child-policy block.
-
-## One outcome, one Coder session
-
-An outcome is an independently integratable behavior or milestone, including
-every directly coupled established layer. A file, command, checklist item,
-focused check, Lead feedback packet, or repair is not a new outcome.
-
-The session key is the spec ID and revision, outcome ID, route, and owned
-surfaces. An unchanged key keeps the same Coder identity for implementation,
-coupled checks, Lead feedback, and in-spec repair. The initial assignment has
-one canonical execution capsule. A same-session continuation uses the compact
-[continuation packet](skills/teamplay/templates/continuation-packet.md) and
-contains no capsule copy or full-task resend.
-
-The only restart boundaries are a new independent outcome, a changed key after
-replan, or an unavailable prior agent before meaningful outcome work begins.
-Spec, authority, frozen-contract, and ownership changes always return to the
-Lead before mutation. Scheduling waits for named conditions and does not
-reflexively poll or duplicate active work.
-
-When a Coder is silent or shows no evidenced mutation, the Lead first waits one
-bounded window for a named checkpoint, inspects the real diff and agent state,
-then redirects the same agent once. If progress still does not arrive, Teamplay
-records `CODER_STALLED`, stops child mutation, and the Lead finishes the same
-locked whole outcome. It does not spawn serial replacements or split the work
-into file, component, command, or exact-edit packets.
-
-Closing a completed child may free a concurrency slot, but it does not create a
-new assignment. Teamplay retains the agent ID and resumes the same Coder for an
-in-spec Lead review or QA repair.
-
-Lifecycle reports distinguish spawn, wait, message/reuse, resume, redirect,
-restart, takeover, and close. Host diagnostics keep input_cached,
-input_uncached, output, and reasoning counters separate; counters are
-diagnostics and never billing proof.
-
-## Review, QA, and repairs
-
-The Lead performs two review passes on the real diff:
-
-1. requirement-by-requirement spec conformance;
-2. engineering integrity and regression risk.
-
-The Lead then executes or directly observes requirement-linked acceptance QA.
-Review and QA share at most two repair slots; one is the normal expectation. A
-second failure of the same requirement, a frozen-boundary change, or a third
-repair request forces replanning.
-
-After a stalled-Coder takeover, the Lead reopens the locked requirement and
-acceptance checklist before editing, then runs these same review and QA gates as
-separate stages. Lead authorship is not a review or QA verdict.
-
-## Fast and current economics
-
-The Fast role contains both:
+Fast affects only eligible Luna children:
 
 ```toml
 service_tier = "fast"
@@ -207,19 +136,104 @@ service_tier = "fast"
 fast_mode = true
 ```
 
-Fast affects only the Luna child. It does not lower intelligence or change the
-Lead.
+Fast changes speed and consumption, not reasoning, specification, review, or QA.
+It is optional because official guidance notes that Fast consumes credits at a
+higher rate.
 
-Prices are not routing constants. For context, direct official model Markdown
-checked on 2026-08-02 listed Luna API input/cached/output at
-`$0.20/$0.02/$1.20` per million tokens versus Sol at `$5/$0.50/$30`, a derived
-`1/25` ratio. The current Codex rate card reported Luna `5/0.5/30` versus Sol
-`125/12.5/750` credits, also `1/25`. Recheck before making a current cost claim:
-[Luna model](https://developers.openai.com/api/docs/models/gpt-5.6-luna),
-[Sol model](https://developers.openai.com/api/docs/models/gpt-5.6-sol),
-[Codex rate card](https://help.openai.com/en/articles/20001106-codex-rate-card).
+## One or more Luna Coders
 
-Lower cost supports Luna delegation only after its eligibility predicates pass.
+| Writers | Rule |
+|---:|---|
+| 1 | Default, including shared mutable work |
+| 2 | Automatic only for complete independent outcomes with frozen contracts and independent checks |
+| 3 | Explicit user request plus disjoint ownership or isolated worktrees |
+
+Never use a fourth mutating Coder in one wave. Multiple Coders are a throughput
+option, not a way to split one feature into files, components, shell commands,
+or exact edits.
+
+Every shared manifest, lockfile, generated output, or other mutable integration
+surface has one owner or belongs to the Lead's serial integration step.
+
+## One outcome, one Coder session
+
+One outcome includes all directly coupled implementation, tests, fixtures,
+documentation, and configuration. The same Coder identity stays with that
+outcome through focused checks, Lead feedback, and bounded in-spec repairs while
+the session key remains unchanged.
+
+The initial assignment contains one canonical execution capsule. Continuations
+reuse the same session with a compact delta packet and contain no capsule or full
+task copy.
+
+For a silent or non-mutating Coder:
+
+```text
+named bounded wait
+-> inspect actual diff and agent state
+-> one redirect to the same agent
+-> CODER_STALLED
+-> stop child mutation
+-> Lead finishes the unchanged whole outcome
+```
+
+Stall recovery never creates a Terra or Sol Coder and never micro-splits the
+outcome. After Lead takeover, the Lead reopens the locked requirement checklist
+and still performs separate review and acceptance QA.
+
+See
+[session-continuity.md](skills/teamplay/references/session-continuity.md) for the
+normative lifecycle contract.
+
+## Specification and assignment
+
+Use [spec-brief.md](skills/teamplay/templates/spec-brief.md) for one bounded
+outcome. Use [spec-contract.md](skills/teamplay/templates/spec-contract.md) when
+parallel ownership, consequential shared contracts, migration/recovery, or
+critical evidence requires a Full Spec Lock.
+
+Shared child policy lives once in
+[execution-policy.md](skills/teamplay/references/execution-policy.md). The Lead
+renders it with the task capsule:
+
+```bash
+python3 skills/teamplay/scripts/render-task-packet.py \
+  --policy skills/teamplay/references/execution-policy.md \
+  --task <task-capsule.md>
+```
+
+The renderer reports canonical capsule, task, and rendered-prompt SHA-256
+values. Coder role prompts do not duplicate the global policy.
+
+## Review, QA, and repair
+
+The Lead performs these gates on the real artifact:
+
+1. requirement-by-requirement specification conformance;
+2. correctness, regression, security, privacy, concurrency, compatibility,
+   maintainability, and meaningful-test review;
+3. requirement-linked acceptance QA on the most faithful available surface.
+
+Review and QA share at most two in-spec repair slots. A repeated failure of the
+same requirement, changed frozen boundary, or need for another repair returns to
+replanning. Child tests and advisory reports are supporting evidence only.
+
+## Installed roles
+
+| Role | Configuration | Purpose |
+|---|---|---|
+| Current main Lead | Existing session unchanged | Specification, integration, final review, QA |
+| `teamplay-coder` | Luna max | Default implementation owner |
+| `teamplay-coder-fast` | Luna max + Fast | Optional accelerated implementation owner |
+| `teamplay-coder-deep` | Terra xhigh | T1/T2 exception implementation owner |
+| `teamplay-scout` | Luna max, read-only | Targeted repository discovery |
+| `teamplay-researcher` | Terra medium, read-only | Current primary-source verification |
+| `teamplay-plan-challenger` | Terra high, read-only | Optional pre-lock contradiction challenge |
+| `teamplay-reviewer` | Terra high, read-only | Optional advisory findings |
+| `teamplay-qa` | Luna max | Optional evidence collection |
+| `teamplay-gate` | Terra high, read-only | Optional critical-risk audit |
+
+No installed Teamplay role uses Sol.
 
 ## Validate
 
@@ -229,15 +243,13 @@ Lower cost supports Luna delegation only after its eligibility predicates pass.
 ./scripts/validate.sh --installed
 ```
 
-The suite parses all role TOML, verifies Luna/Sol max and Fast-only settings,
-renders Standard/Fast/Sol fixture prompts, checks exact capsule hashes, audits
-duplicates, enforces prompt-pressure reduction, and checks installed bytes.
+Validation parses every role, rejects all Sol child models, verifies Luna max,
+Terra xhigh ceilings, and Fast-only settings, renders representative assignments,
+checks capsule hashes and prompt pressure, classifies routing/lifecycle fixtures,
+and compares installed bytes.
 
-Routing fixtures are in [routing-fixtures.md](tests/routing-fixtures.md), with
-0.11 continuity fixtures and results in tests/lifecycle-fixtures.md and
-tests/lifecycle-results-v0.11.md. Live
-runtime identity must come from host or agent-registry metadata. When unavailable,
-the honest result is `NOT_PROVEN`, not a child-reported PASS.
+Configured models prove intent only. Live runtime identity requires host or
+agent-registry evidence; otherwise report `NOT_PROVEN`.
 
 ## Authority
 

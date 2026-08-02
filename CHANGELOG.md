@@ -2,6 +2,47 @@
 
 All notable changes to Teamplay are documented here.
 
+## 0.12.0 — 2026-08-03
+
+- Status: `complete`; cost-first routing, rewritten README, bundle/installed
+  validation, and local private-route synchronization pass.
+- Primary correction: Luna max is the default implementation Coder because
+  Teamplay exists to reduce implementation cost while the current main Lead
+  retains specification, review, and QA. Difficulty alone must not create an
+  initial Sol Coder.
+- Sol children are prohibited. Terra xhigh is the maximum child route and is
+  allowed only by explicit user selection or an evidenced post-Luna capability
+  blocker; stalls continue to transfer to the Lead.
+- Pricing observation verified against current official API and Codex rate
+  cards; prices remain evidence, not hard-coded routing constants.
+- Removed every Sol child configuration. The former Sol implementation Coder
+  now uses Terra xhigh and the former Sol Gate uses Terra high; Terra xhigh is
+  the maximum Teamplay child route.
+- Enforced max reasoning for every Luna role, including Scout and advisory QA,
+  while retaining Luna max as the default implementation Coder.
+- Restricted Terra implementation to `T1 explicit_user_terra` or
+  `T2 evidenced_luna_capability_blocker`; difficulty, failed readiness, normal
+  defects, and stalls cannot escalate models.
+- Reclassified hard authentication, lifecycle, migration, and ambiguous-defect
+  fixtures as Lead-specification work followed by Luna max implementation.
+- Rewrote README around the economic premise, current model ceiling, complete
+  Luna-first workflow, multiple-Coder boundaries, session continuity, and
+  specification-based Lead review/QA.
+- Official evidence observed on 2026-08-03: API Luna `$1/$0.10/$6` versus Terra
+  `$2.50/$0.25/$15`; Codex Luna `25/2.5/150` versus Terra
+  `62.5/6.25/375` per 1M input/cached/output tokens or credits. Luna is 1/2.5
+  of Terra in each category; values remain volatile and non-normative.
+- Added `TP-COST-FIRST-001-r1`, 16/16 routing classifications, no-Sol role
+  inspection, and versioned Standard/Fast/Terra render fixtures and hashes.
+- Validation evidence: `./scripts/validate.sh --bundle`, `./scripts/install.sh`,
+  `./scripts/validate.sh --installed`, local `teamplay_deepseek` static and full
+  preflight, shell parsing, and `git diff --check` pass. Installed public skill
+  and role bytes match the bundle.
+- Limitation and next gate: no fresh live Luna/Fast/Terra/no-Sol canary was run;
+  runtime identity remains `NOT_PROVEN`. Open a new Codex task to refresh the
+  installed agent registry. No push, merge, or release was performed.
+- Canonical specification: `docs/specs/TP-COST-FIRST-001-r1.md`.
+
 ## 0.11.1 — 2026-08-02
 
 - Status: `complete`; public bundle/installed validation and local private-route

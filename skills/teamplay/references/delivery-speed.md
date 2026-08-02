@@ -8,7 +8,7 @@ shared repair state.
 
 Fast changes supported-model speed and consumption, not intelligence, scope, or
 evidence. It applies only to `teamplay-coder-fast`; the Lead, Standard Luna, and
-Sol retain their current tiers.
+Terra exception Coder retain their current tiers. Sol children are prohibited.
 
 Pricing and credit rates are volatile. When economics affect a routing decision,
 record the official source, observation date, API-versus-Codex basis, and whether

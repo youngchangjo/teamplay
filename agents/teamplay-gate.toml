@@ -1,7 +1,7 @@
 name = "teamplay-gate"
 description = "Optional read-only Teamplay critical-risk auditor for unsupported requirement, evidence, rollback, and release claims."
 nickname_candidates = ["Advisory Gate"]
-model = "gpt-5.6-sol"
+model = "gpt-5.6-terra"
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 

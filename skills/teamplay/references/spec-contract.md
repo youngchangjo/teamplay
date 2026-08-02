@@ -8,7 +8,8 @@ Teamplay run has one written, revision-identified Spec Brief or Full Spec Lock.
 Use `templates/spec-brief.md` for one bounded outcome when no Full Spec Lock
 trigger applies. It records:
 
-- identity, baseline, route, and L1-L6 results or Sol signal;
+- identity, baseline, Luna-first route, L1-L6 readiness, and any T1/T2 Terra
+  exception evidence;
 - outcome and stable requirement anchors;
 - writable ownership and non-goals;
 - canonical local context and resolved assumptions;
@@ -57,8 +58,9 @@ invalidation, and cross-slice Lead review/QA plan.
 - A product, authority, frozen-contract, or ownership change returns to the Lead.
 - When canonical intent changes, increment the spec revision and invalidate
   affected implementation and evidence before resuming.
-- Sol may resolve only the technical decision space the Lead explicitly delegates;
-  product behavior and final interpretation remain with the Lead.
+- Terra xhigh may implement only the technical decision space the Lead
+  explicitly delegates under T1 or T2; product behavior and final interpretation
+  remain with the Lead. Sol children are prohibited.
 
 The Lead reviews the actual diff against requirement anchors and executes the
 acceptance scenarios described in the applicable template. A child summary does

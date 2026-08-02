@@ -7,7 +7,9 @@ Report:
 
 1. user outcome and authority boundary;
 2. canonical spec path, ID, revision, level, and baseline;
-3. R0-R3 route: model, effort, tier, L1-L6 or Sol signal, pool, isolation;
+3. R0-R3 route: Luna max economic default, selected model, effort, tier,
+   L1-L6 readiness, any T1/T2 Terra exception evidence, explicit confirmation
+   that no Sol child was selected, pool, and isolation;
 4. agent assignments and compact results;
 5. execution capsule and task hashes;
 6. requirement coverage: implementation, Lead review, Lead QA, evidence;

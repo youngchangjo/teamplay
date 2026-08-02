@@ -1,16 +1,17 @@
 ---
 name: teamplay
-description: Route specification-locked implementation to GPT-5.6 Luna max or Sol max while the current main Codex agent retains integration, final spec review, and acceptance QA. Use when the user invokes Teamplay, asks for Luna implementation workers, requests optional Fast children, or wants model-aware parallel implementation.
-version: 0.11.1
+description: Save implementation cost by defaulting specification-locked coding to GPT-5.6 Luna max while the current main Codex agent retains specification, integration, final review, and acceptance QA. Teamplay never selects Sol; Terra xhigh is the maximum child route and explicit or evidenced post-Luna exception only. Use when the user invokes Teamplay, asks for cost-efficient Luna implementation, requests optional Fast children, or wants bounded parallel implementation.
+version: 0.12.0
 ---
 
 # Teamplay
 
-Teamplay separates product judgment from implementation throughput. The current
-main agent is always Lead. Children implement or advise; the Lead integrates the
-real diff and personally owns final review and QA. When a Coder remains stalled
-after the bounded same-session recovery path, the Lead directly finishes the
-unchanged whole outcome instead of multiplying or micro-splitting Coders.
+Teamplay is cost-first: the current main agent is always Lead and the default
+implementation Coder is Luna max. The Lead spends its existing context on the
+specification, integration, final review, and acceptance QA; Luna supplies
+lower-cost implementation throughput. Teamplay never creates a Sol child. Terra
+xhigh is the maximum child route and is used only by explicit user choice or an
+evidenced post-Luna capability exception.
 
 ## Read before routing
 
@@ -47,6 +48,11 @@ Use `templates/spec-brief.md` for one bounded ordinary outcome and
 - Child Reviewer, QA, and Gate roles are advisory only.
 - Every Luna child uses max reasoning. Fast changes only the selected Luna
   child's service tier.
+- Luna max is the default mutating Coder. Difficulty, ambiguity, criticality,
+  and file count do not select an initial Sol Coder.
+- Sol is prohibited for every Teamplay child. Terra xhigh requires
+  `T1 explicit_user_terra` or `T2 evidenced_luna_capability_blocker` from
+  `references/routing.md`.
 
 ## Workflow
 
@@ -66,7 +72,9 @@ Use the exact R0-R3 order in `references/routing.md`:
 3. model;
 4. writer pool.
 
-Do not use Sol to bypass missing authority or an unresolved user decision.
+Do not use a stronger model to bypass missing authority, an unresolved decision, or an
+unfinished specification. A failed readiness check returns to the Lead; it does
+not select Terra, and Sol is never available.
 
 ### 3. Lock the appropriate written specification
 
@@ -76,6 +84,11 @@ before mutation. Record a stable spec revision and repository baseline.
 The specification must be sufficient for the Lead to review each requirement
 against the actual diff and execute requirement-linked QA. It locks decisions,
 not keystrokes. Resolve material product ambiguity before delegation.
+
+Hard, novel, cross-cutting, security-sensitive, concurrent, or migration work
+may require a Full Spec Lock, but difficulty does not change the default Coder.
+The Lead resolves consequential choices first, then delegates the locked whole
+implementation outcome to Luna max.
 
 ### 4. Keep one Coder session for one outcome
 
@@ -101,13 +114,19 @@ wait, message/reuse, resume, redirect, restart, takeover, and close events.
 
 ### 5. Select model and pool
 
-Apply the consequential-decision definition and Luna predicates in
+Apply the cost-first rule and delegation-readiness checks in
 `references/routing.md` without restating them. Luna is max in both Standard and
-Fast roles. Sol is selected proactively when the route requires frontier
-judgment; it is not only a post-failure rescue.
+Fast roles and is the default initial implementation Coder. Never infer Terra from
+task difficulty, scope, ambiguity, criticality, or the selected preset.
 
-Use the smallest safe writer pool. Announce the selected model, spec level,
-pool, isolation, complete owned outcomes, and the Lead's final review/QA surface.
+Never create a Sol child. Use Terra xhigh only for recorded
+`T1 explicit_user_terra` or `T2 evidenced_luna_capability_blocker`. T2 requires
+a real prior Luna attempt on the same locked whole outcome and concrete
+requirement/check evidence. A stall is not T2 and continues to Lead takeover.
+
+Use the smallest safe writer pool. Announce that Luna max is the economic
+default, the selected model, any Terra exception and evidence, spec level, pool,
+isolation, complete owned outcomes, and the Lead's final review/QA surface.
 
 ### 6. Render and delegate
 
@@ -191,15 +210,16 @@ into a billing claim. End every invocation with a Teamplay Run Report.
 
 ## Public presets
 
-- `$teamplay`: model-aware route; Luna max Standard when all Luna predicates
-  pass, otherwise Sol max when the task remains authorized and spec-ready.
-- `$teamplay-fast`: the same route, but eligible Luna children use Fast. Sol and
-  the Lead are unchanged.
-- `$teamplay-deep`: require richer invariants and evidence. Route by the same
-  model policy rather than selecting Sol merely because the preset says deep.
+- `$teamplay`: cost-first route; Luna max Standard is the initial implementation
+  default after the Lead locks readiness.
+- `$teamplay-fast`: the same Luna-first route, with Fast applied only to eligible
+  Luna children. It never makes Terra automatic.
+- `$teamplay-deep`: require richer invariants and evidence while keeping Luna
+  max as the default Coder. The word deep is not a T1 Terra request.
 - `$teamplay-critical`: require threat, rollback, and evidence boundaries; add
-  an advisory Gate only when useful. The Lead remains final authority.
+  an advisory Gate only when useful. Criticality is not a T1 Terra request and
+  the Lead remains final authority.
 
-Natural-language controls may request a pool size, Fast, or Sol, but cannot
+Natural-language controls may request a pool size, Fast, or Terra, but cannot
 override authority, specification readiness, safe isolation, or final Lead
-review and QA.
+review and QA. A Sol child request is rejected by the fixed routing prohibition.

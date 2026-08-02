@@ -12,7 +12,8 @@ Expected: Luna max Standard; Spec Brief; one writer.
 
 Prompt: Propagate a fully locked API signature across 30 named files with fixed
 compatibility behavior and existing compile/tests.
-Expected: Luna max Standard; Spec Brief; one writer. File count does not select Sol.
+Expected: Luna max Standard; Spec Brief; one writer. File count does not select
+Terra, and Sol is prohibited.
 
 ## DR-03 — Established UI pattern
 
@@ -42,25 +43,29 @@ Expected: Luna max Standard; Spec Brief; one writer.
 
 Prompt: Choose among materially different session, permission, and ownership
 designs inside a locked product outcome.
-Expected: Sol max; Full Spec Lock; one writer.
+Expected: no Coder until the Lead chooses and locks the design; then Luna max,
+Full Spec Lock, one writer. Difficulty does not select Terra or Sol.
 
 ## DR-08 — Lifecycle race
 
 Prompt: Fix a race spanning cancellation, retry, persistence, and lifecycle
 ownership while preserving named observable behavior.
-Expected: Sol max; Full Spec Lock; one writer.
+Expected: Lead locks lifecycle invariants and acceptance; then Luna max, Full
+Spec Lock, one writer.
 
 ## DR-09 — Persistent migration
 
 Prompt: Implement a schema migration with backward compatibility, integrity,
 rollback, and recovery decisions.
-Expected: Sol max; Full Spec Lock; one writer.
+Expected: Lead locks migration, rollback, and recovery decisions; then Luna max,
+Full Spec Lock, one writer.
 
 ## DR-10 — Bounded ambiguous defect
 
 Prompt: Diagnose a known observable failure inside one component where the root
 cause is unknown but public behavior and ownership are frozen.
-Expected: Sol max; Spec Brief; one writer.
+Expected: Luna max; Spec Brief; one writer. Ambiguous diagnosis alone does not
+select Terra or Sol.
 
 ## DR-11 — Fast child only
 
@@ -84,11 +89,26 @@ Prompt: The same requirement fails twice, a frozen interface changes, or a
 third repair would be required.
 Expected: REPLAN or BLOCKED; no automatic third repair.
 
+## DR-15 — Explicit Terra exception
+
+Prompt: User explicitly requests one Terra implementation Coder for a locked
+outcome and accepts the higher cost.
+Expected: Terra xhigh; T1 recorded; one writer; no Sol child.
+
+## DR-16 — Evidenced post-Luna capability blocker
+
+Prompt: Luna attempted the locked whole outcome and returned a concrete failed
+requirement/check plus valid partial work. The Lead records why clarification,
+same-Luna repair, and direct takeover are less economical than one Terra retry.
+Expected: Terra xhigh; T2 evidence recorded; same whole outcome; one writer; no
+Sol child. A stall or vague difficulty report would not pass.
+
 ## Live canaries
 
 - `LC-STD`: DR-01 through Standard Luna max.
 - `LC-FAST`: DR-11 through Fast Luna max with the Lead unchanged.
-- `LC-SOL`: DR-10 through Sol max plus Spec Brief.
+- `LC-TERRA`: DR-15 through Terra xhigh with T1 evidence.
+- `LC-NO-SOL`: inspect every installed Teamplay role and reject any Sol model.
 
 Runtime identity must come from host, CLI, or agent-registry metadata. When that
 surface is unavailable, record `NOT_PROVEN`; a child echo is not proof.

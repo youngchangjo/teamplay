@@ -1,188 +1,153 @@
-# Teamplay 0.11.1 design rationale
+# Teamplay 0.12 design rationale
 
-Teamplay is a specification-first manager pattern with model-aware
-implementation. The current main agent keeps product authority, integration,
-final diff review, acceptance QA, and completion. Luna or Sol owns one bounded
-implementation outcome.
+Teamplay is a cost-first manager pattern. The current main agent keeps product
+authority, specification, integration, final diff review, acceptance QA, and
+completion. Luna max owns implementation by default.
 
-## Why the 0.9 harness changed
+## Economic premise
 
-Version 0.9 correctly moved review and QA back to the Lead, but it overfit three
-areas:
+The main conversation already carries product context and remains responsible
+for quality. Creating another frontier child for implementation duplicates
+expensive judgment context. Teamplay instead uses the main Lead to close
+decisions and a lower-cost Luna max child to produce the locked result.
 
-- Luna was described by outcome size without qualifying ambiguity or remaining
-  decision density;
-- Sol was available only after a Luna failure;
-- safety, ownership, evidence, and final-authority clauses were repeated in the
-  core skill, references, templates, and role prompts.
+Official pages checked on 2026-08-03 showed Luna at 1/2.5 of Terra for each API
+and Codex token category. Prices are volatile evidence rather than routing
+constants, but this cost relationship is the reason Luna is the default.
 
-OpenAI's current GPT-5.6 guidance describes Sol as the frontier choice for
-demanding, ambiguous, multi-step work and Luna as the efficient high-volume
-choice for clear, repeatable work. It also recommends lean prompts that state a
-policy once. Multi-agent guidance favors independent bounded work and warns
-against shared mutable writers.
+Max reasoning is retained. The economy comes from model selection, broad
+outcome ownership, session reuse, and avoiding duplicate agents—not from
+weakening reasoning or final evidence.
 
-The user's product policy remains stricter than generic effort guidance: every
-Luna child runs at max.
+## No Sol children
 
-## Authority before model
+Teamplay 0.12 prohibits GPT-5.6 Sol for every child role and preset. The highest
+child configuration is Terra xhigh. This applies to Coder, Reviewer, QA, Gate,
+and rescue paths. Teamplay does not alter the user's already-selected main Lead.
+
+The prohibition removes an easy failure mode: broad words such as “difficult,”
+“deep,” “critical,” or “ambiguous” can no longer produce an expensive initial
+Sol Coder.
+
+## Luna-first routing
 
 The route is:
 
 ```text
-R0 authority -> R1 specification -> R2 model -> R3 pool
+R0 authority
+-> R1 Lead locks specification and consequential decisions
+-> R2 Luna max by default
+-> R3 smallest safe writer pool
 ```
 
-This order prevents a powerful model from being treated as authority. Sol cannot
-perform an unapproved external or destructive action, and no model starts while
-a user-authority decision remains unresolved.
+L1-L6 are delegation-readiness checks, not stronger-model selectors. A failed
+check sends work back to the Lead to resolve, specify, or block. Once the
+observable behavior, interfaces, lifecycle, ownership, risk decisions, and
+acceptance are locked, Luna can implement a large cross-layer outcome.
 
-## Decision density, not file count
+Task size and file count are not model signals. One coherent Luna outcome may
+include every directly coupled implementation, test, fixture, document, and
+configuration surface.
 
-Luna eligibility is an all-pass semantic gate. The behavior, acceptance,
-contracts, consequential choices, risk, and ownership must already be bounded.
-The Coder can still span every directly required established layer.
+## Terra xhigh exception
 
-Sol is proactive when consequential technical judgment remains. It can resolve
-only the technical decision space named by the Lead; the Lead still owns product
-intent. This avoids paying for a predictable Luna failure while preserving Luna
-for broad mechanical implementation that benefits from its lower cost.
+Terra xhigh is allowed only for:
 
-## Coherent outcomes and persistent sessions
+- `T1`: a direct user request for a Terra implementation child;
+- `T2`: concrete evidence from a real Luna attempt that the same locked whole
+  outcome exceeds Luna's capability and that another Luna repair or Lead
+  takeover is less economical.
 
-Version 0.11 makes outcome granularity explicit. One outcome is an
-independently integratable behavior or milestone with its directly coupled
-implementation, checks, fixtures, docs, and configuration. Splitting one
-outcome by file, command, test, or repair creates coordination noise without
-adding useful independence.
+Difficulty is not T1. A failed readiness check, silence, slow reasoning, no
+mutation, one failed test, or a normal review defect is not T2. Stalled Luna
+work follows the lifecycle recovery path and transfers to the Lead rather than
+escalating models.
 
-The Coder session key is the spec ID/revision, outcome ID, route, and owned
-surfaces. While that key is unchanged, one Coder identity owns implementation,
-coupled checks, Lead feedback, and bounded in-spec repairs. This keeps context
-and responsibility continuous without changing Lead authority.
+## Specification before delegation
 
-## Restart boundaries and continuation
+A Spec Brief supplies requirement anchors, frozen behavior, ownership,
+acceptance, and validation for one bounded outcome. A Full Spec Lock adds
+decision records, cross-slice contracts, rollback, and coordinated evidence when
+the work shape requires them.
 
-The first assignment contains exactly one rendered execution capsule. A
-same-session follow-up uses a compact continuation packet containing only the
-delta, requested result, invalidated checks, and stop conditions. It deliberately
-does not copy the capsule or resend the full initial task.
-
-A new Coder is justified only by a new independent outcome, a changed key after
-replan, or an unavailable prior agent before meaningful outcome work begins. A
-spec, authority, frozen-contract, or ownership change is a replan boundary. The
-scheduler waits for named conditions and avoids reflexive polling or duplicate
-work.
-
-Silence is handled as a bounded recovery state, not as a reason to fragment the
-outcome. The Lead waits for one named checkpoint, inspects real diff and host
-state, and redirects the same agent once. Persistent no-response or no-progress
-becomes `CODER_STALLED`; child mutation stops and the Lead directly completes
-the unchanged whole outcome. This is cheaper and clearer than serially creating
-replacement Coders or shrinking the work into component and exact-edit packets.
-
-Lead takeover is deliberately compatible with Lead review authority. Before
-direct implementation, the Lead reopens the already locked requirements and
-acceptance checklist. After implementation, spec conformance, engineering
-integrity, and acceptance QA remain separate evidence gates; authorship cannot
-stand in for any of them.
-
-Closing a completed child can release a concurrency slot, but it does not create
-a new assignment boundary. Teamplay retains the agent identity and resumes it
-for an in-spec repair until the outcome is accepted or replanned.
-
-## Lifecycle diagnostics
-
-Run reports distinguish spawn, wait, message/reuse, resume, redirect, restart,
-takeover, and close events. Host token diagnostics preserve cached input,
-uncached input, output, and reasoning as separate observations. They describe
-execution diagnostics, not provider billing or cost.
-
-## Two specification levels
-
-A Spec Brief supplies enough written authority for one ordinary outcome and for
-the Lead's final review/QA without adding a matrix or per-file recipe.
-
-A Full Spec Lock adds coordination controls only when the work shape requires
-them: multiple writers, shared contracts or ownership, critical semantics,
-migration/recovery, cross-environment QA, or non-local rollback.
-
-The trigger is risk created by coordination, not the presence of a filename such
-as `Package.resolved` or a lockfile. One owner can make a predetermined shared
-artifact update under a Brief.
-
-## Single-source execution policy
-
-The canonical execution capsule is delimited in one reference file. A renderer
-extracts it and assembles a spawn prompt with one task capsule. Validation checks
-delimiter count and normalized SHA-256 equality against the source.
-
-This is stronger and shorter than repeating paraphrased rules:
-
-- source drift becomes detectable;
-- a child receives policy text rather than an unread path;
-- role prompts contain only model-specific judgment and stops;
-- task capsules contain only variable assignment data.
+Hard work generally changes specification depth, not model choice. The Lead
+resolves consequential architecture, security, concurrency, migration, and
+lifecycle decisions before Luna mutates code.
 
 ## Writer pool
 
-The default is one mutating writer. Two are automatic only for genuinely
-independent outcomes. Three requires explicit intent and isolation. This matches
-the practical value of focused contexts while accounting for Codex's warning
-that parallel write-heavy work can increase conflicts and coordination.
+One mutating Luna is the default. Two are automatic only for complete independent
+outcomes with frozen contracts, disjoint ownership, and independent checks.
+Three requires explicit user intent and isolation. Shared mutable surfaces have
+one owner or remain a serial Lead integration step.
 
-Routing is the sole normative owner of pool and parallel rules. Delivery-speed
-guidance may discuss scheduling but cannot redefine eligibility.
+Parallelism improves throughput only when outcomes are genuinely independent.
+It never justifies duplicate work or splitting one feature by file, component,
+command, test, or exact edit.
 
-## Fast
+## Persistent outcome ownership
 
-Standard and Fast Luna use the same model, max effort, specification, and result
-contract. Fast adds child-local service-tier and feature settings. The Lead and
-Sol remain unchanged.
+The Coder session key is the spec ID/revision, outcome ID, route, and owned
+surfaces. While unchanged, one Coder identity owns implementation, focused
+checks, Lead feedback, and bounded repair.
 
-Pricing is observational context, not policy. Version 0.10 records the official
-source and date when discussing the 2026-08-01 Luna reduction but does not embed
-current prices in routing logic.
+The first assignment contains one rendered execution capsule. Continuations
+carry only the delta and never resend the capsule or full task. This preserves
+context and avoids repeated input cost.
+
+## Stall recovery
+
+Silence is a bounded recovery state:
+
+```text
+named wait -> inspect diff/agent state -> same-ID redirect
+-> CODER_STALLED -> stop child mutation -> Lead takeover
+```
+
+A stall cannot satisfy T2 and never creates Terra or Sol. The original whole
+outcome remains intact. The Lead prevents late concurrent child mutation,
+reopens the locked requirement checklist, implements the remainder, and still
+runs separate review and QA.
 
 ## Review, QA, and repair
 
-The Lead's spec-conformance pass occurs before engineering-integrity judgment.
-This prevents a code-only review from redefining the product.
+The Lead first reviews specification conformance, then engineering integrity,
+then executes or directly observes requirement-linked acceptance QA. Child
+checks and advisory findings cannot approve completion.
 
-Acceptance QA remains a direct Lead responsibility. Child checks and advisory
-QA evidence are inputs, not the final verdict. Proof layers remain separate.
+Review and QA share two in-spec repair slots. A repeated failure of one
+requirement or changed frozen boundary means the plan must be revised rather
+than adding hidden retries or stronger agents.
 
-Review and QA share two repair slots. A late QA failure cannot silently create a
-third allowance. Repeated failure of one requirement or a changed frozen
-boundary means the plan was wrong and must be revised.
+## Fast
 
-## Verifiable lean-harness target
+Fast remains Luna-only and child-local. It changes speed and consumption, not
+model intelligence, scope, reasoning effort, specification, review, or QA.
+Because Fast may consume credits at a higher rate, it is selected explicitly.
 
-Teamplay preserves the 0.9 prompt-pressure baseline. Version 0.11.1 must show:
+## Verifiable contract
 
-- one global policy block in each assembled prompt;
-- no copied global block in Coder TOMLs;
-- shorter role instructions for Standard, Fast, and Sol;
-- at least 25% fewer non-task policy characters per representative route;
-- one session identity across implementation, coupled checks, feedback, and
-  bounded repair;
-- explicit restart boundaries and capsule-free continuation;
-- bounded wait, one same-session redirect, and Lead takeover for a persistent
-  stall without micro-packets or replacement Coders;
-- distinct lifecycle events and non-billing token diagnostics;
-- no loss of authority, requirement coverage, Lead review, Lead QA, or evidence
-  separation.
+Version 0.12 validation requires:
 
-Static TOML proves configured intent only. Live Standard, Fast, and Sol canaries
-need host-observed model, effort, and tier metadata; otherwise runtime identity
-is `NOT_PROVEN`.
+- Luna max as the declared economic and initial implementation default, with
+  every Luna child fixed at max reasoning;
+- no `gpt-5.6-sol` in any Teamplay agent TOML;
+- Terra xhigh as the maximum child configuration;
+- no automatic Terra selection from difficulty, presets, or failed readiness;
+- T1/T2 evidence for every Terra implementation route;
+- one global policy block per initial assignment and none in continuations;
+- one Coder identity per coherent outcome and bounded Lead takeover on stall;
+- final specification review, engineering review, QA, and evidence separation;
+- installed skill and role bytes matching the bundle.
+
+Static configuration proves configured intent only. Live model identity and
+runtime behavior remain host-observed evidence.
 
 ## Sources checked
 
-- [GPT-5.6 guidance](https://developers.openai.com/api/docs/guides/latest-model)
-- [OpenAI Multi-agent](https://developers.openai.com/api/docs/guides/responses-multi-agent)
+- [GPT-5.6 model guidance](https://developers.openai.com/api/docs/guides/latest-model)
+- [GPT-5.6 model comparison](https://developers.openai.com/api/docs/models/compare)
 - [GPT-5.6 Luna](https://developers.openai.com/api/docs/models/gpt-5.6-luna)
-- [GPT-5.6 Sol](https://developers.openai.com/api/docs/models/gpt-5.6-sol)
+- [Codex rate card](https://help.openai.com/en/articles/20001106-codex-rate-card)
 - [Codex subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents)
 - [Codex speed](https://learn.chatgpt.com/docs/agent-configuration/speed)
-- [Codex rate card](https://help.openai.com/en/articles/20001106-codex-rate-card)

@@ -27,15 +27,15 @@ codex_dir = Path(sys.argv[2])
 mode = sys.argv[3]
 
 expected = {
-    "teamplay-scout": ("gpt-5.6-luna", "low"),
+    "teamplay-scout": ("gpt-5.6-luna", "max"),
     "teamplay-researcher": ("gpt-5.6-terra", "medium"),
     "teamplay-plan-challenger": ("gpt-5.6-terra", "high"),
     "teamplay-coder-fast": ("gpt-5.6-luna", "max"),
     "teamplay-coder": ("gpt-5.6-luna", "max"),
-    "teamplay-coder-deep": ("gpt-5.6-sol", "max"),
+    "teamplay-coder-deep": ("gpt-5.6-terra", "xhigh"),
     "teamplay-reviewer": ("gpt-5.6-terra", "high"),
-    "teamplay-qa": ("gpt-5.6-luna", "high"),
-    "teamplay-gate": ("gpt-5.6-sol", "high"),
+    "teamplay-qa": ("gpt-5.6-luna", "max"),
+    "teamplay-gate": ("gpt-5.6-terra", "high"),
 }
 read_only = {
     "teamplay-scout",
@@ -63,6 +63,11 @@ actual_roster = {
     for name, data in agents.items()
 }
 assert actual_roster == expected, f"roster mismatch:\n{actual_roster}"
+assert all(model != "gpt-5.6-sol" for model, _ in actual_roster.values())
+assert all(
+    effort == "max" for model, effort in actual_roster.values()
+    if model == "gpt-5.6-luna"
+), actual_roster
 
 for name, data in agents.items():
     features = data.get("features", {})
@@ -74,21 +79,27 @@ for name, data in agents.items():
         assert features.get("fast_mode") is not True, f"unexpected Fast feature: {name}"
 
 version = (package / "VERSION").read_text().strip()
-assert version == "0.11.1", version
+assert version == "0.12.0", version
 
 skill = (package / "skills/teamplay/SKILL.md").read_text()
 assert skill.startswith("---\nname: teamplay\n")
-assert "\nversion: 0.11.1\n---\n" in skill
+assert "\nversion: 0.12.0\n---\n" in skill
 for phrase in (
     "references/execution-policy.md",
     "references/session-continuity.md",
     "references/spec-contract.md",
     "references/routing.md",
     "R0-R3 order",
-    "personally owns final review and QA",
+    "code review",
+    "acceptance QA",
     "render-task-packet.py",
     "same session key",
     "continuation packet",
+    "cost-first",
+    "default initial implementation Coder",
+    "Never create a Sol child",
+    "T1 explicit_user_terra",
+    "T2 evidenced_luna_capability_blocker",
     "CODER_STALLED",
     "Lead directly finish",
     "Teamplay Run Report",
@@ -103,7 +114,7 @@ shortcut_presets = {
 for shortcut, preset in shortcut_presets.items():
     text = (package / f"skills/{shortcut}/SKILL.md").read_text()
     assert text.startswith(f"---\nname: {shortcut}\n")
-    assert "\nversion: 0.11.1\n---\n" in text
+    assert "\nversion: 0.12.0\n---\n" in text
     assert "../teamplay/SKILL.md" in text
     assert f"requested_preset: {preset}" in text
 
@@ -113,6 +124,7 @@ required_files = (
     "CHANGELOG.md",
     "docs/DESIGN.md",
     "docs/POLICY_MOVEMENT_V0.10.md",
+    "docs/specs/TP-COST-FIRST-001-r1.md",
     "docs/specs/TP-CODER-LIFECYCLE-001-r2.md",
     "skills/teamplay/references/execution-policy.md",
     "skills/teamplay/references/session-continuity.md",
@@ -131,8 +143,10 @@ required_files = (
     "tests/routing-results-v0.10.md",
     "tests/routing-results-v0.11.md",
     "tests/routing-results-v0.11.1.md",
+    "tests/routing-results-v0.12.md",
     "tests/render-results-v0.10.json",
     "tests/render-results-v0.11.json",
+    "tests/render-results-v0.12.json",
     "tests/lifecycle-fixtures.md",
     "tests/lifecycle-results-v0.11.md",
     "tests/lifecycle-results-v0.11.1.md",
@@ -143,6 +157,9 @@ required_files = (
     "tests/fixtures/task-standard-v0.11.md",
     "tests/fixtures/task-fast-v0.11.md",
     "tests/fixtures/task-sol-v0.11.md",
+    "tests/fixtures/task-standard-v0.12.md",
+    "tests/fixtures/task-fast-v0.12.md",
+    "tests/fixtures/task-terra-v0.12.md",
     "tests/fixtures/continuation-v0.11.md",
     "tests/fixtures/continuation-v0.11.1.md",
 )
@@ -198,12 +215,12 @@ canonical_capsule = renderer.extract_capsule(policy)
 canonical_hash = hashlib.sha256(canonical_capsule.encode()).hexdigest()
 
 baseline = json.loads((package / "tests/baselines/prompt-pressure-v0.9.json").read_text())
-render_record = json.loads((package / "tests/render-results-v0.11.json").read_text())
+render_record = json.loads((package / "tests/render-results-v0.12.json").read_text())
 assert render_record["canonicalCapsuleSha256"] == canonical_hash
 fixture_map = {
-    "teamplay-coder": ("task-standard-v0.11.md", "standard"),
-    "teamplay-coder-fast": ("task-fast-v0.11.md", "fast"),
-    "teamplay-coder-deep": ("task-sol-v0.11.md", "sol"),
+    "teamplay-coder": ("task-standard-v0.12.md", "standard"),
+    "teamplay-coder-fast": ("task-fast-v0.12.md", "fast"),
+    "teamplay-coder-deep": ("task-terra-v0.12.md", "terra"),
 }
 pressure = {}
 for role, (fixture, record_name) in fixture_map.items():
@@ -259,7 +276,12 @@ for phrase in (
     "R0 authority",
     "L1 requirements_closed",
     "L6 bounded_ownership",
-    "user directly requests Sol",
+    "DEFAULT_IMPLEMENTATION_CODER = Luna max",
+    "T1 explicit_user_terra",
+    "T2 evidenced_luna_capability_blocker",
+    "No Teamplay child may use GPT-5.6 Sol",
+    "Terra xhigh is the maximum allowed child route",
+    "does not satisfy T2",
     "Never run more than three mutating Coders",
     "sole normative source",
 ):
@@ -322,9 +344,9 @@ assert "LEAD_QA bounded failure -> next available REPAIR slot" in delivery
 assert "Any failure after REPAIR_2 -> REPLAN/BLOCKED" in delivery
 
 fixtures = (package / "tests/routing-fixtures.md").read_text()
-for index in range(1, 15):
+for index in range(1, 17):
     assert f"DR-{index:02d}" in fixtures, f"routing fixture missing: DR-{index:02d}"
-for live in ("LC-STD", "LC-FAST", "LC-SOL"):
+for live in ("LC-STD", "LC-FAST", "LC-TERRA", "LC-NO-SOL"):
     assert live in fixtures
 results = (package / "tests/routing-results-v0.10.md").read_text()
 assert "14/14 static classifications" in results
@@ -336,6 +358,15 @@ results_0111 = (package / "tests/routing-results-v0.11.1.md").read_text()
 assert "14/14 preserved routing classifications" in results_0111
 assert "7/7 lifecycle contract" in results_0111
 assert "10/10 lifecycle fixtures" in results_0111
+results_012 = (package / "tests/routing-results-v0.12.md").read_text()
+for phrase in (
+    "16/16 static routing classifications PASS",
+    "gpt-5.6-sol` agent entries: 0",
+    "Every Luna role, including Default/Fast Coders: Luna max",
+    "Exception Coder: Terra xhigh",
+    "Sol implementation, review, QA, Gate, and rescue routes: prohibited",
+):
+    assert phrase in results_012, f"0.12 routing result missing: {phrase}"
 
 lifecycle_fixtures = (package / "tests/lifecycle-fixtures.md").read_text()
 for fixture in (
@@ -372,6 +403,19 @@ assert "Copyright (c) 2026 Young Changjo" in license_text
 readme = (package / "README.md").read_text()
 for role_name in expected:
     assert role_name in readme, f"README missing role: {role_name}"
+for phrase in (
+    "Why Luna first",
+    "Luna max is the default and first implementation Coder",
+    "Teamplay never creates a Sol child",
+    "Terra xhigh is the strongest Teamplay child",
+    "$1 / $0.10 / $6",
+    "$2.50 / $0.25 / $15",
+    "25 / 2.5 / 150",
+    "62.5 / 6.25 / 375",
+):
+    assert phrase in readme, f"README missing cost-first contract: {phrase}"
+for stale in ("$0.20/$0.02/$1.20", "`1/25` ratio", "Sol max |"):
+    assert stale not in readme, f"README contains stale routing/pricing: {stale}"
 
 if mode == "--installed":
     installed_agents = codex_dir / "agents"

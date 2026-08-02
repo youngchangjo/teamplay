@@ -9,7 +9,11 @@
 - Coder count:
 - Outcome ID:
 - Session key inputs: spec ID/revision, outcome ID, route, owned surfaces
-- L1-L6 results; for Sol, failed predicate(s) and/or independent Sol signal:
+- Economic default: `Luna max`
+- L1-L6 delegation-readiness results:
+- Terra exception: `none | T1 explicit_user_terra | T2 evidenced_luna_capability_blocker`
+- Terra exception evidence; must be empty for Luna:
+- Sol child selected: `no`
 
 ## Outcome and requirement anchors
 
