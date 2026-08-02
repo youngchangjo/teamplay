@@ -1,49 +1,42 @@
 # Evidence contract
 
-## Evidence layers
+Evidence states do not imply later states:
 
-Teamplay keeps these claims separate:
+1. `specified`: canonical spec revision and requirement anchors exist.
+2. `implemented`: owned changes and Coder checks exist.
+3. `lead_reviewed`: the Lead inspected the real diff against the spec and
+   engineering risks.
+4. `lead_qa_observed`: the Lead executed or directly observed the named surface.
+5. `advisory_audited`: an optional child returned additional findings.
+6. `externally_verified`: deployment, store, release, or another external state
+   was read back independently.
 
-1. `implemented`: the intended files changed.
-2. `reviewed`: an independent reviewer inspected the actual diff.
-3. `verified`: applicable tests, builds, or runtime scenarios passed.
-4. `gated`: a high-risk final audit accepted the available evidence.
-5. `released`: an external deployment or release surface was verified.
+## Requirement evidence
 
-No earlier layer implies a later one.
+For each requirement record the spec anchor, implementation surfaces, exact
+check or scenario, target identity, expected and actual observable, artifact,
+evidence state, verdict, and limitation.
 
-## Required handoff fields
+Use:
 
-Every child result should include:
+- `PASS`: requested evidence exists on the named surface;
+- `FAIL`: the observed result violates the requirement;
+- `PARTIAL`: some required evidence exists;
+- `BLOCKED`: a named prerequisite prevented observation;
+- `NOT_APPLICABLE`: the requirement does not need that evidence class;
+- `NOT_PROVEN`: configuration or behavior may be correct but the requested
+  evidence surface is unavailable.
 
-- role and assignment;
-- status;
-- inspected or changed paths;
-- exact checks performed;
-- findings or observable results;
-- blockers and remaining risks;
-- artifact paths when artifacts were produced.
+## Identity and invalidation
 
-## Verdict vocabulary
-
-Use explicit verdicts:
-
-- `PASS`: directly verified against the requested surface.
-- `FAIL`: executed and did not meet the criterion.
-- `PARTIAL`: some requested layers passed and others remain open.
-- `BLOCKED`: the scenario could not run because a named prerequisite is missing.
-- `NOT_APPLICABLE`: the criterion genuinely does not apply, with one-line reason.
-
-Do not use `PASS` for skipped, inferred, simulated-as-physical, or prose-only
+Evidence names the branch/SHA, build or artifact identity, surface, and time.
+Invalidate affected evidence after executable inputs, frozen contracts, target
+identity, or the observed behavior changes. Static TOML proves configuration,
+not the model or tier that actually ran. Child echoes are not runtime identity
 evidence.
 
-## Final report
-
-The lead's final report must name:
-
-- what changed;
-- review verdict;
-- commands and scenarios that passed or failed;
-- surfaces not exercised;
-- high-risk gate verdict when used;
-- exact next action requiring the user, a device, credentials, or external state.
+Lifecycle evidence is orchestration evidence, not product or runtime proof.
+Reports distinguish spawn, message/reuse, resume, redirect, restart, and close
+with the session key and host-observed identity or an honest limitation. Host
+token diagnostics keep input_cached, input_uncached, output, and reasoning
+separate; they never establish provider billing or cost.

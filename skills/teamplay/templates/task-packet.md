@@ -1,32 +1,49 @@
-# Implementation task packet
+# Teamplay task capsule
+
+This task-variable capsule follows the canonical execution capsule. Render both
+with `scripts/render-task-packet.py`; do not copy global policy here.
 
 ```yaml
-role: teamplay-coder-fast | teamplay-coder | teamplay-coder-deep
-selection_reason:
-objective:
-coherent_outcome:
-user_visible_or_integratable_finish_line:
-baseline:
-  repository:
-  branch:
-  sha:
-owned_paths: []
-owned_scope:
-  directly_required_layers: []
-  permitted_adjacent_paths: []
-  material_expansion_requires_escalation: true
-context: []
-constraints:
-  - Preserve unrelated and user-owned worktree changes.
-acceptance_criteria: []
-verification_requested: []
-completion_batch_checks: []
-required_output:
-  - status
-  - changedPaths
-  - implementationSummary
-  - verification
-  - remainingRisks
-  - assumptionsResolvedFromRepositoryConventions
-  - materialEscalations
+assignment:
+  role: teamplay-coder | teamplay-coder-fast | teamplay-coder-deep
+  instance:
+  spec:
+    path:
+    id:
+    revision:
+    baseline_sha:
+    level: brief | full
+  outcome_id:
+  session_key:
+  initial_assignment: true
+  route:
+    model:
+    reasoning_effort: max
+    service_tier: standard | fast
+    luna_predicates:
+      L1:
+      L2:
+      L3:
+      L4:
+      L5:
+      L6:
+    sol_signal:
+  pool:
+    size:
+    wave:
+    isolation:
+  requirements: []
+  outcome:
+  owned_surfaces: []
+  shared_surface_owner:
+  frozen_contracts: []
+  allowed_local_judgment: []
+  required_checks: []
+  task_specific_stops: []
+  repair_cycle: 0 | 1 | 2
 ```
+
+Expected result fields are supplied by the canonical execution capsule.
+
+For same-session follow-up, use templates/continuation-packet.md. Do not place
+the canonical execution capsule or a full initial task inside a continuation.

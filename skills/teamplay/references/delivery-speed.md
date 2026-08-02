@@ -1,70 +1,59 @@
-# Delivery speed contract
+# Delivery and repair cadence
 
-Teamplay optimizes for the shortest reliable path to a complete user-visible or
-integratable outcome. More agents, smaller tasks, and more checkpoints are not
-automatically better.
+Pool count, writer independence, and isolation are defined only in
+`routing.md`. This file covers Fast economics, scheduling, early checks, and the
+shared repair state.
 
-## Slice sizing
+## Fast
 
-Assign one Coder a coherent vertical slice:
+Fast changes supported-model speed and consumption, not intelligence, scope, or
+evidence. It applies only to `teamplay-coder-fast`; the Lead, Standard Luna, and
+Sol retain their current tiers.
 
-- a complete small fix including directly related tests, snapshots, docs, and
-  configuration;
-- a complete standard feature across UI, domain, data, integration, and tests
-  where those layers are genuinely required;
-- a complete deep goal across modules, invariants, migration, or concurrency
-  boundaries defined by the approved plan.
+Pricing and credit rates are volatile. When economics affect a routing decision,
+record the official source, observation date, API-versus-Codex basis, and whether
+a ratio is quoted or derived. Do not embed current prices in routing logic.
 
-Do not split work by file count, directory, framework layer, or arbitrary token
-budget. Split only when outcomes are independently deliverable, ownership would
-otherwise conflict, an isolated worktree enables safe parallelism, or a material
-decision blocks the next slice.
+## Scheduling
 
-Every implementation slice must end in an integratable state with its focused
-tests and directly required supporting changes. Scaffolding alone is not a
-completed slice unless scaffolding itself is the requested outcome.
+- Start one implementation wave after the specification is ready.
+- Run an early targeted check when it can prevent invalid downstream work.
+- Integrate and inspect a stable outcome instead of reviewing partial noise.
+- Do not start a new mutating wave faster than the Lead can integrate it.
+- Keep implementation, coupled checks, Lead feedback, and in-spec repairs on
+  the same Coder identity while the session key is unchanged.
+- Use message/reuse or resume for an unchanged key. Redirect once for bounded
+  non-progress before considering a restart, and wait only for a named result
+  or host condition; do not reflexively poll or duplicate active work.
+- Closing a child may free a concurrency slot, but it does not create a fresh
+  assignment boundary. Retain and resume the same agent ID for in-spec repair.
+- Restart only for a new independent outcome, a changed key after replan, an
+  unavailable prior agent, or evidenced non-progress after the bounded
+  redirect.
 
-## Coder autonomy
+## Shared repair budget
 
-Within the approved outcome and constraints, the Coder may:
-
-- inspect and edit every directly necessary path;
-- follow established repository patterns without asking about routine details;
-- make reversible, low-risk implementation assumptions and report them;
-- run targeted checks during development and one batched completion check;
-- finish tests, snapshots, docs, and configuration required by the outcome.
-
-The Coder escalates only when a decision materially changes product behavior,
-public interfaces, data ownership, security, irreversible effects, user-granted
-authority, or the approved outcome.
-
-## Fewer handoffs
-
-- Skip Scout when the Coder can locate the implementation inside a known area.
-- Run Scout and Researcher in parallel when both are truly needed.
-- Skip Plan Challenger for clear, ordinary-risk work using established patterns.
-- Review the stable completed slice, not each file or intermediate commit.
-- Batch reviewer findings into one repair packet and use one focused re-review.
-- Run dedicated QA only at the major gates in `qa-surfaces.md`.
-- Do not poll active agents aggressively or request progress prose that does not
-  change the next decision.
-
-## Parallel implementation
-
-Default to one writer in a shared worktree. Use multiple Coders only for
-independently deliverable vertical slices with disjoint ownership or isolated
-worktrees. Parallelism that creates merge or coordination work is not a speedup.
-
-## Speed without weakened evidence
-
-Faster delivery does not authorize skipping required review, safety boundaries,
-or final evidence. It changes when work is grouped and when gates run:
+Lead review and Lead QA share at most two repair slots:
 
 ```text
-coherent implementation slice
-→ one independent review
-→ one batched repair if needed
-→ focused re-review
-→ one major QA gate
-→ optional high-risk Gate
+IMPLEMENTED -> LEAD_REVIEW
+
+LEAD_REVIEW pass -> LEAD_QA
+LEAD_REVIEW bounded failure -> next available REPAIR slot
+
+REPAIR_1 -> focused Lead re-review -> LEAD_QA when review passes
+REPAIR_2 -> focused Lead re-review -> LEAD_QA when review passes
+
+LEAD_QA pass -> COMPLETE
+LEAD_QA bounded failure -> next available REPAIR slot -> Lead re-review -> Lead QA
+
+Any failure after REPAIR_2 -> REPLAN/BLOCKED
+Any second failure of the same requirement -> REPLAN
+Any frozen-contract, ownership, authority, or spec change -> REPLAN
 ```
+
+One repair remains the expected path. A repair is bounded only when it stays
+inside the same spec revision, ownership, and authority. Each repair packet
+names failed requirement IDs, observed evidence, owner, permitted files,
+invalidated checks, and exact reruns. Do not create a separate hidden repair
+allowance for QA failures.

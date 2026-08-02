@@ -1,0 +1,27 @@
+{
+  "policyVersion": "TEAMPLAY-EXEC-1",
+  "canonicalCapsuleSha256": "9965cc7cfc9c4658f3783247d265388cc8a098f97ca026cf3115d00a07b2478c",
+  "fixtures": {
+    "standard": {
+      "taskSha256": "8dd98224721d15dcbd91ee7719d67c186bf0af8ea826660aa97c4fc0b82920e1",
+      "renderedPromptSha256": "93d0f580fde655f6695b6c946ec6f96207cff1357599e9fbb5b48ec7a449f619",
+      "renderedCharacters": 1576,
+      "beginDelimiterCount": 1,
+      "endDelimiterCount": 1
+    },
+    "fast": {
+      "taskSha256": "009ad767f6dd6c10d0786c40470962e0f8a1e48b2f12a1afe6284cb5843d7e98",
+      "renderedPromptSha256": "9ed0d9c70b5445a15d852262f13dd5411dd42d90afdd7f44b0d218c45057619b",
+      "renderedCharacters": 1541,
+      "beginDelimiterCount": 1,
+      "endDelimiterCount": 1
+    },
+    "sol": {
+      "taskSha256": "7126da0d41b3f877074821c315dd17bcdc7039313d3ae983c8d0b1a03a4de331",
+      "renderedPromptSha256": "2ec32825955173439d608b1bcbe4e7d99619105a88a435622989bba0f769bcd4",
+      "renderedCharacters": 1616,
+      "beginDelimiterCount": 1,
+      "endDelimiterCount": 1
+    }
+  }
+}

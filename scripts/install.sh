@@ -11,6 +11,7 @@ TARGET_SKILL_DIR="$TARGET_SKILLS_DIR/teamplay"
 install -d "$TARGET_AGENTS_DIR"
 install -d "$TARGET_SKILL_DIR/references"
 install -d "$TARGET_SKILL_DIR/templates"
+install -d "$TARGET_SKILL_DIR/scripts"
 
 # Teamplay 0.4.0 moved Lead ownership to the current main agent. Remove only the
 # obsolete Teamplay-owned preset from earlier installations.
@@ -29,6 +30,11 @@ done
 
 for TEMPLATE_FILE in "$PACKAGE_DIR"/skills/teamplay/templates/*.md; do
   install -m 0644 "$TEMPLATE_FILE" "$TARGET_SKILL_DIR/templates/$(basename "$TEMPLATE_FILE")"
+done
+
+for SKILL_SCRIPT in "$PACKAGE_DIR"/skills/teamplay/scripts/*; do
+  [ -f "$SKILL_SCRIPT" ] || continue
+  install -m 0755 "$SKILL_SCRIPT" "$TARGET_SKILL_DIR/scripts/$(basename "$SKILL_SCRIPT")"
 done
 
 for SHORTCUT in teamplay-fast teamplay-deep teamplay-critical; do

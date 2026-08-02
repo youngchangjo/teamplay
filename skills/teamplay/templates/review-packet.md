@@ -1,24 +1,27 @@
-# Review task packet
+# Advisory review packet
 
 ```yaml
 role: teamplay-reviewer
-review_focus: outcome-completeness | correctness-regression | security-concurrency | general
-objective:
-completed_slice_outcome:
+authority: advisory-only
+review_focus: spec-deviation | correctness-regression | security-concurrency | general
+canonical_spec:
+  paths: []
+  revision:
+assigned_requirement_ids: []
 baseline:
   repository:
   base_sha:
   head_sha:
-approved_scope: []
-acceptance_criteria: []
 changed_paths: []
 diff_source:
+lead_questions: []
 verification_evidence: []
 required_output:
-  - verdict
-  - findings
-  - blockers
+  - advisoryStatus
+  - specDeviationCandidates
+  - engineeringRiskCandidates
+  - optionalImprovements
   - inspectedDiff
   - evidenceChecked
-  - batchedRepairFindings
+  - limitations
 ```

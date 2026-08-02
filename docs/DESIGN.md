@@ -1,146 +1,173 @@
-# Teamplay design rationale
+# Teamplay 0.11 design rationale
 
-Teamplay is a manager-style Codex orchestration skill. The current main agent
-owns the user conversation, acts as Lead, and performs final synthesis; Lead is
-never spawned as a subagent. Narrow specialist agents perform bounded work. The
-installed roster is intentionally larger than the active roster so routing can
-match the actual task without spawning an agent swarm.
+Teamplay is a specification-first manager pattern with model-aware
+implementation. The current main agent keeps product authority, integration,
+final diff review, acceptance QA, and completion. Luna or Sol owns one bounded
+implementation outcome.
 
-## Selection principles
+## Why the 0.9 harness changed
 
-1. Start with the lead and add a role only for concrete work.
-2. Prefer parallel read-heavy work over parallel writes.
-3. Give each child a minimal local contract instead of parent-level workflow
-   philosophy.
-4. Use one writer in a shared worktree by default.
-5. Select implementation capability by failure cost and breadth, not file count
-   alone.
-6. Keep implementation, review, QA, gate, and release evidence separate.
-7. Use task-focused review axes instead of accumulating overlapping personas.
-8. End every run with a structured routing and evidence report.
-9. Prefer faithful interactive QA over build-only inference when a UI surface is
-   available.
-10. Run dedicated QA at major gates, not after every edit or repair.
-11. Delegate coherent vertical slices rather than file-sized micro-tasks.
+Version 0.9 correctly moved review and QA back to the Lead, but it overfit three
+areas:
 
-## Entry points
+- Luna was described by outcome size without qualifying ambiguity or remaining
+  decision density;
+- Sol was available only after a Luna failure;
+- safety, ownership, evidence, and final-authority clauses were repeated in the
+  core skill, references, templates, and role prompts.
 
-Teamplay exposes four skill names instead of requiring a trailing mode option:
+OpenAI's current GPT-5.6 guidance describes Sol as the frontier choice for
+demanding, ambiguous, multi-step work and Luna as the efficient high-volume
+choice for clear, repeatable work. It also recommends lean prompts that state a
+policy once. Multi-agent guidance favors independent bounded work and warns
+against shared mutable writers.
 
-- `$teamplay`: automatic routing;
-- `$teamplay-fast`: small, clear, low-risk work;
-- `$teamplay-deep`: complex implementation or thorough investigation;
-- `$teamplay-critical`: high-risk work with mandatory evidence gates.
+The user's product policy remains stricter than generic effort guidance: every
+Luna child runs at max.
 
-The three preset skills are thin wrappers. Each loads the same core Teamplay
-skill and supplies one `requested_preset`, so routing and safety logic remain in
-one maintained source. Fast may escalate for safety, Deep does not silently
-downgrade to Fast, and Critical cannot convert a missing required surface into a
-pass.
+## Authority before model
 
-## Model rationale
+The route is:
 
-- The Lead keeps the model and reasoning effort selected for the current main
-  session. Sol high is recommended for demanding orchestration, but Teamplay
-  does not override the user's main-model choice.
-- Luna low handles bounded local discovery.
-- Terra medium handles current external research where source evaluation matters.
-- Luna max handles small, well-specified implementation efficiently.
-- Terra high is the standard implementation and review tier.
-- Sol max is reserved for deep implementation where failure is expensive.
-- Luna high executes procedural QA on explicit scenarios.
-- Sol high performs an independent final gate for material risk.
+```text
+R0 authority -> R1 specification -> R2 model -> R3 pool
+```
 
-Reasoning effort scales work within a model; it does not make a smaller model
-universally stronger than a larger tier. Teamplay therefore treats Luna max as
-the fast bounded implementation lane, not the default for all coding.
+This order prevents a powerful model from being treated as authority. Sol cannot
+perform an unapproved external or destructive action, and no model starts while
+a user-authority decision remains unresolved.
 
-## Run observability
+## Decision density, not file count
 
-Every invocation ends with a Teamplay Run Report. The report records the entry
-point, resolved preset, current main Lead, every spawned role and configured
-model, assignment, handoff flow, evidence layers, omissions, and observable
-routing signals.
+Luna eligibility is an all-pass semantic gate. The behavior, acceptance,
+contracts, consequential choices, risk, and ownership must already be bounded.
+The Coder can still span every directly required established layer.
 
-Configured agent files are the source for expected child model and reasoning
-values. Actual runtime model claims are labeled confirmed only when runtime
-metadata exposes them; agent self-identification is not proof. Duration and
-token usage are omitted when unavailable rather than estimated.
+Sol is proactive when consequential technical judgment remains. It can resolve
+only the technical decision space named by the Lead; the Lead still owns product
+intent. This avoids paying for a predictable Luna failure while preserving Luna
+for broad mechanical implementation that benefits from its lower cost.
 
-This creates comparable operational records without exposing hidden
-chain-of-thought. Maintainers can later look for repeated escalation, rework,
-review findings, QA blockers, or unnecessary roles before changing the router.
+## Coherent outcomes and persistent sessions
 
-## Interactive QA rationale
+Version 0.11 makes outcome granularity explicit. One outcome is an
+independently integratable behavior or milestone with its directly coupled
+implementation, checks, fixtures, docs, and configuration. Splitting one
+outcome by file, command, test, or repair creates coordination noise without
+adding useful independence.
 
-QA uses purpose-built semantic, build, and simulator tools where available, then
-actively exercises visible behavior:
+The Coder session key is the spec ID/revision, outcome ID, route, and owned
+surfaces. While that key is unchanged, one Coder identity owns implementation,
+coupled checks, Lead feedback, and bounded in-spec repairs. This keeps context
+and responsibility continuous without changing Lead authority.
 
-- `browser:control-in-app-browser` owns websites, local web apps, responsive
-  layouts, and browser-visible flows. The runtime default prefers the in-app
-  Browser when the user has not explicitly selected another browser.
-- `computer-use:computer-use` owns native app windows, iOS Simulator UI, system
-  dialogs, and other visible interactions not exposed by a more specific tool.
+## Restart boundaries and continuation
 
-Browser and Computer Use evidence are deliberately separate. An in-app Browser
-pass is not native Simulator or physical-device proof, and a Simulator pass is
-not installed-device, deployment, or release proof. Each QA scenario records its
-surface, decisive actions, visual artifacts, and limitations.
+The first assignment contains exactly one rendered execution capsule. A
+same-session follow-up uses a compact continuation packet containing only the
+delta, requested result, invalidated checks, and stop conditions. It deliberately
+does not copy the capsule or resend the full initial task.
 
-QA execution is intentionally gated. Coders own fast feedback such as unit
-tests, lint, typecheck, and narrow smoke checks. The Lead consolidates Browser,
-Computer Use, Simulator, device, and integration scenarios at an integrated
-feature, user-visible milestone, pre-merge, pre-release, or critical final
-evidence gate. Focused failed scenarios run after repairs; a full gate repeats
-only when broader evidence became stale or final acceptance requires it.
+A new Coder is justified only by a new independent outcome, a changed key after
+replan, an unavailable prior agent, or evidenced non-progress after one bounded
+redirect. A spec, authority, frozen-contract, or ownership change is a replan
+boundary. The scheduler waits for named conditions and avoids reflexive polling
+or duplicate work.
 
-## Delivery speed rationale
+Closing a completed child can release a concurrency slot, but it does not create
+a new assignment boundary. Teamplay retains the agent identity and resumes it
+for an in-spec repair until the outcome is accepted or replanned.
 
-The main source of avoidable latency is excessive decomposition: separate
-agents for routine discovery, one-file implementation fragments, intermediate
-reviews, and repeated QA. Teamplay instead gives one appropriately sized Coder a
-complete user-visible or integratable slice and lets it change every directly
-required layer inside the approved boundary.
+## Lifecycle diagnostics
 
-Scout and Researcher are used only when their answers materially unblock the
-slice. Plan Challenger is reserved for ambiguity, architecture, and risk.
-Review happens after the slice is stable, findings are batched into one repair
-packet, and QA runs at a major gate. This reduces handoffs while preserving
-independent review and faithful final evidence.
+Run reports distinguish spawn, message/reuse, resume, redirect, restart, and
+close events. Host token diagnostics preserve cached input, uncached input,
+output, and reasoning as separate observations. They describe execution
+diagnostics, not provider billing or cost.
 
-## Research basis
+## Two specification levels
 
-- [OpenAI Codex Subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents)
-  recommends narrow custom agents, bounded prompts, parallel read-heavy work,
-  and caution with parallel writes.
-- [OpenAI practical guide to building agents](https://cdn.openai.com/business-guides-and-resources/a-practical-guide-to-building-agents.pdf)
-  recommends starting with a single agent and using a manager pattern when
-  specialization materially helps.
-- [OpenAI Symphony](https://openai.com/index/open-source-codex-orchestration-symphony/)
-  emphasizes task dependencies, isolated workspaces, evidence, and objectives
-  over rigid agent state machines.
-- [GPT-5.6 model guidance](https://developers.openai.com/api/docs/guides/latest-model)
-  positions Sol for demanding work, Terra for balanced capability and cost, and
-  Luna for efficient high-volume work.
-- Community reports consistently value read-only exploration, focused review,
-  and explicit task packets, while warning about token burn, aggressive polling,
-  unclear delegation prompts, and conflicting parallel writers.
+A Spec Brief supplies enough written authority for one ordinary outcome and for
+the Lead's final review/QA without adding a matrix or per-file recipe.
 
-Community experience is anecdotal rather than benchmark evidence. Teamplay's
-model routing should eventually be evaluated on representative repositories
-using completion rate, reviewer defects, rework count, elapsed time, and token
-usage.
+A Full Spec Lock adds coordination controls only when the work shape requires
+them: multiple writers, shared contracts or ownership, critical semantics,
+migration/recovery, cross-environment QA, or non-local rollback.
 
-## Runtime limitations
+The trigger is risk created by coordination, not the presence of a filename such
+as `Package.resolved` or a lockfile. One owner can make a predetermined shared
+artifact update under a Brief.
 
-- Custom agent discovery can vary across Codex surfaces and versions. Restart or
-  open a new task after installation and run `scripts/validate.sh --installed`.
-- Lead does not depend on custom-agent discovery because it is the current main
-  agent. Only the nine specialist presets need to be discovered after install.
-- A valid TOML file proves configuration syntax, not which model actually ran.
-  Route using the registered agent type and runtime metadata where available;
-  do not trust model self-identification in prose.
-- Parent permission and sandbox overrides may take precedence over custom agent
-  defaults. Read-only role instructions remain a second safety layer.
-- Teamplay does not create isolated worktrees itself. The lead must keep one
-  writer or use a runtime-provided isolated worktree before parallel writes.
+## Single-source execution policy
+
+The canonical execution capsule is delimited in one reference file. A renderer
+extracts it and assembles a spawn prompt with one task capsule. Validation checks
+delimiter count and normalized SHA-256 equality against the source.
+
+This is stronger and shorter than repeating paraphrased rules:
+
+- source drift becomes detectable;
+- a child receives policy text rather than an unread path;
+- role prompts contain only model-specific judgment and stops;
+- task capsules contain only variable assignment data.
+
+## Writer pool
+
+The default is one mutating writer. Two are automatic only for genuinely
+independent outcomes. Three requires explicit intent and isolation. This matches
+the practical value of focused contexts while accounting for Codex's warning
+that parallel write-heavy work can increase conflicts and coordination.
+
+Routing is the sole normative owner of pool and parallel rules. Delivery-speed
+guidance may discuss scheduling but cannot redefine eligibility.
+
+## Fast
+
+Standard and Fast Luna use the same model, max effort, specification, and result
+contract. Fast adds child-local service-tier and feature settings. The Lead and
+Sol remain unchanged.
+
+Pricing is observational context, not policy. Version 0.10 records the official
+source and date when discussing the 2026-08-01 Luna reduction but does not embed
+current prices in routing logic.
+
+## Review, QA, and repair
+
+The Lead's spec-conformance pass occurs before engineering-integrity judgment.
+This prevents a code-only review from redefining the product.
+
+Acceptance QA remains a direct Lead responsibility. Child checks and advisory
+QA evidence are inputs, not the final verdict. Proof layers remain separate.
+
+Review and QA share two repair slots. A late QA failure cannot silently create a
+third allowance. Repeated failure of one requirement or a changed frozen
+boundary means the plan was wrong and must be revised.
+
+## Verifiable lean-harness target
+
+Teamplay preserves the 0.9 prompt-pressure baseline. Version 0.11 must show:
+
+- one global policy block in each assembled prompt;
+- no copied global block in Coder TOMLs;
+- shorter role instructions for Standard, Fast, and Sol;
+- at least 25% fewer non-task policy characters per representative route;
+- one session identity across implementation, coupled checks, feedback, and
+  bounded repair;
+- explicit restart boundaries and capsule-free continuation;
+- distinct lifecycle events and non-billing token diagnostics;
+- no loss of authority, requirement coverage, Lead review, Lead QA, or evidence
+  separation.
+
+Static TOML proves configured intent only. Live Standard, Fast, and Sol canaries
+need host-observed model, effort, and tier metadata; otherwise runtime identity
+is `NOT_PROVEN`.
+
+## Sources checked
+
+- [GPT-5.6 guidance](https://developers.openai.com/api/docs/guides/latest-model)
+- [OpenAI Multi-agent](https://developers.openai.com/api/docs/guides/responses-multi-agent)
+- [GPT-5.6 Luna](https://developers.openai.com/api/docs/models/gpt-5.6-luna)
+- [GPT-5.6 Sol](https://developers.openai.com/api/docs/models/gpt-5.6-sol)
+- [Codex subagents](https://learn.chatgpt.com/docs/agent-configuration/subagents)
+- [Codex speed](https://learn.chatgpt.com/docs/agent-configuration/speed)
+- [Codex rate card](https://help.openai.com/en/articles/20001106-codex-rate-card)

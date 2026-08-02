@@ -1,76 +1,60 @@
 # Role contracts
 
-## Team Lead — current main agent
+Shared child policy lives only in `execution-policy.md`; model and pool policy
+lives only in `routing.md`.
 
-Owns interpretation, routing, task packets, conflict resolution, and final
-status. The Lead is the current main conversation agent, not a spawned subagent.
-It keeps the user's selected main model and reasoning effort, may handle a
-read-only or truly trivial task directly, and must not turn orchestration into
-an unnecessary agent swarm.
+## Lead
 
-## Scout — Luna low
+The current main agent owns user dialogue, authority, specification, routing,
+integration, final spec review, acceptance QA, repair state, and completion.
 
-Read-only. Locates files, symbols, callers, tests, instructions, and likely
-verification commands. Returns absolute paths and concise findings. Does not
-design or implement the solution.
+## Scout
 
-## Researcher — Terra medium
+Read-only repository mapper. Use only when targeted discovery materially helps
+the Lead lock context, ownership, or validation surfaces.
 
-Read-only. Verifies current official documentation, standards, release notes,
-upstream source, and version-specific behavior. Uses primary sources and direct
-links. Distinguishes verified fact, inference, and uncertainty. Does not edit.
+## Researcher
 
-## Plan Challenger — Terra high
+Read-only primary-source researcher. Use when current external behavior is part
+of the specification. It verifies facts and citations, not product intent.
 
-Read-only. Challenges assumptions, interfaces, scope, migration concerns,
-acceptance criteria, and verification gaps. Returns `READY`, `REVISE`, or
-`BLOCKED`. Does not replace the lead and does not implement.
+## Plan Challenger
 
-## Fast Coder — Luna max
+Read-only pre-lock challenger for contradictions, missing decisions, interface
+risk, and unverifiable acceptance. The Lead resolves its advisory verdict.
 
-Owns a small, well-specified, low-risk change in established patterns. Escalates
-instead of improvising when it encounters broader design, security, concurrency,
-or migration work.
+## Luna Coder
 
-## Standard Coder — Terra high
+Mutating implementation owner selected only after L1-L6 pass. Standard and Fast
+share one role contract; Fast changes only the child tier. It stops when an
+eligibility predicate proves false.
 
-Owns only its assigned paths and responsibility. Makes the smallest correct
-product change across a few files or established layers, adds or updates
-relevant tests, preserves unrelated work, runs bounded checks, and reports exact
-results. Does not push, merge, release, or broaden the assignment.
+All mutating Coders own one coherent, independently integratable outcome across
+their directly coupled established layers. They keep one identity through
+implementation, focused checks, Lead feedback, and bounded in-spec repair while
+the session key is unchanged. A file, command, test failure, or repair is not a
+new assignment, and a continuation does not resend the execution capsule.
 
-## Deep Coder — Sol max
+## Sol Coder
 
-Owns one complex goal involving cross-module interfaces, difficult debugging,
-security, concurrency, data integrity, or migration. Confirms invariants and
-rollback boundaries, but complexity does not authorize unrelated refactoring.
+Mutating implementation owner selected proactively when a Luna predicate fails
+or Sol is directly requested. It may resolve only the locked technical decision
+space and does not own product interpretation.
 
-## Reviewer — Terra high
+The shared mutating-Coder continuity contract above applies equally to Sol.
 
-Read-only. Reviews the real diff for correctness, regressions, scope control,
-maintainability, and test relevance. Findings include severity and file/line
-references. Returns `APPROVE` or `REQUEST_CHANGES`. For high-risk work, separate
-reviewer instances may receive distinct task-focused axes. Does not edit.
+## Reviewer
 
-## QA — Luna high
+Optional read-only scanner for spec-deviation and engineering-risk candidates.
+It does not approve the diff. The Lead independently inspects and adjudicates
+its findings.
 
-Verification-only by default. Runs the most faithful available test, build,
-runtime, UI, device, or integration scenarios. Separates passes, failures,
-blocked scenarios, and unavailable surfaces. Does not silently fix product code.
+## QA helper
 
-## Gate — Sol high
+Optional evidence collector for scenarios assigned by the Lead. It reports
+observations and artifacts but does not issue final acceptance.
 
-Read-only final auditor for high-risk work. Checks the original goal, diff,
-review, QA evidence, and remaining operational gates. Returns `APPROVE`,
-`PARTIAL`, or `REJECT` with criterion-linked reasons. It cannot turn missing
-evidence into a pass.
+## Gate
 
-## Shared-worktree contract
-
-Every mutating role must be told:
-
-- other agents and the user may have concurrent changes;
-- do not revert, reset, overwrite, stage, or commit unfamiliar work;
-- edit only owned paths unless an unavoidable dependency is reported first;
-- re-read files immediately before patching;
-- report conflicts rather than resolving them by discarding another change.
+Optional read-only critical-risk auditor after Lead review and QA. It reports
+unsupported claims or operational gaps without approving release or completion.

@@ -1,32 +1,22 @@
 ---
 name: teamplay-deep
-description: Run Teamplay with the deep preset for complex implementation, architecture, difficult debugging, or thorough review. Use when the user says "$teamplay-deep" or asks Teamplay to investigate and implement deeply without taking the fast path.
-version: 0.8.0
+description: Run Teamplay with stronger specification, invariants, and evidence while selecting Luna max or Sol max by consequential decision density. Use when the user invokes "$teamplay-deep" or asks for difficult cross-cutting work.
+version: 0.11.0
 ---
 
 # Teamplay Deep
 
-This is a thin entry point for the core Teamplay workflow.
+Read and apply `../teamplay/SKILL.md` with:
 
-Before acting, fully read `../teamplay/SKILL.md` and every reference it marks as
-required. Then follow the core entry contract with:
-
-```text
+```yaml
 requested_preset: deep
 ```
 
-Deep means:
-
-- keep the current main agent as Teamplay Lead;
-- add Scout or Researcher when discovery or external facts matter;
-- use Plan Challenger when design, ambiguity, or cross-cutting interfaces matter;
-- select Standard Coder or Deep Coder from the actual implementation depth;
-- require focused independent review for meaningful code changes;
-- run faithful QA once at the completed integration or user-visible milestone,
-  not after each subtask.
-
-Do not silently downgrade to the fast path. Deep does not require mutation when
-the user's request is read-only, and it does not authorize unrelated expansion.
-
-End with the core Teamplay Run Report and record which discovery, challenge,
-implementation, review, and QA lanes actually ran.
+- Strengthen invariant, compatibility, rollback, and adversarial evidence detail.
+- Use the same R0-R3 route. Deep does not automatically mean Sol, and Sol does
+  not wait for Luna to fail.
+- Use Luna max when L1-L6 pass; use Sol max when a predicate fails or Sol was
+  directly requested.
+- The current main Lead still performs final review and QA.
+- Keep one Coder identity for one coherent outcome and its coupled checks,
+  feedback, and in-spec repairs while the session key is unchanged.

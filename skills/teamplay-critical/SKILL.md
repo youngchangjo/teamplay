@@ -1,36 +1,22 @@
 ---
 name: teamplay-critical
-description: Run Teamplay with the critical preset for security, privacy, auth, payment, data integrity, migration, deployment, release, destructive, or irreversible work. Use when the user says "$teamplay-critical" or explicitly requires the strongest Teamplay evidence gate.
-version: 0.8.0
+description: Run Teamplay with threat-, rollback-, and evidence-aware specification for security, privacy, auth, payment, migration, release, or irreversible-risk work. Use when the user invokes "$teamplay-critical" or requests a critical gate.
+version: 0.11.0
 ---
 
 # Teamplay Critical
 
-This is a thin entry point for the core Teamplay workflow.
+Read and apply `../teamplay/SKILL.md` with:
 
-Before acting, fully read `../teamplay/SKILL.md` and every reference it marks as
-required. Then follow the core entry contract with:
-
-```text
+```yaml
 requested_preset: critical
 ```
 
-For a mutating implementation, Critical requires:
-
-- the current main agent acting as Teamplay Lead;
-- `teamplay-plan-challenger`;
-- `teamplay-coder-deep`;
-- one or more task-focused `teamplay-reviewer` passes;
-- one consolidated `teamplay-qa` run on every applicable requested verification
-  surface after the critical implementation is stable;
-- `teamplay-gate` after review and QA.
-
-Add Scout or Researcher when discovery or current external evidence is required.
-Do not silently downgrade, skip a required evidence layer, or convert a blocked
-physical, external, deployment, or release surface into a pass. Critical does
-not itself authorize publication, release, account changes, purchases, deletion,
-or other destructive actions.
-
-End with the core Teamplay Run Report. Every required Critical evidence layer
-must have a separate verdict; missing evidence must remain `PARTIAL` or
-`BLOCKED`.
+- Apply R0 before every route; critical does not grant new authority.
+- Use a Full Spec Lock when the triggers in `spec-contract.md` apply.
+- Route by L1-L6. Critical judgment commonly selects Sol max, but a fully locked
+  mechanical slice may still use Luna max.
+- Add the advisory Gate only when a second critical-risk audit adds value.
+- The current main Lead owns final spec review, QA, and completion.
+- Lifecycle continuity never expands authority: reuse the same Coder only while
+  the locked session key, ownership, and frozen contracts remain unchanged.

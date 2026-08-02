@@ -1,105 +1,88 @@
-# Routing
+# Routing policy
 
-## Public entry points
+This is the sole normative source for Teamplay model eligibility, pool count,
+writer independence, shared-surface ownership, and isolation.
 
-| Skill | Requested preset | Contract |
-|---|---|---|
-| `$teamplay` | `auto` | Select the smallest useful roster |
-| `$teamplay-fast` | `fast` | Prefer Fast Coder; escalate at higher-risk boundaries |
-| `$teamplay-deep` | `deep` | Favor discovery, challenge, focused review, and faithful QA |
-| `$teamplay-critical` | `critical` | Require Deep Coder, review, QA, and Gate for mutations |
+## R0-R3 precedence
 
-Shortcut skills must load the core Teamplay skill. They do not duplicate the
-orchestration workflow.
+1. `R0 authority`: out-of-authority, destructive, external-state, login/CAPTCHA,
+   user-only, release, purchase, account, or permission work is `BLOCKED`. Sol is
+   not a fallback for unauthorized work.
+2. `R1 specification`: the Lead locks a Spec Brief or Full Spec Lock. Product
+   outcome, requirements, invariants, authority, and delegated technical decision
+   space must be explicit. Unresolved user-authority items must be empty.
+3. `R2 model`: within authority and with a ready spec, select Luna max or Sol max.
+4. `R3 pool`: select the smallest safe writer pool after model selection.
 
-In every route, `Lead` means the current main conversation agent. Teamplay never
-spawns a Lead subagent.
+## Consequential decision
 
-## Decision table
+A consequential decision is a choice whose alternatives can materially change:
 
-| Signal | Add role | Reason |
-|---|---|---|
-| Relevant files or symbols are unknown | Scout | Establish a precise change surface |
-| Current docs, standards, upstream source, or version behavior matters | Researcher | Verify external facts with primary sources |
-| Requirements have competing interpretations | Plan Challenger | Expose the decision before mutation |
-| Several layers or interfaces will change | Plan Challenger | Test the slice and interface boundaries |
-| Small, clear, low-risk change in existing patterns | Fast Coder | Minimize latency and cost without broadening scope |
-| Normal product feature across established layers | Standard Coder | Balance implementation quality, speed, and cost |
-| Cross-cutting, security, concurrency, data, or migration work | Deep Coder | Use frontier reasoning for expensive failure modes |
-| Meaningful code changed | Reviewer | Inspect the actual diff independently |
-| Tests, build, runtime, UI, or device surface exists | QA | Verify observable behavior |
-| Security, privacy, auth, payment, or data integrity risk | Gate | Re-audit completion evidence |
-| Migration, deployment, release, deletion, or irreversible action | Gate | Prevent evidence layers from being conflated |
+- user-visible or externally observable behavior;
+- a public, cross-component, or cross-slice interface;
+- persistence, schema, protocol, compatibility, migration, or recovery;
+- security, privacy, authentication, authorization, permissions, payments, or
+  cryptographic semantics;
+- concurrency, ordering, lifecycle ownership, cancellation, retry, or state;
+- external effects, deployment, rollback, release, or component ownership.
 
-## Common routes
+Private naming, helper extraction, equivalent local organization, fixtures, and
+other observationally equivalent choices are not consequential.
 
-### Read-only explanation
+## Luna max eligibility
 
-Lead only. Add Scout for repository discovery, Researcher for current external
-facts, or Plan Challenger when the user wants an independent critique.
+Route to Luna max only when every predicate passes:
 
-### One-spot change
+- `L1 requirements_closed`: no unresolved product interpretation can change an
+  observable result.
+- `L2 acceptance_executable`: requirement-linked checks or objective inspection
+  criteria are named before coding.
+- `L3 contracts_frozen`: public and cross-slice interfaces are unchanged or
+  exact signatures, semantics, compatibility, and ownership are locked.
+- `L4 decision_density_zero`: no consequential implementation decision remains;
+  a repository precedent is named or only equivalent local choices remain.
+- `L5 ordinary_risk`: no judgment remains over security-sensitive semantics,
+  concurrency/lifecycle, migration/data integrity, non-local rollback, or
+  irreversible/external state.
+- `L6 bounded_ownership`: writable surfaces and context are bounded, no other
+  child's uncommitted work is required, and validation is independent.
 
-Lead -> Fast Coder -> Reviewer. Add QA if a relevant test or runtime scenario
-exists.
+When all pass and Sol was not directly requested, use `teamplay-coder`. Use
+`teamplay-coder-fast` only when Fast is selected. File breadth is not a routing
+signal. Record L1-L6 in the task capsule.
 
-### Normal feature
+If a Luna child discovers a false predicate, it stops with that predicate, the
+consequential decision, current changes, and still-valid evidence.
 
-Scout or Researcher when needed -> Lead -> Standard Coder -> Reviewer -> QA.
+## Sol max eligibility
 
-### Ambiguous or cross-cutting feature
+Route to `teamplay-coder-deep` before mutation when any L1-L6 predicate fails or
+the user directly requests Sol, provided R0 and R1 pass. Do not run Luna first
+merely to justify Sol.
 
-Scout and/or Researcher -> Lead -> Plan Challenger -> Standard or Deep Coder ->
-Reviewer -> QA.
+Direct Sol signals include unresolved technical architecture, novel
+cross-cutting behavior, consequential public contracts, security/privacy/auth/
+payment/permission judgment, concurrency or lifecycle correctness, migration or
+data integrity, compatibility/rollback/recovery, consequential performance or
+reliability trade-offs, and ambiguous cross-component defects.
 
-### High-risk change
+Default to one mutating Sol Coder. Sol never expands authority or takes final
+spec, review, QA, integration, or completion ownership from the Lead. After the
+Lead locks a Sol-resolved contract, independent mechanical follow-on work may
+return to Luna.
 
-Scout and/or Researcher -> Lead -> Plan Challenger -> Deep Coder -> focused
-Reviewer lane(s) -> QA -> Gate.
+## Writer pool
 
-## Parallelism
+- One mutating Coder is the default.
+- Auto may select two only for independent complete outcomes with frozen
+  contracts, disjoint paths, no shared generated output/manifest/lockfile, no
+  dependency on another child's uncommitted work, and independent checks.
+- Three requires explicit user request and the same proof plus disjoint ownership
+  or isolated worktrees.
+- Never run more than three mutating Coders in one wave.
+- Every shared mutable surface has exactly one Coder owner or belongs to the
+  Lead's serial integration step.
 
-Safe parallel work:
-
-- independent discovery questions;
-- external research and local code discovery;
-- at most three independent read-only discovery, research, triage, or review
-  assignments;
-- coders with explicit, disjoint owned paths or isolated worktrees;
-- preparation of QA scenarios while implementation proceeds, provided QA does
-  not claim execution until the target state is stable.
-
-Keep sequential:
-
-- challenge before plan approval;
-- implementation before diff review;
-- repairs before focused re-review;
-- stable implementation before runtime QA;
-- review and QA before final gate.
-
-Concurrency limits:
-
-- no more than four active child threads by default;
-- no more than three concurrent read-only children;
-- one writer by default;
-- never parallelize overlapping write ownership in a shared worktree.
-
-Waiting policy:
-
-- wait on mailbox updates instead of repeatedly reading full child transcripts;
-- back off bounded waits when state is unchanged;
-- do not declare a running child failed because one wait timed out;
-- interrupt only for a real scope change, unsafe behavior, or explicit user
-  override.
-
-## Stop conditions
-
-Stop delegation and ask the user when:
-
-- two plausible interpretations would produce materially different products;
-- the requested action needs credentials, purchasing, publication, or account
-  authority not already provided;
-- a destructive target is not exact;
-- overlapping worktree changes cannot be safely separated;
-- a required physical or external verification surface is unavailable and the
-  user asked for that exact finish line.
+A predetermined one-owner change may touch a manifest, lockfile, schema, or
+generated artifact without becoming parallel or Full Lock work. The risk comes
+from coordination and consequential decisions, not filenames.

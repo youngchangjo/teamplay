@@ -1,70 +1,101 @@
 # Teamplay Run Report
 
-```markdown
-## Teamplay Run Report
+## Outcome and authority
 
-### Run
-
-- Entry point: `$teamplay | $teamplay-fast | $teamplay-deep | $teamplay-critical`
-- Resolved preset: `auto | fast | deep | critical`
+- Requested outcome:
+- Authorized local work:
+- Excluded authority:
 - Overall status: `COMPLETE | PARTIAL | BLOCKED | FAILED`
-- Lead: `current main agent`
-- Lead model: `<runtime-confirmed value | runtime metadata not exposed>`
-- Lead reasoning: `<runtime-confirmed value | runtime metadata not exposed>`
-- Saved report: `<path | inline only>`
 
-### Team used
+## Specification
 
-| Instance | Registered agent type | Model provenance | Assignment | Why selected | Result |
+- Path, ID, revision, and baseline:
+- Level: `brief | full`
+- Requirement anchors:
+- Unresolved user-authority items: none | list
+
+## Route
+
+- R0 authority:
+- R1 specification readiness:
+- R2 model: Luna max Standard | Luna max Fast | Sol max
+- L1-L6 results or Sol signal:
+- R3 pool, isolation, and shared-surface owner:
+
+## Rendered assignment evidence
+
+- Canonical capsule SHA-256:
+- Task SHA-256:
+- Rendered prompt SHA-256:
+- Delimiter count:
+- Runtime identity: `PASS | NOT_PROVEN`
+- Runtime evidence or limitation:
+
+## Outcome continuity
+
+- Outcome ID:
+- Session key:
+- Coder identity:
+- One identity retained through implementation, coupled checks, Lead feedback,
+  and in-spec repair: PASS | PARTIAL | BLOCKED
+- Initial assignment capsule copies: 1
+- Same-session continuation capsule copies: 0
+
+## Lifecycle diagnostics
+
+| Event | Count | Agent identity/session key evidence | Limitation |
+|---|---:|---|---|
+| spawn |  |  |  |
+| message/reuse |  |  |  |
+| resume |  |  |  |
+| redirect |  |  |  |
+| restart |  |  |  |
+| close |  |  |  |
+
+Token diagnostics, when exposed by the host, are observations only:
+
+- input_cached:
+- input_uncached:
+- output:
+- reasoning:
+- Billing inferred: no; counters do not establish provider billing, credits,
+  or cost.
+
+## Child results
+
+| Role | Outcome | Status | Changed surfaces | Validation | Residual risk |
 |---|---|---|---|---|---|
-| 1 | `teamplay-coder` | configured: `gpt-5.6-terra`, high | ... | ... | ... |
 
-If no child ran:
+## Requirement coverage
 
-| Instance | Registered agent type | Model provenance | Assignment | Why selected | Result |
+| Requirement | Implementation | Lead review | Lead QA | Evidence state | Gap |
 |---|---|---|---|---|---|
-| — | None | — | Main Lead handled directly | Delegation added no useful separation | ... |
 
-### Flow
+## Lead review
 
-`Lead → Scout + Researcher → Coder → Reviewer → QA → Gate`
+- Spec-conformance verdict:
+- Engineering-integrity verdict:
+- Required repairs:
 
-- Escalations: ...
-- Retries or repair loops: ...
-- Implementation slices: ...
-- Avoidable handoffs: ...
-- Whole assigned outcome completed in one pass: `yes | no` — ...
+## Lead QA
 
-### Delivery
+- Gate and target identity:
+- Exact surfaces and scenarios:
+- Evidence and limitations:
+- Verdict:
 
-- Outcome: ...
-- Changed paths: ...
-- Artifacts: ...
+## Repair state
 
-### Evidence
+- Slots used: `0 | 1 | 2`
+- Invalidated checks/evidence:
+- Replan trigger:
 
-- Implementation: `PASS | FAIL | PARTIAL | BLOCKED | NOT_APPLICABLE` — ...
-- Review: `PASS | FAIL | PARTIAL | BLOCKED | NOT_APPLICABLE` — ...
-- QA/runtime: `PASS | FAIL | PARTIAL | BLOCKED | NOT_APPLICABLE` — ...
-- QA gate: `<gate name | not run>`
-- QA execution count: `<runtime-confirmed count>`
-- Reused/invalidated evidence: ...
-- Interactive surfaces: `<in-app Browser | Chrome | Computer Use app | Simulator | device | none>`
-- Visual evidence: `<screenshot/artifact paths | not applicable>`
-- Surface limitations: ...
-- Gate: `PASS | FAIL | PARTIAL | BLOCKED | NOT_APPLICABLE` — ...
-- Release/external: `PASS | FAIL | PARTIAL | BLOCKED | NOT_APPLICABLE` — ...
+## Advisory findings
 
-### Omissions and limits
+- Finding and Lead adjudication:
 
-- Roles not used: ...
-- Unverified surfaces: ...
-- User-authorized next actions: ...
+## External and release state
 
-### Routing observations
-
-- Observable model or routing behavior: ...
-- Suggested future Teamplay adjustment: ...
-- Delivery speed observation: `<slice sizing, handoff count, review loops, QA gate frequency>`
-- Runtime duration/tokens: `<runtime value | not exposed>`
-```
+- Verified external state:
+- Unverified or unauthorized actions:
+- Next gate:

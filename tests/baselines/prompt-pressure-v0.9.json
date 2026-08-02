@@ -1,0 +1,18 @@
+{
+  "measurement": "UTF-8 character count of v0.9 custom-agent developer_instructions plus its mixed policy/task template; v0.10 compares developer instructions plus the extracted global capsule after task-variable content is separated",
+  "version": "0.9.0",
+  "roles": {
+    "teamplay-coder": {
+      "developerInstructionCharacters": 1827,
+      "assembledNonTaskPolicyCharacters": 2888
+    },
+    "teamplay-coder-fast": {
+      "developerInstructionCharacters": 1938,
+      "assembledNonTaskPolicyCharacters": 2999
+    },
+    "teamplay-coder-deep": {
+      "developerInstructionCharacters": 1558,
+      "assembledNonTaskPolicyCharacters": 2619
+    }
+  }
+}

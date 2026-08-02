@@ -1,245 +1,178 @@
 ---
 name: teamplay
-description: Let the current main Codex agent lead an adaptive GPT-5.6 engineering team using Luna fast specialists, Terra standard implementers and reviewers, optional Sol deep implementation, and an evidence-based final gate. Use when the user says "$teamplay", "use Teamplay", asks for an adaptive multi-agent team, or wants implementation, independent review, and QA divided among model-specific subagents.
-version: 0.8.0
+description: Route specification-locked implementation to GPT-5.6 Luna max or Sol max while the current main Codex agent retains integration, final spec review, and acceptance QA. Use when the user invokes Teamplay, asks for Luna implementation workers, requests optional Fast children, or wants model-aware parallel implementation.
+version: 0.11.0
 ---
 
 # Teamplay
 
-Teamplay forms the smallest useful team for the task. It does not equate more
-agents with better work.
+Teamplay separates product judgment from implementation throughput. The current
+main agent is always Lead. Children implement or advise; the Lead integrates the
+real diff and personally owns final review and QA.
 
-## Required references
+## Read before routing
 
-Before routing a Teamplay request, read all six files:
+Always read:
 
+- `references/execution-policy.md`
+- `references/session-continuity.md` before assigning or continuing a
+  mutating Coder;
+- `references/spec-contract.md`
 - `references/routing.md`
-- `references/role-contracts.md`
-- `references/evidence-contract.md`
-- `references/reporting.md`
-- `references/qa-surfaces.md`
-- `references/delivery-speed.md`
 
-Use the packet templates when delegating research, implementation, review, or
-QA. Use `templates/final-report.md` to close every Teamplay run.
+Read only when the stage needs them:
 
-## Entry contract
+- `references/role-contracts.md` before selecting optional roles;
+- `references/delivery-speed.md` for Fast, waves, early checks, or repair;
+- `references/evidence-contract.md` before judging completion evidence;
+- `references/qa-surfaces.md` before acceptance QA;
+- `references/reporting.md` when closing the run.
 
-When this skill is invoked:
+Use `templates/spec-brief.md` for one bounded ordinary outcome and
+`templates/spec-contract.md` for a Full Spec Lock. Use
+`templates/continuation-packet.md`, `templates/lead-review.md`,
+`templates/qa-packet.md`, and
+`templates/final-report.md` at their named Lead stages.
 
-1. You, the current main agent handling the user's conversation, are the
-   Teamplay Lead. Keep ownership of interpretation, routing, user updates,
-   conflict resolution, and final synthesis.
-2. Never spawn or delegate to a separate `teamplay-lead`. Teamplay intentionally
-   has no Lead subagent preset.
-3. Use the model and reasoning effort already selected for the current main
-   session. Teamplay does not silently replace or override the user's main model.
-4. Apply the Lead workflow below and spawn only the bounded specialist roles it
-   selects.
+## Fixed authority
 
-## Lead workflow
+- The current main conversation agent is Lead; never spawn another Lead.
+- Keep the Lead's selected model, reasoning effort, and service tier unchanged.
+- The Lead owns specification interpretation, route choice, integration, final
+  code review, acceptance QA, conflict resolution, and completion verdict.
+- Child Reviewer, QA, and Gate roles are advisory only.
+- Every Luna child uses max reasoning. Fast changes only the selected Luna
+  child's service tier.
+
+## Workflow
 
 ### 1. Establish the baseline
 
-- Read applicable `AGENTS.md` and repository instructions.
-- Inspect current branch, worktree status, relevant files, and available test or
-  runtime surfaces when the request concerns a repository.
-- Preserve unrelated and user-owned changes.
-- State assumptions, scope, and verifiable success criteria.
+Read repository instructions and `CHANGELOG.md`, inspect branch/worktree state,
+canonical product documents, relevant code, and available validation surfaces.
+Preserve unrelated and user-owned changes. State the requested outcome and
+observable success criteria.
 
-Read-only inspection is allowed. Do not mutate product files during this step.
+### 2. Apply routing precedence
 
-### 2. Classify the task
+Use the exact R0-R3 order in `references/routing.md`:
 
-Evaluate these dimensions:
+1. authority;
+2. specification readiness;
+3. model;
+4. writer pool.
 
-- `mutation`: none, docs/config, code, or external state.
-- `discovery`: known location or investigation required.
-- `external_dependency`: current documentation, standards, upstream source, or
-  version-specific behavior must be verified.
-- `ambiguity`: clear, competing interpretations, or unresolved requirements.
-- `breadth`: one spot, several files in established layers, or cross-cutting.
-- `implementation_depth`: small and mechanical, standard product work, or deep
-  work involving architecture, concurrency, security, data, or migration.
-- `slice_shape`: one complete user-visible or integratable outcome, its directly
-  required layers, and the material boundaries that must not change.
-- `verification`: static, tests/build, runtime/UI, device, or external surface.
-- `risk`: ordinary, security, privacy, auth, payment, data loss, migration,
-  deployment, release, or irreversible external action.
+Do not use Sol to bypass missing authority or an unresolved user decision.
 
-Honor explicit user routing constraints and a shortcut skill's requested preset
-before automatic routing.
+### 3. Lock the appropriate written specification
 
-### 3. Select the roster
+The Lead creates or confirms exactly one canonical Spec Brief or Full Spec Lock
+before mutation. Record a stable spec revision and repository baseline.
 
-Use only roles with concrete work:
+The specification must be sufficient for the Lead to review each requirement
+against the actual diff and execute requirement-linked QA. It locks decisions,
+not keystrokes. Resolve material product ambiguity before delegation.
 
-- `teamplay-scout`: broad discovery is required before a coherent implementation
-  slice can be assigned. Do not spawn it for routine local discovery the selected
-  Coder can perform inside a known scope.
-- `teamplay-researcher`: current official documentation, standards, upstream
-  source, or external version-specific behavior affects the result.
-- `teamplay-plan-challenger`: ambiguity, architectural choice, cross-cutting
-  change, or high risk makes an independent pre-implementation challenge useful.
-- `teamplay-coder-fast`: a small, well-specified, low-risk change fits existing
-  patterns. It owns the complete bounded outcome, not one file fragment.
-- `teamplay-coder`: standard product implementation forms a coherent vertical
-  slice across the established layers it needs.
-- `teamplay-coder-deep`: complex, cross-cutting, security, concurrency, data,
-  or migration implementation requires frontier reasoning and end-to-end
-  ownership.
-- `teamplay-reviewer`: review a completed meaningful slice, not every file or
-  intermediate edit. It may be skipped for prose-only or trivial mechanical
-  edits when the Lead records why.
-- `teamplay-qa`: executable verification is available or specifically requested.
-  Spawn it at a named major QA gate, not after every edit or subtask. For UI
-  work, route QA to the in-app Browser, Browser, or Computer Use surface
-  according to `references/qa-surfaces.md`; do not stop at unit or build output
-  when an interactive surface is available and relevant.
-- `teamplay-gate`: material security, payment, privacy, migration, deployment,
-  release, destructive, or irreversible risk remains after review and QA.
+### 4. Keep one Coder session for one outcome
 
-Select one coder by default. Do not spawn agents merely to restate work already
-completed by another role.
+Apply the lifecycle contract before spawning or continuing a Coder. Define one
+independently integratable outcome, derive its stable session key from the spec
+ID/revision, outcome ID, route, and owned surfaces, and keep one Coder identity
+through implementation, directly coupled checks, Lead feedback, and bounded
+in-spec repairs. A file, layer, exact code fragment, command, checklist item,
+test failure, or repair is not a new outcome.
 
-Optimize for completed outcomes and fewer handoffs. Do not split a cohesive
-feature or root-cause fix into micro-tasks solely because several files or layers
-are involved. Follow `references/delivery-speed.md`.
+The initial assignment gets exactly one rendered execution capsule. For an
+unchanged session key, use message/reuse or resume with the compact,
+capsule-free continuation packet. Use redirect once for bounded non-progress.
+A same session key keeps the prior Coder identity; it does not create a new
+assignment for a focused check or repair.
+Closing a completed child to release a concurrency slot is resource management,
+not a restart boundary. Retain its agent ID and resume it if Lead review or QA
+produces an in-spec repair.
+Create a fresh Coder only at a documented restart boundary; record all
+spawn, message/reuse, resume, redirect, restart, and close events.
 
-### 4. Announce the team
+### 5. Select model and pool
 
-Before spawning children, tell the user which roles are being used, why, and
-which roles were intentionally omitted. Keep the update concise.
+Apply the consequential-decision definition and Luna predicates in
+`references/routing.md` without restating them. Luna is max in both Standard and
+Fast roles. Sol is selected proactively when the route requires frontier
+judgment; it is not only a post-failure rescue.
 
-### 5. Delegate bounded work
+Use the smallest safe writer pool. Announce the selected model, spec level,
+pool, isolation, complete owned outcomes, and the Lead's final review/QA surface.
 
-- Use `fork_turns: "none"` and minimal self-contained messages. Include only the
-  complete outcome, necessary inputs, owned scope, constraints, acceptance
-  criteria, and required output. Keep parent orchestration policy out of child
-  packets.
-- Delegate one coherent vertical slice per Coder. Allow it to inspect and edit
-  every directly necessary file in that approved slice, including tests and
-  supporting configuration. Do not require a new handoff for routine adjacent
-  files or conventional implementation choices.
-- Tell every mutating child that other agents share the worktree and it must not
-  revert or overwrite unfamiliar changes.
-- Keep at most four child threads active concurrently and at most three
-  read-only children in parallel.
-- Default to one writer. Multiple coders are allowed only when assignments are
-  independent and owned paths do not overlap or use isolated worktrees.
-- Parallelize read-heavy discovery, research, triage, or review axes. Be
-  conservative with parallel write-heavy work.
-- Use Scout and Researcher in parallel only when their answers materially unblock
-  the Coder. Skip Plan Challenger when requirements and architecture are already
-  clear and ordinary risk is low.
-- Respect dependencies: challenge before coding; review after the diff exists;
-  QA once the intended milestone or integrated implementation is stable; final
-  Gate after review and QA.
-- Give QA the exact target URL, app, Simulator or device, primary flow, boundary
-  cases, expected observables, and evidence directory when known. Require it to
-  name the actual surface and its proof limitations.
-- Declare one of these major QA gates before spawning QA: integrated feature,
-  user-visible milestone, pre-merge, pre-release, or critical final evidence.
-  Coder-level narrow tests are not a QA gate.
-- Coalesce related scenarios into one QA run. Do not rerun unchanged passing
-  Browser, Computer Use, Simulator, device, or integration evidence after every
-  small repair. Rerun affected failed scenarios first and invalidate broader
-  evidence only when the target changed in a way that can affect it.
-- Do not poll running agents aggressively. Use bounded waits and back off when
-  no new mailbox state arrives. A timeout alone is not a failure.
+### 6. Render and delegate
 
-### 6. Close the loop
+Create one task capsule from `templates/task-packet.md`. Materialize the exact
+canonical execution capsule with:
 
-- If the challenger returns `REVISE`, resolve the objections before coding.
-- If the reviewer returns `REQUEST_CHANGES`, send concrete findings back to the
-  owning coder as one batched repair packet, then request one focused re-review.
-- For a high-risk review, reuse `teamplay-reviewer` with separate, bounded
-  assignments such as outcome completeness, correctness and regressions, or
-  security and concurrency. Do not create extra reviewer personas merely to
-  rename a review axis.
-- If QA fails because of the implementation, return the failure to the coder and
-  rerun focused review and affected QA scenarios after repair. Run the full QA
-  gate again only when broader evidence became stale or the final gate requires it.
-- Do not use the gate to replace missing review or QA.
-- Stop and ask the user when a decision changes scope materially or requires new
-  authority.
+```bash
+python3 skills/teamplay/scripts/render-task-packet.py \
+  --policy skills/teamplay/references/execution-policy.md \
+  --task <task-capsule.md>
+```
 
-### 7. Report the outcome
+Send the complete rendered stdout as the child assignment. A path-only policy
+reference or manually copied capsule is invalid. Record the renderer's canonical
+capsule hash and task hash in the run report.
 
-Separate:
+Each mutating Coder receives one independently integratable outcome. A Luna
+Coder that discovers a failed eligibility predicate returns the failed predicate
+and preserves still-valid work instead of redesigning the product.
 
-- implementation status;
-- review status;
-- QA/runtime status;
-- gate or release status;
-- remaining blockers and user-authorized next actions.
+The task capsule is initial-assignment data. A same-session continuation uses
+templates/continuation-packet.md and does not resend the execution capsule or
+the full initial task.
 
-Never call a build-only result a runtime, device, deployment, or release pass.
+### 7. Integrate and review personally
 
-Every Teamplay run must end with a `Teamplay Run Report`, including read-only,
-failed, blocked, or no-subagent runs. Follow `references/reporting.md` and
-`templates/final-report.md`.
+After a stable implementation result, the Lead inspects the actual changed-file
+inventory and diff:
 
-The report must make later routing improvements possible without exposing hidden
-chain-of-thought. Record concise decisions and observable evidence, not private
-reasoning. At minimum include:
+1. spec-conformance pass requirement by requirement;
+2. engineering-integrity pass for correctness, regression, security, privacy,
+   concurrency, compatibility, maintainability, and meaningful tests.
 
-- requested entry point and resolved preset;
-- current main agent as Lead, with its model or reasoning only when runtime
-  metadata confirms them;
-- every spawned agent instance, registered `agent_type`, configured model and
-  reasoning effort, assignment, selection reason, and result;
-- roles considered but intentionally omitted, with a concise reason;
-- handoff order, retries, escalations, and review or QA repair loops;
-- implementation slice size, avoidable handoffs, and whether the Coder completed
-  the whole assigned outcome in one pass;
-- changed paths or delivered artifacts;
-- exact verification, review, QA, and gate verdicts;
-- interactive QA surfaces used, decisive actions, screenshots or other visual
-  evidence, and what those surfaces did not prove;
-- the named QA gate, number of QA executions, evidence reused, and evidence
-  invalidated by repairs;
-- remaining blockers, unverified surfaces, and user-authorized next actions;
-- routing observations useful for improving Teamplay later.
+Separate required defects from optional improvements. Advisory findings are
+inputs only; the Lead adjudicates them against the canonical specification.
 
-If no subagent was used, say so and record why the main Lead handled the task
-directly. Never infer actual model execution from an agent's prose. Label model
-information as `configured` unless runtime metadata independently confirms it.
-Report duration or token usage only when the runtime exposes those values; do
-not estimate them.
+### 8. Repair within the bounded state
 
-## Routing presets
+Use `references/delivery-speed.md`. Lead review and Lead QA share one maximum of
+two repair slots. One repair is the expected path. Replan when the same
+requirement fails twice, a frozen boundary changes, or another repair would
+exceed the shared budget.
 
-- `auto`: default `$teamplay` behavior. Select the smallest useful roster from
-  the classification dimensions and assign one complete vertical slice to the
-  selected Coder.
-- `fast`: requested by `$teamplay-fast`. Prefer
-  `teamplay-coder-fast`, plus a reviewer for meaningful code changes. Use cheap
-  coder-level checks, but omit dedicated QA unless the user explicitly requests
-  it or the task reaches a material user-visible or risk gate. If broader design,
-  security, data, migration,
-  destructive, or irreversible risk appears, stop the fast path and escalate;
-  never force an unsafe fast completion.
-- `deep`: requested by `$teamplay-deep`. Favor Scout or Researcher when needed,
-  Plan Challenger, Standard or Deep Coder according to the real implementation
-  depth, and focused review. Run dedicated QA at the completed integration or
-  user-visible milestone rather than after each subtask. Do not silently
-  downgrade to the fast path.
-- `critical`: requested by `$teamplay-critical`. For an implementation require
-  Plan Challenger, `teamplay-coder-deep`, focused independent review, QA, and
-  Gate. If a required surface cannot run, report blocked or partial rather than
-  weakening the preset.
+### 9. Execute acceptance QA personally
 
-`standard`, `quick`, `lean`, and `thorough` remain accepted natural-language
-aliases for compatibility, but the public entry points are `$teamplay`,
-`$teamplay-fast`, `$teamplay-deep`, and `$teamplay-critical`. A user's explicit
-inclusion or exclusion wins unless it would make the requested operation unsafe.
+Use `references/qa-surfaces.md`. The Lead executes or directly observes decisive
+requirement-linked scenarios on the most faithful available surface. Keep
+static, build, browser, Simulator, installed-app, physical-device, external,
+deployment, and release evidence separate. A child may prepare evidence but
+cannot issue the final QA verdict.
 
-## Safety boundary
+### 10. Close honestly
 
-Teamplay does not authorize pushing, merging, releasing, purchasing, changing
-accounts or permissions, deleting user data, or performing unrelated cleanup.
-Use normal approval and destructive-action rules for those operations.
+Use `references/reporting.md` and `templates/final-report.md`. Report the spec
+revision, route, pool, implementation results, Lead review, Lead QA, advisory
+findings, evidence limits, external/release state, and remaining authority
+boundaries. Include lifecycle event counts and host token diagnostics with
+cached, uncached, output, and reasoning values separated; never turn counters
+into a billing claim. End every invocation with a Teamplay Run Report.
 
-Treat the selected registered `agent_type` as the model-routing authority. Do
-not treat an agent's natural-language statement about its own model as proof.
+## Public presets
+
+- `$teamplay`: model-aware route; Luna max Standard when all Luna predicates
+  pass, otherwise Sol max when the task remains authorized and spec-ready.
+- `$teamplay-fast`: the same route, but eligible Luna children use Fast. Sol and
+  the Lead are unchanged.
+- `$teamplay-deep`: require richer invariants and evidence. Route by the same
+  model policy rather than selecting Sol merely because the preset says deep.
+- `$teamplay-critical`: require threat, rollback, and evidence boundaries; add
+  an advisory Gate only when useful. The Lead remains final authority.
+
+Natural-language controls may request a pool size, Fast, or Sol, but cannot
+override authority, specification readiness, safe isolation, or final Lead
+review and QA.

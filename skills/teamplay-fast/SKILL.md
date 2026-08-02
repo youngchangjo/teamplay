@@ -1,34 +1,23 @@
 ---
 name: teamplay-fast
-description: Run Teamplay with the fast preset for small, clear, low-risk changes. Use when the user says "$teamplay-fast", asks Teamplay to move quickly, or wants the Luna max fast implementation lane with bounded review.
-version: 0.8.0
+description: Run Teamplay with child-local Fast when an authorized, spec-ready implementation qualifies for GPT-5.6 Luna max. Use when the user invokes "$teamplay-fast" or requests accelerated Luna children without changing the Lead.
+version: 0.11.0
 ---
 
 # Teamplay Fast
 
-This is a thin entry point for the core Teamplay workflow.
+Read and apply `../teamplay/SKILL.md` with:
 
-Before acting, fully read `../teamplay/SKILL.md` and every reference it marks as
-required. Then follow the core entry contract with:
-
-```text
+```yaml
 requested_preset: fast
 ```
 
-Fast means:
-
-- keep the current main agent as Teamplay Lead;
-- prefer `teamplay-coder-fast` for a required mutation;
-- use `teamplay-reviewer` for meaningful code changes;
-- let the coder run cheap, directly relevant checks;
-- omit dedicated QA unless the user requests it or the work reaches a material
-  user-visible or risk gate;
-- omit roles that have no concrete assignment.
-
-Fast does not weaken safety. If the task exposes broader design, security,
-privacy, auth, payment, data integrity, migration, deployment, destructive, or
-irreversible risk, stop the fast path and have the lead announce the required
-escalation. Never force fast completion through a higher-risk boundary.
-
-End with the core Teamplay Run Report and record whether Fast completed as
-requested or escalated to another lane, and why dedicated QA ran or was omitted.
+- Route by R0-R3 normally.
+- When Luna is selected, use `teamplay-coder-fast` with Luna max,
+  `service_tier = "fast"`, and `features.fast_mode = true`.
+- When Sol is selected, use the Standard Sol role; Fast does not force Luna.
+- Keep the Lead's model, reasoning, service tier, review, and QA unchanged.
+- Price and credit values are volatile; record a current official source when
+  economics materially affect the route.
+- Preserve the same session key through the outcome, coupled checks, feedback,
+  and bounded repair; use the capsule-free continuation packet.

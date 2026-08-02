@@ -2,6 +2,104 @@
 
 All notable changes to Teamplay are documented here.
 
+## 0.11.0 — 2026-08-02
+
+- Status: `complete`; public lifecycle policy, bundle/installed validation, and
+  local private-route synchronization pass.
+- Point-in-time regression evidence: one spec revision produced ten serial
+  DeepSeek Coder spawn/close cycles, ten follow-up messages, and 43 waits while
+  file, exact-edit, test, and repair steps were treated as new assignments.
+- Corrected the default to preserve one Coder session for one coherent outcome and
+  its focused checks and bounded repairs; use a compact continuation message and
+  create a fresh Coder only at an explicit restart boundary.
+- Added the public continuity contract for one independently integratable
+  outcome, a stable session key, same-session Lead feedback and repairs, and
+  finite evidence-based restart boundaries.
+- Defined close as concurrency-slot management rather than a replacement-Coder
+  boundary; an in-spec repair resumes the retained agent ID.
+- Added a capsule-free continuation packet, lifecycle event reporting, and
+  host token diagnostics that keep cached, uncached, output, and reasoning
+  counters separate without inferring provider billing.
+- Replaced micro-instruction fields with a requested-result continuation and
+  validator coverage that rejects `exact_next_action`.
+- Added versioned 0.11 fixtures and results for continuity, restart, rendering,
+  and lifecycle diagnostics.
+- Validation evidence: `./scripts/validate.sh --bundle` and `--installed`, local
+  `teamplay_deepseek` static and full preflight, shell parsing, and
+  `git diff --check` pass. Installed public skill bytes match the bundle.
+- Runtime limitation: no new lifecycle canary was run; existing DeepSeek route
+  entitlement evidence remains valid but does not by itself prove same-ID
+  continuation behavior. No push, merge, or release was performed.
+- Canonical specification:
+  `docs/specs/TP-CODER-LIFECYCLE-001-r1.md`.
+
+## 0.10.0 — 2026-08-02
+
+- Status: `partial`; local implementation, bundle/install validation, renderer
+  checks, and main-agent static routing classification are complete. Fresh-task
+  live Coder identities and external implementation conformance remain pending.
+- Kept every Luna implementation child on GPT-5.6 Luna max and preserved
+  child-local Fast without changing the Lead.
+- Replaced rescue-only Sol with proactive Sol max routing when consequential
+  technical judgment remains or the user directly requests Sol.
+- Added R0-R3 routing precedence so authority and written-spec readiness are
+  resolved before model and writer-pool selection.
+- Added semantic Luna L1-L6 eligibility based on closed requirements,
+  executable acceptance, frozen contracts, zero consequential decision density,
+  ordinary risk, and bounded ownership.
+- Split the written specification into a compact Spec Brief and coordination-
+  or risk-triggered Full Spec Lock.
+- Added one canonical delimited execution capsule plus a production renderer
+  that reports capsule, task, and rendered-prompt SHA-256 values.
+- Removed repeated global policy from Coder roles and replaced the nine-field
+  output with a compact six-field envelope.
+- Unified Lead review and Lead QA under one maximum-two repair budget with
+  explicit replanning triggers.
+- Added the required Fast feature flag, 14 routing fixtures, Standard/Fast/Sol
+  render fixtures, and the saved 0.9 prompt-pressure baseline.
+- Updated public documentation against current OpenAI GPT-5.6, subagent, Fast,
+  and pricing guidance. Latest direct model docs observed Luna at 1/25 of Sol
+  token price after the 2026-08-01 reduction; prices remain non-normative.
+- GPT-5.6 Sol Pro architect result: `PLAN APPROVE` after three bounded packets in
+  one reused ChatGPT conversation.
+- Validation evidence: `./scripts/validate.sh --bundle` and `--installed`, TOML
+  parsing, script syntax, renderer delimiter/hash equality, `git diff --check`,
+  and 14/14 Lead routing classifications pass. Non-task policy characters fell
+  by 37.5% Standard, 37.7% Fast, and 37.6% Sol from the saved 0.9 baseline.
+- Limitations and next gate: `LC-STD`, `LC-FAST`, and `LC-SOL` remain
+  `NOT_PROVEN` until a new Codex task loads 0.10 and exposes host-observed run
+  metadata. GPT Pro `IMPLEMENTATION_CONFORMANCE` review is pending. No commit,
+  push, merge, or release was performed.
+
+## 0.9.0 — 2026-08-02
+
+- Made the current main agent the sole owner of canonical specification lock,
+  final code review, acceptance QA execution, and completion verdicts.
+- Added a requirement coverage contract with stable specification anchors,
+  non-goals, invariants, frozen interfaces, and requirement-linked QA evidence.
+- Changed the Standard Coder from Terra high to Luna max and expanded both Luna
+  Coder presets to large, independently integratable vertical slices.
+- Reinterpreted `$teamplay-fast` as agent-local Fast service tier for Luna
+  implementation children without reducing scope, reasoning, review, or QA.
+- Added an automatic one-or-two Coder pool and an explicit maximum-three mode
+  guarded by independent outcomes, frozen interfaces, and safe isolation.
+- Kept the Sol Coder as an explicit rescue lane only after a demonstrated Luna
+  capability blocker or direct user request.
+- Demoted Reviewer, QA, and Gate children to optional advisory helpers that
+  cannot issue final review, QA, completion, or release verdicts.
+- Added specification, Lead review, and Lead QA templates and expanded the final
+  report with pool configuration and requirement coverage.
+- Updated bundle and installed-copy validation for Teamplay 0.9.0.
+- Validation evidence: `./scripts/validate.sh --bundle`,
+  `./scripts/validate.sh --installed`, `git diff --check`, and shell syntax checks
+  for both scripts pass; the installed copy matches the bundle byte for byte.
+- Validation limitation: the `skill-creator` quick validator is not present in
+  the installed skill package, and the current task retains the pre-install
+  agent registry until Codex refreshes it.
+- Next gate: restart Codex or open a new task, then verify a Standard and Fast
+  dry run report the new large-slice, spec-first contracts and that Fast applies
+  only to the Luna child.
+
 ## 0.8.0 — 2026-07-26
 
 - Expanded Coder ownership from file-sized tasks to complete user-visible or
