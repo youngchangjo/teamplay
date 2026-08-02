@@ -2,6 +2,42 @@
 
 All notable changes to Teamplay are documented here.
 
+## 0.12.1 — 2026-08-03
+
+- Status: `complete`; Lead-owned Gate correction, README visualization,
+  installation migration, and public/private validation pass.
+- Remove the `teamplay-gate` child role. Final Gate judgment belongs to the
+  current main Lead after specification review and acceptance QA.
+- Rewrite the README's top-level explanation with role tables, decision tables,
+  and end-to-end Mermaid flows for model routing, implementation, review, QA,
+  repair, and final Gate.
+- Removed `agents/teamplay-gate.toml` and added an exact installer migration that
+  removes only the obsolete installed Teamplay Gate role. The public and
+  installed rosters now contain eight roles.
+- Updated the core skill, Critical preset, role contract, design rationale,
+  report wording, routing fixtures, and local DeepSeek wrapper so Gate always
+  means a current-main-Lead phase after review and QA.
+- Added revision-2 cost-first specification, DR-17 Lead Gate fixture, 18/18
+  ownership/routing results, and validator assertions for Gate absence and the
+  README's phase table, decision table, role table, and Mermaid nodes.
+- Defined 90% Luna as a lower-bound audit alarm, not a target mix. Terra has zero
+  allocation budget and no reserved 10%; every Terra outcome requires T1/T2,
+  and policy forbids creating Terra to fill a percentage or diversify routes.
+- Added the rationale for Main-Lead review, QA, and Gate: only the Lead holds the
+  canonical user/spec context, integrated diff, faithful QA surfaces, separated
+  evidence layers, and final authority; child self-approval is invalid.
+- Preserved Luna max economic routing, all-Luna max effort, Terra xhigh
+  implementation ceiling, T1/T2 exceptions, no-Sol policy, session continuity,
+  stall-to-Lead takeover, and the shared repair budget.
+- Validation evidence: `./scripts/validate.sh --bundle`, `./scripts/install.sh`,
+  `./scripts/validate.sh --installed`, local `teamplay_deepseek` static and full
+  preflight, shell parsing, `git diff --check`, and installed-role inventory pass.
+- Limitation and next gate: Mermaid source is statically validated but no GitHub
+  rendered screenshot or live runtime Gate canary was produced. Open a new Codex
+  task to refresh the eight-role registry. No push, merge, or release was
+  performed.
+- Canonical specification: `docs/specs/TP-COST-FIRST-001-r2.md`.
+
 ## 0.12.0 — 2026-08-03
 
 - Status: `complete`; cost-first routing, rewritten README, bundle/installed

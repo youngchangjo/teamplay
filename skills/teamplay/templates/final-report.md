@@ -24,6 +24,12 @@
 - Terra exception: none | T1 explicit_user_terra | T2 evidenced_luna_capability_blocker
 - Terra exception evidence:
 - Sol child selected: no
+- Implementation outcomes by route: Luna max / Terra xhigh:
+- Run-level Luna share; observation only, not cumulative proof:
+- 90% Luna floor audit: `PASS | BELOW_FLOOR | NOT_MEANINGFUL_SAMPLE`
+- Terra allocation budget: 0
+- Terra exception IDs and T1/T2 evidence; empty unless individually authorized:
+- Terra created to fill a percentage or diversify routes: no
 - R3 pool, isolation, and shared-surface owner:
 
 ## Rendered assignment evidence
@@ -93,10 +99,20 @@ Token diagnostics, when exposed by the host, are observations only:
 
 ## Lead QA
 
-- Gate and target identity:
+- QA gate name and target identity:
 - Exact surfaces and scenarios:
 - Evidence and limitations:
 - Verdict:
+
+## Lead final Gate
+
+- Requirement coverage complete:
+- Evidence layers sufficient:
+- Residual risk and rollback/recovery:
+- External/release claims supported:
+- Remaining authority boundary:
+- Verdict: `COMPLETE | REPAIR | REPLAN | BLOCKED`
+- Gate child used: no
 
 ## Repair state
 

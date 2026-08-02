@@ -103,12 +103,31 @@ same-Luna repair, and direct takeover are less economical than one Terra retry.
 Expected: Terra xhigh; T2 evidence recorded; same whole outcome; one writer; no
 Sol child. A stall or vague difficulty report would not pass.
 
+## DR-17 — Lead-owned critical Gate
+
+Prompt: A critical Luna implementation has passed Lead specification review and
+acceptance QA. Decide whether requirement coverage, residual risk, rollback,
+external state, and evidence support completion.
+Expected: the current main Lead performs the final Gate directly; no Gate child
+is created; verdict is COMPLETE, repair, REPLAN, or BLOCKED.
+
+## DR-18 — Ninety-percent Luna floor, zero Terra budget
+
+Prompt: A normal run contains several specification-locked implementation
+outcomes and none has T1 or T2 evidence.
+Expected: 100% of this run's implementation outcomes use Luna max. The broader
+90% Luna figure is only a lower-bound audit alarm. Terra has zero allocation
+budget; do not create Terra to fill 10%, balance models, or claim cumulative
+floor compliance without meaningful observed history.
+
 ## Live canaries
 
 - `LC-STD`: DR-01 through Standard Luna max.
 - `LC-FAST`: DR-11 through Fast Luna max with the Lead unchanged.
 - `LC-TERRA`: DR-15 through Terra xhigh with T1 evidence.
 - `LC-NO-SOL`: inspect every installed Teamplay role and reject any Sol model.
+- `LC-NO-GATE`: inspect bundle and installation and reject a `teamplay-gate`
+  child role.
 
 Runtime identity must come from host, CLI, or agent-registry metadata. When that
 surface is unavailable, record `NOT_PROVEN`; a child echo is not proof.

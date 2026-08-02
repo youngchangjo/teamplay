@@ -2,10 +2,11 @@
 
 Teamplay saves coding cost by assigning specification-locked implementation to
 GPT-5.6 Luna at max reasoning while the current main Codex agent keeps product
-judgment, integration, final code review, and acceptance QA.
+judgment, integration, final code review, acceptance QA, and final Gate judgment.
+Gate is not delegated.
 
 ```text
-Main Lead: specification -> integration -> review -> QA
+Main Lead: specification -> integration -> review -> QA -> Gate
 Luna max: implementation -> focused checks -> bounded repair
 ```
 
@@ -19,6 +20,53 @@ The economic rule is deliberately simple:
 - Terra xhigh is the strongest Teamplay child and is an explicit or evidenced
   post-Luna exception only.
 - Teamplay never creates a Sol child at any reasoning effort.
+- Final review, acceptance QA, and Gate are all performed by the current main
+  Lead. There is no Gate child.
+
+| Implementation route | Allocation policy | When it is used |
+|---|---|---|
+| Luna max | Default for all outcomes; 90% is only a lower-bound audit alarm | Every normal specification-locked implementation outcome |
+| Terra xhigh | **Allocation budget 0; no reserved percentage** | Only an individually authorized T1 or T2 exception |
+| Sol | **Allocation 0** | Prohibited for every Teamplay child |
+
+The 90% Luna figure is not a target mix. Teamplay must not create Terra to fill
+10%, balance models, or make a report look diverse. If no T1 or T2 exception
+exists, the run uses Luna max for 100% of its implementation outcomes. If an
+observed history falls below the 90% Luna floor, the response is to audit overly
+broad exceptions—not to allocate Terra a share.
+
+## At a glance
+
+| Phase | Owner | Model policy | Decisive output |
+|---|---|---|---|
+| Authority and specification | Main Lead | Existing main session unchanged | Locked requirements and acceptance |
+| Implementation | Coder | Luna max by default | Complete integratable outcome |
+| Exception implementation | Coder | Terra xhigh only with T1 or T2 | Same locked whole outcome |
+| Focused checks and repair | Same Coder | Keep the existing route/session | Diff and supporting evidence |
+| Specification review | Main Lead | Existing main session unchanged | Requirement verdicts |
+| Acceptance QA | Main Lead | Existing main session unchanged | Observed scenario evidence |
+| Final Gate | Main Lead | Existing main session unchanged | Complete, repair, replan, or blocked |
+
+```mermaid
+flowchart TD
+    A["User request"] --> B["Main Lead<br/>authority + specification lock"]
+    B --> C{"Ready for delegation?"}
+    C -- "No" --> B
+    C -- "Yes" --> D{"T1 or T2 Terra exception?"}
+    D -- "No" --> E["Luna max Coder"]
+    D -- "Yes" --> F["Terra xhigh Coder"]
+    E --> G["Implementation + focused checks"]
+    F --> G
+    G --> H["Main Lead<br/>specification review"]
+    H --> I["Main Lead<br/>acceptance QA"]
+    I --> J{"Main Lead final Gate"}
+    J -- "Repair" --> K["Same Coder repair"]
+    K --> H
+    J -- "Pass" --> L["Complete"]
+    J -- "Contract or evidence gap" --> M["Replan or Blocked"]
+```
+
+Sol does not appear in the flow because Teamplay cannot select a Sol child.
 
 ## Why Luna first
 
@@ -73,10 +121,27 @@ the bounded recovery path; it does not escalate models.
 
 ### Sol: unavailable
 
-Teamplay never selects GPT-5.6 Sol for implementation, review, QA, Gate, rescue,
-or any preset. A request for a Sol child is rejected; Terra xhigh is the maximum
-available child route. Teamplay also never changes the model or effort already
-selected for the current main Lead.
+Teamplay never selects GPT-5.6 Sol for implementation, review, QA, rescue, or
+any preset. A request for a Sol child is rejected; Terra xhigh is the maximum
+available child route. Final Gate is not routed at all—the main Lead performs it
+directly. Teamplay also never changes the model or effort already selected for
+that Lead.
+
+### Common routing decisions
+
+| Situation | Teamplay action |
+|---|---|
+| Ordinary or broad implementation | Lock the specification, then use Luna max |
+| Hard, ambiguous, security, concurrency, or migration work | Lead resolves decisions and strengthens the spec, then uses Luna max |
+| User explicitly requests Terra | Record T1 and use one Terra xhigh Coder |
+| Luna returns a concrete capability blocker | Record complete T2 evidence before considering Terra xhigh |
+| Luna is silent or stalls | Wait, redirect once, then Main Lead takeover |
+| User requests a Sol child | Reject the route; Sol is unavailable |
+| Critical outcome | Luna max implementation; Main Lead performs review, QA, and final Gate |
+
+Terra should remain genuinely rare because it has no allocation budget. Teamplay
+reports each T1/T2 exception individually and does not treat “under 10%” as
+permission to create one.
 
 ## Quick start
 
@@ -113,10 +178,31 @@ The current main conversation agent is always Teamplay Lead. It:
 6. reviews every requirement against the written specification;
 7. performs an engineering-integrity review;
 8. executes or directly observes acceptance QA;
-9. reports evidence, limitations, and external/release state separately.
+9. directly performs the final Gate from the specification, QA, risk, rollback,
+   and evidence record;
+10. reports evidence, limitations, and external/release state separately.
 
 Children cannot approve their own implementation or issue the final completion
-verdict.
+or Gate verdict.
+
+## Why the Main Lead reviews, runs QA, and performs Gate
+
+The separation is intentional. The implementation child optimizes for producing
+the locked outcome; the main Lead remains the only participant with the complete
+authority and evidence context needed to judge it.
+
+| Why the Main Lead owns it | Failure this prevents |
+|---|---|
+| It holds the canonical user conversation and locked specification | Reviewing only the code and silently redefining the requested product |
+| It did not produce the delegated implementation diff | A Coder approving or rationalizing its own work |
+| It sees every outcome, shared surface, and integration change | Locally correct code causing cross-slice regressions or ownership conflicts |
+| It controls the requirement checklist and faithful QA surfaces | Treating lint/unit tests as proof of browser, Simulator, device, deployment, or release behavior |
+| It separates static, runtime, external, and release evidence | Blending unlike proof layers into one unsupported “done” claim |
+| It retains user authority and completion responsibility | A child making product, destructive, external, or release decisions it was never authorized to make |
+
+Even after a stalled-Coder takeover causes the Lead to write code directly, the
+Lead reopens the specification checklist and runs review, QA, and Gate as
+separate evidence phases. Authorship never counts as approval.
 
 ## Presets
 
@@ -125,7 +211,7 @@ verdict.
 | `$teamplay` | Luna max Standard, one writer by default |
 | `$teamplay-fast` | Luna max with child-local Fast; Lead unchanged |
 | `$teamplay-deep` | Luna max with richer invariants, rollback, and evidence |
-| `$teamplay-critical` | Luna max with threat and recovery boundaries; optional Terra high advisory Gate |
+| `$teamplay-critical` | Luna max with threat and recovery boundaries; Main Lead performs the critical Gate |
 
 Fast affects only eligible Luna children:
 
@@ -205,24 +291,27 @@ python3 skills/teamplay/scripts/render-task-packet.py \
 The renderer reports canonical capsule, task, and rendered-prompt SHA-256
 values. Coder role prompts do not duplicate the global policy.
 
-## Review, QA, and repair
+## Review, QA, Gate, and repair
 
 The Lead performs these gates on the real artifact:
 
 1. requirement-by-requirement specification conformance;
 2. correctness, regression, security, privacy, concurrency, compatibility,
    maintainability, and meaningful-test review;
-3. requirement-linked acceptance QA on the most faithful available surface.
+3. requirement-linked acceptance QA on the most faithful available surface;
+4. final Gate over requirement coverage, evidence layers, residual risk,
+   rollback boundaries, external state, and completion claims.
 
 Review and QA share at most two in-spec repair slots. A repeated failure of the
 same requirement, changed frozen boundary, or need for another repair returns to
-replanning. Child tests and advisory reports are supporting evidence only.
+replanning. Child tests and advisory reports are supporting evidence only. No
+Gate child exists.
 
 ## Installed roles
 
 | Role | Configuration | Purpose |
 |---|---|---|
-| Current main Lead | Existing session unchanged | Specification, integration, final review, QA |
+| Current main Lead | Existing session unchanged | Specification, integration, final review, QA, Gate, completion |
 | `teamplay-coder` | Luna max | Default implementation owner |
 | `teamplay-coder-fast` | Luna max + Fast | Optional accelerated implementation owner |
 | `teamplay-coder-deep` | Terra xhigh | T1/T2 exception implementation owner |
@@ -231,9 +320,8 @@ replanning. Child tests and advisory reports are supporting evidence only.
 | `teamplay-plan-challenger` | Terra high, read-only | Optional pre-lock contradiction challenge |
 | `teamplay-reviewer` | Terra high, read-only | Optional advisory findings |
 | `teamplay-qa` | Luna max | Optional evidence collection |
-| `teamplay-gate` | Terra high, read-only | Optional critical-risk audit |
 
-No installed Teamplay role uses Sol.
+No installed Teamplay role uses Sol, and no Gate role is installed.
 
 ## Validate
 

@@ -6,7 +6,8 @@ lives only in `routing.md`.
 ## Lead
 
 The current main agent owns user dialogue, authority, specification, routing,
-integration, final spec review, acceptance QA, repair state, and completion.
+integration, final spec review, acceptance QA, final Gate judgment, repair state,
+and completion. Gate is a Lead phase, not a child role.
 
 ## Scout
 
@@ -56,7 +57,9 @@ its findings.
 Optional evidence collector for scenarios assigned by the Lead. It reports
 observations and artifacts but does not issue final acceptance.
 
-## Gate
+## Lead final Gate
 
-Optional read-only critical-risk auditor after Lead review and QA. It reports
-unsupported claims or operational gaps without approving release or completion.
+After specification review and acceptance QA, the current main Lead checks
+whether all required evidence layers, unresolved risks, rollback boundaries,
+external-state limits, and release claims support completion. No Gate child may
+be spawned and no advisory result can replace this judgment.

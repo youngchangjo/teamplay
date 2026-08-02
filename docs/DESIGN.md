@@ -19,11 +19,18 @@ Max reasoning is retained. The economy comes from model selection, broad
 outcome ownership, session reuse, and avoiding duplicate agents—not from
 weakening reasoning or final evidence.
 
+The 90% Luna figure is a lower-bound audit alarm, not a target mix. Terra has
+zero allocation budget and no reserved percentage; each Terra outcome requires
+its own T1 or T2 authorization. Without a valid exception, a run routes every
+implementation outcome to Luna. Falling below the floor triggers an audit of
+overly broad exceptions, never an attempt to fill a Terra percentage.
+
 ## No Sol children
 
 Teamplay 0.12 prohibits GPT-5.6 Sol for every child role and preset. The highest
-child configuration is Terra xhigh. This applies to Coder, Reviewer, QA, Gate,
-and rescue paths. Teamplay does not alter the user's already-selected main Lead.
+child configuration is Terra xhigh. This applies to Coder, Reviewer, QA, and
+rescue paths. Final Gate is a phase performed by the current main Lead, not a
+child role. Teamplay does not alter the user's already-selected main Lead.
 
 The prohibition removes an easy failure mode: broad words such as “difficult,”
 “deep,” “critical,” or “ambiguous” can no longer produce an expensive initial
@@ -109,11 +116,21 @@ outcome remains intact. The Lead prevents late concurrent child mutation,
 reopens the locked requirement checklist, implements the remainder, and still
 runs separate review and QA.
 
-## Review, QA, and repair
+## Review, QA, Gate, and repair
 
 The Lead first reviews specification conformance, then engineering integrity,
-then executes or directly observes requirement-linked acceptance QA. Child
-checks and advisory findings cannot approve completion.
+then executes or directly observes requirement-linked acceptance QA. It finally
+performs the Gate over requirement coverage, evidence layers, residual risk,
+rollback, external state, and completion claims. Child checks and advisory
+findings cannot approve completion, and no Gate child exists.
+
+This ownership is deliberate. The main Lead alone holds the canonical user
+conversation and specification, sees the integrated cross-outcome diff, controls
+the faithful QA surfaces, separates static/runtime/external/release evidence,
+and retains authority for completion. A Coder is therefore not allowed to
+self-review its implementation into acceptance. If the Lead takes over coding
+after a stall, it still reopens the pre-existing specification checklist and
+runs review, QA, and Gate as distinct evidence phases.
 
 Review and QA share two in-spec repair slots. A repeated failure of one
 requirement or changed frozen boundary means the plan must be revised rather
@@ -137,7 +154,9 @@ Version 0.12 validation requires:
 - T1/T2 evidence for every Terra implementation route;
 - one global policy block per initial assignment and none in continuations;
 - one Coder identity per coherent outcome and bounded Lead takeover on stall;
-- final specification review, engineering review, QA, and evidence separation;
+- final specification review, engineering review, QA, Lead-owned Gate, and
+  evidence separation;
+- no distributed or installed `teamplay-gate` role;
 - installed skill and role bytes matching the bundle.
 
 Static configuration proves configured intent only. Live model identity and

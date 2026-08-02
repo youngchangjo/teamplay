@@ -12,7 +12,17 @@ default implementation Coder is GPT-5.6 Luna at max reasoning.
 
 ```text
 DEFAULT_IMPLEMENTATION_CODER = Luna max
+LUNA_IMPLEMENTATION_FLOOR = 90% audit threshold, never a quota
+TERRA_ALLOCATION_BUDGET = 0; individually authorized exceptions only
+SOL_ALLOCATION = 0; prohibited
 ```
+
+The Luna percentage is a lower-bound audit alarm by independently integratable
+implementation outcome, not a mix target, quota, or billing estimate. Terra has
+no reserved share to fill. Without T1 or T2, every implementation outcome in
+that run uses Luna max. Never create Terra to approach 10%, balance a roster, or
+make a report look diverse. Never invent cumulative compliance without observed
+routing history.
 
 Task difficulty, breadth, novelty, ambiguity, cross-cutting scope, security
 sensitivity, or the words `hard`, `deep`, and `critical` do not by themselves
@@ -78,6 +88,7 @@ and normally resumes the same Luna session.
 No Teamplay child may use GPT-5.6 Sol at any reasoning effort. This prohibition
 applies to implementation, review, QA, Gate, rescue, and every public preset.
 The user's already-selected main Lead is not rerouted by Teamplay.
+Final Gate judgment is a phase owned directly by that Lead, never a child route.
 
 Terra xhigh is the maximum allowed child route and remains an exception, not the
 normal response to difficult work. A Terra Coder may be created only when one of
@@ -103,6 +114,11 @@ and record the exception in the task capsule and run report. Terra does not expa
 authority or take specification, integration, final review, QA, or completion
 ownership from the Lead. After the exception outcome is locked or completed,
 subsequent mechanical outcomes return to Luna max.
+
+If observed routing falls below the 90% Luna floor over a meaningful history,
+audit whether T1/T2 is being interpreted too broadly. The corrective action is
+to narrow invalid exceptions or improve Lead specification—not to allocate any
+target share to Terra.
 
 ## Writer pool
 

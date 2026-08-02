@@ -26,6 +26,13 @@ Report:
 13. any `CODER_STALLED` verdict, expected checkpoint, bounded wait condition,
     observed progress, implementation-owner transition, and preserved partial
     work.
+14. implementation outcomes by Luna/Terra route, the run-level Luna share, an
+    honest `PASS`, `BELOW_FLOOR`, or `NOT_MEANINGFUL_SAMPLE` against the 90%
+    Luna audit floor, and each Terra exception ID/evidence; confirm Terra's
+    allocation budget is zero and never present one run as cumulative history.
+15. the current main Lead's final Gate over requirement coverage, evidence
+    layers, residual risk, rollback/recovery, external claims, and authority,
+    with explicit confirmation that no Gate child was used.
 
 The initial assignment records one canonical execution capsule. A same-session
 continuation records zero capsule copies and references the unchanged session
@@ -39,7 +46,8 @@ present Lead authorship or passing implementation checks as those verdicts.
 
 ## Overall status
 
-- `COMPLETE`: every applicable requirement passed Lead review and Lead QA.
+- `COMPLETE`: every applicable requirement passed Lead review, Lead QA, and the
+  Lead's final Gate.
 - `PARTIAL`: useful work exists but a requirement or evidence class remains.
 - `BLOCKED`: a named prerequisite or authority boundary stops progress.
 - `FAILED`: execution completed with a requirement failure not repaired.

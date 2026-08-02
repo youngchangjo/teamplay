@@ -1,17 +1,17 @@
 ---
 name: teamplay
-description: Save implementation cost by defaulting specification-locked coding to GPT-5.6 Luna max while the current main Codex agent retains specification, integration, final review, and acceptance QA. Teamplay never selects Sol; Terra xhigh is the maximum child route and explicit or evidenced post-Luna exception only. Use when the user invokes Teamplay, asks for cost-efficient Luna implementation, requests optional Fast children, or wants bounded parallel implementation.
-version: 0.12.0
+description: Save implementation cost by defaulting specification-locked coding to GPT-5.6 Luna max while the current main Codex agent retains specification, integration, final review, acceptance QA, and final Gate judgment. Teamplay never selects Sol; Terra xhigh is the maximum child route and explicit or evidenced post-Luna exception only. Use when the user invokes Teamplay, asks for cost-efficient Luna implementation, requests optional Fast children, or wants bounded parallel implementation.
+version: 0.12.1
 ---
 
 # Teamplay
 
 Teamplay is cost-first: the current main agent is always Lead and the default
 implementation Coder is Luna max. The Lead spends its existing context on the
-specification, integration, final review, and acceptance QA; Luna supplies
-lower-cost implementation throughput. Teamplay never creates a Sol child. Terra
-xhigh is the maximum child route and is used only by explicit user choice or an
-evidenced post-Luna capability exception.
+specification, integration, final review, acceptance QA, and final Gate judgment;
+Luna supplies lower-cost implementation throughput. Teamplay never creates a
+Sol child. Terra xhigh is the maximum child route and is used only by explicit
+user choice or an evidenced post-Luna capability exception.
 
 ## Read before routing
 
@@ -42,17 +42,29 @@ Use `templates/spec-brief.md` for one bounded ordinary outcome and
 - The current main conversation agent is Lead; never spawn another Lead.
 - Keep the Lead's selected model, reasoning effort, and service tier unchanged.
 - The Lead owns specification interpretation, route choice, integration, final
-  code review, acceptance QA, conflict resolution, and completion verdict.
+  code review, acceptance QA, final Gate judgment, conflict resolution, and
+  completion verdict.
 - The Lead may directly take over a stalled Coder's unchanged whole outcome
   after the lifecycle contract's wait and same-session redirect.
-- Child Reviewer, QA, and Gate roles are advisory only.
+- Child Reviewer and QA roles are advisory only. There is no Gate child; the
+  current main Lead performs the final Gate directly.
 - Every Luna child uses max reasoning. Fast changes only the selected Luna
   child's service tier.
 - Luna max is the default mutating Coder. Difficulty, ambiguity, criticality,
   and file count do not select an initial Sol Coder.
+- Luna max has a 90% lower-bound audit floor, not a quota. Terra has zero
+  allocation budget and no target share; it requires T1 or T2 for each outcome.
+  Without T1 or T2, the current run is 100% Luna. Never create Terra to fill 10%.
 - Sol is prohibited for every Teamplay child. Terra xhigh requires
   `T1 explicit_user_terra` or `T2 evidenced_luna_capability_blocker` from
   `references/routing.md`.
+
+The Lead owns review, QA, and Gate because it alone retains the canonical user
+conversation and locked specification, sees the integrated cross-outcome diff,
+controls faithful QA surfaces and evidence-layer separation, and holds final
+authority. A Coder's checks support review but cannot approve its own work. If
+the Lead writes code after takeover, it reopens the pre-existing specification
+checklist and keeps implementation, review, QA, and Gate as separate phases.
 
 ## Workflow
 
@@ -199,7 +211,15 @@ static, build, browser, Simulator, installed-app, physical-device, external,
 deployment, and release evidence separate. A child may prepare evidence but
 cannot issue the final QA verdict.
 
-### 11. Close honestly
+### 11. Perform the final Gate personally
+
+After review and acceptance QA, the current main Lead checks complete
+requirement coverage, evidence-layer sufficiency, residual risk, rollback and
+recovery boundaries, external-state claims, and remaining authority limits.
+Issue `COMPLETE`, a bounded repair, `REPLAN`, or `BLOCKED`. Do not spawn a Gate
+child or treat an advisory verdict as this decision.
+
+### 12. Close honestly
 
 Use `references/reporting.md` and `templates/final-report.md`. Report the spec
 revision, route, pool, implementation results, Lead review, Lead QA, advisory
@@ -217,8 +237,8 @@ into a billing claim. End every invocation with a Teamplay Run Report.
 - `$teamplay-deep`: require richer invariants and evidence while keeping Luna
   max as the default Coder. The word deep is not a T1 Terra request.
 - `$teamplay-critical`: require threat, rollback, and evidence boundaries; add
-  an advisory Gate only when useful. Criticality is not a T1 Terra request and
-  the Lead remains final authority.
+  Lead-owned critical Gate checks after review and QA. Criticality is not a T1
+  Terra request and the Lead remains final authority.
 
 Natural-language controls may request a pool size, Fast, or Terra, but cannot
 override authority, specification readiness, safe isolation, or final Lead

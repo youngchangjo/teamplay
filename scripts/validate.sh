@@ -35,14 +35,12 @@ expected = {
     "teamplay-coder-deep": ("gpt-5.6-terra", "xhigh"),
     "teamplay-reviewer": ("gpt-5.6-terra", "high"),
     "teamplay-qa": ("gpt-5.6-luna", "max"),
-    "teamplay-gate": ("gpt-5.6-terra", "high"),
 }
 read_only = {
     "teamplay-scout",
     "teamplay-researcher",
     "teamplay-plan-challenger",
     "teamplay-reviewer",
-    "teamplay-gate",
 }
 
 agent_files = sorted((package / "agents").glob("teamplay-*.toml"))
@@ -79,11 +77,11 @@ for name, data in agents.items():
         assert features.get("fast_mode") is not True, f"unexpected Fast feature: {name}"
 
 version = (package / "VERSION").read_text().strip()
-assert version == "0.12.0", version
+assert version == "0.12.1", version
 
 skill = (package / "skills/teamplay/SKILL.md").read_text()
 assert skill.startswith("---\nname: teamplay\n")
-assert "\nversion: 0.12.0\n---\n" in skill
+assert "\nversion: 0.12.1\n---\n" in skill
 for phrase in (
     "references/execution-policy.md",
     "references/session-continuity.md",
@@ -100,6 +98,12 @@ for phrase in (
     "Never create a Sol child",
     "T1 explicit_user_terra",
     "T2 evidenced_luna_capability_blocker",
+    "There is no Gate child",
+    "final Gate directly",
+    "Perform the final Gate personally",
+    "canonical user",
+    "conversation and locked specification",
+    "cannot approve its own work",
     "CODER_STALLED",
     "Lead directly finish",
     "Teamplay Run Report",
@@ -114,7 +118,7 @@ shortcut_presets = {
 for shortcut, preset in shortcut_presets.items():
     text = (package / f"skills/{shortcut}/SKILL.md").read_text()
     assert text.startswith(f"---\nname: {shortcut}\n")
-    assert "\nversion: 0.12.0\n---\n" in text
+    assert "\nversion: 0.12.1\n---\n" in text
     assert "../teamplay/SKILL.md" in text
     assert f"requested_preset: {preset}" in text
 
@@ -125,6 +129,7 @@ required_files = (
     "docs/DESIGN.md",
     "docs/POLICY_MOVEMENT_V0.10.md",
     "docs/specs/TP-COST-FIRST-001-r1.md",
+    "docs/specs/TP-COST-FIRST-001-r2.md",
     "docs/specs/TP-CODER-LIFECYCLE-001-r2.md",
     "skills/teamplay/references/execution-policy.md",
     "skills/teamplay/references/session-continuity.md",
@@ -144,9 +149,11 @@ required_files = (
     "tests/routing-results-v0.11.md",
     "tests/routing-results-v0.11.1.md",
     "tests/routing-results-v0.12.md",
+    "tests/routing-results-v0.12.1.md",
     "tests/render-results-v0.10.json",
     "tests/render-results-v0.11.json",
     "tests/render-results-v0.12.json",
+    "tests/render-results-v0.12.1.json",
     "tests/lifecycle-fixtures.md",
     "tests/lifecycle-results-v0.11.md",
     "tests/lifecycle-results-v0.11.1.md",
@@ -215,7 +222,7 @@ canonical_capsule = renderer.extract_capsule(policy)
 canonical_hash = hashlib.sha256(canonical_capsule.encode()).hexdigest()
 
 baseline = json.loads((package / "tests/baselines/prompt-pressure-v0.9.json").read_text())
-render_record = json.loads((package / "tests/render-results-v0.12.json").read_text())
+render_record = json.loads((package / "tests/render-results-v0.12.1.json").read_text())
 assert render_record["canonicalCapsuleSha256"] == canonical_hash
 fixture_map = {
     "teamplay-coder": ("task-standard-v0.12.md", "standard"),
@@ -281,9 +288,14 @@ for phrase in (
     "T2 evidenced_luna_capability_blocker",
     "No Teamplay child may use GPT-5.6 Sol",
     "Terra xhigh is the maximum allowed child route",
+    "LUNA_IMPLEMENTATION_FLOOR = 90% audit threshold, never a quota",
+    "TERRA_ALLOCATION_BUDGET = 0",
+    "Never create Terra to approach 10%",
+    "Without T1 or T2",
     "does not satisfy T2",
     "Never run more than three mutating Coders",
     "sole normative source",
+    "Final Gate judgment is a phase owned directly by that Lead",
 ):
     assert phrase in routing, f"routing missing: {phrase}"
 
@@ -328,6 +340,10 @@ for phrase in (
     "message/reuse",
     "input_cached",
     "Billing inferred: no",
+    "90% Luna floor audit",
+    "NOT_MEANINGFUL_SAMPLE",
+    "Lead final Gate",
+    "Gate child used: no",
 ):
     assert phrase in final_report, f"final report missing: {phrase}"
 
@@ -344,9 +360,9 @@ assert "LEAD_QA bounded failure -> next available REPAIR slot" in delivery
 assert "Any failure after REPAIR_2 -> REPLAN/BLOCKED" in delivery
 
 fixtures = (package / "tests/routing-fixtures.md").read_text()
-for index in range(1, 17):
+for index in range(1, 19):
     assert f"DR-{index:02d}" in fixtures, f"routing fixture missing: DR-{index:02d}"
-for live in ("LC-STD", "LC-FAST", "LC-TERRA", "LC-NO-SOL"):
+for live in ("LC-STD", "LC-FAST", "LC-TERRA", "LC-NO-SOL", "LC-NO-GATE"):
     assert live in fixtures
 results = (package / "tests/routing-results-v0.10.md").read_text()
 assert "14/14 static classifications" in results
@@ -367,6 +383,19 @@ for phrase in (
     "Sol implementation, review, QA, Gate, and rescue routes: prohibited",
 ):
     assert phrase in results_012, f"0.12 routing result missing: {phrase}"
+results_0121 = (package / "tests/routing-results-v0.12.1.md").read_text()
+for phrase in (
+    "18/18 static routing and ownership classifications PASS",
+    "Main Lead owns final Gate",
+    "Gate child absent from bundle",
+    "Gate child absent from install",
+    "Every Luna role remains max",
+    "Luna 90% is a lower-bound audit alarm",
+    "Terra allocation budget and reserved share are zero",
+    "without T1/T2 routes 100%",
+    "Mermaid flow",
+):
+    assert phrase in results_0121, f"0.12.1 routing result missing: {phrase}"
 
 lifecycle_fixtures = (package / "tests/lifecycle-fixtures.md").read_text()
 for fixture in (
@@ -412,10 +441,24 @@ for phrase in (
     "$2.50 / $0.25 / $15",
     "25 / 2.5 / 150",
     "62.5 / 6.25 / 375",
+    "## At a glance",
+    "```mermaid",
+    "Main Lead final Gate",
+    "### Common routing decisions",
+    "No installed Teamplay role uses Sol, and no Gate role is installed",
+    "90% is only a lower-bound audit alarm",
+    "Allocation budget 0; no reserved percentage",
+    "If no T1 or T2 exception",
+    "## Why the Main Lead reviews, runs QA, and performs Gate",
+    "Coder approving or rationalizing its own work",
 ):
     assert phrase in readme, f"README missing cost-first contract: {phrase}"
 for stale in ("$0.20/$0.02/$1.20", "`1/25` ratio", "Sol max |"):
     assert stale not in readme, f"README contains stale routing/pricing: {stale}"
+assert "`teamplay-gate`" not in readme
+assert not (package / "agents/teamplay-gate.toml").exists()
+installer = (package / "scripts/install.sh").read_text()
+assert 'rm -f "$TARGET_AGENTS_DIR/teamplay-gate.toml"' in installer
 
 if mode == "--installed":
     installed_agents = codex_dir / "agents"

@@ -17,6 +17,10 @@ install -d "$TARGET_SKILL_DIR/scripts"
 # obsolete Teamplay-owned preset from earlier installations.
 rm -f "$TARGET_AGENTS_DIR/teamplay-lead.toml"
 
+# Teamplay 0.12.1 moved final Gate judgment into the current main Lead. Remove
+# only the obsolete Teamplay-owned advisory Gate role from earlier installs.
+rm -f "$TARGET_AGENTS_DIR/teamplay-gate.toml"
+
 for AGENT_FILE in "$PACKAGE_DIR"/agents/teamplay-*.toml; do
   install -m 0644 "$AGENT_FILE" "$TARGET_AGENTS_DIR/$(basename "$AGENT_FILE")"
 done

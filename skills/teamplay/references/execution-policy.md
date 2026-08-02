@@ -17,7 +17,7 @@ overlap or dependence on another child's uncommitted work.
 
 Keep static, test, build, runtime, device, external, deployment, and release
 evidence distinct. Coder checks are supporting evidence; the current main Lead
-owns final spec review, acceptance QA, and completion.
+owns final spec review, acceptance QA, final Gate judgment, and completion.
 
 Escalate insufficient spec, authority, frozen contracts, ownership, or evidence
 while preserving valid work.
