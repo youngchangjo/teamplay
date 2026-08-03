@@ -1,7 +1,7 @@
 ---
 name: teamplay
 description: Save implementation cost by defaulting specification-locked coding to GPT-5.6 Luna max while the current main Codex agent retains specification, integration, final review, acceptance QA, and final Gate judgment. Teamplay never selects Sol; Terra xhigh is the maximum child route and explicit or evidenced post-Luna exception only. Use when the user invokes Teamplay, asks for cost-efficient Luna implementation, requests optional Fast children, or wants bounded parallel implementation.
-version: 0.12.2
+version: 0.13.0
 ---
 
 # Teamplay
@@ -13,18 +13,17 @@ Luna supplies lower-cost implementation throughput. Teamplay never creates a
 Sol child. Terra xhigh is the maximum child route and is used only by explicit
 user choice or an evidenced post-Luna capability exception.
 
-## Read before routing
+## Read contracts progressively
 
-Always read:
+Read a detailed contract when its stage begins, not all contracts up front:
 
-- `references/execution-policy.md`
-- `references/session-continuity.md` before assigning or continuing a
-  mutating Coder;
-- `references/spec-contract.md`
-- `references/routing.md`
-
-Read only when the stage needs them:
-
+- `references/routing.md` before selecting a model or writer pool;
+- `references/spec-contract.md` before locking a Brief or Full Spec;
+- `references/session-continuity.md` before assigning or continuing a mutating
+  Coder;
+- `references/execution-policy.md` only when rendering an initial child packet;
+- `references/runtime-identity.md` after spawning any child whose route or
+  isolation will be claimed;
 - `references/role-contracts.md` before selecting optional roles;
 - `references/delivery-speed.md` for Fast, waves, early checks, or repair;
 - `references/evidence-contract.md` before judging completion evidence;
@@ -96,6 +95,12 @@ before mutation. Record a stable spec revision and repository baseline.
 The specification must be sufficient for the Lead to review each requirement
 against the actual diff and execute requirement-linked QA. It locks decisions,
 not keystrokes. Resolve material product ambiguity before delegation.
+
+The ordinary Spec Brief exposes five implementation-facing sections—objective,
+ownership, interfaces, constraints, and verification—behind one compact control
+header. Keep stable requirement IDs and acceptance evidence, but do not add a
+per-file recipe or implementation sequence. Use Full Spec Lock only when its
+actual coordination, risk, authority, or evidence triggers apply.
 
 Hard, novel, cross-cutting, security-sensitive, concurrent, or migration work
 may require a Full Spec Lock, but difficulty does not change the default Coder.
@@ -195,6 +200,24 @@ inventory and diff:
 
 Separate required defects from optional improvements. Advisory findings are
 inputs only; the Lead adjudicates them against the canonical specification.
+
+### 8a. Optionally obtain a fresh-context advisory audit
+
+Do not create an advisory reviewer on every run. It is eligible only when the
+user explicitly asks for an independent audit, or a Critical run records a
+material reason that one context-clean scan is worth the extra Terra cost.
+
+When eligible, read `references/role-contracts.md` and use
+`teamplay-reviewer` with `fork_turns: none`. Send the complete revision-locked
+specification, assigned requirement IDs, actual accumulated diff, and Lead
+verification evidence—not a code-only summary. The reviewer is Terra high,
+read-only, fresh-context, and advisory-only; it is never Sol and cannot approve,
+veto, repair, or replace the Lead's review, QA, final Gate, or completion.
+
+Observe the actual role, model, effort, sandbox, and permission profile using
+`references/runtime-identity.md`. If read-only isolation is missing or
+unobservable, stop the advisory lane or report it as non-isolated only under the
+documented before/after state check. Never call requested isolation enforced.
 
 ### 9. Repair within the bounded state
 

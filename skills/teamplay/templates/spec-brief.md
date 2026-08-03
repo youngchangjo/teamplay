@@ -1,6 +1,6 @@
-# Spec Brief
+# Compact five-part Spec Brief
 
-## Identity
+## Control header
 
 - Spec ID and revision:
 - Repository baseline:
@@ -15,40 +15,37 @@
 - Terra exception evidence; must be empty for Luna:
 - Sol child selected: `no`
 
-## Outcome and requirement anchors
+## 1. Objective
 
 - One completion sentence:
-- `SB-01`:
+- Why the observable outcome matters:
+- Stable requirements:
+  - `SB-01`:
 
-## Scope, ownership, and non-goals
+## 2. Ownership
 
 - Writable surfaces:
 - Shared-surface owner:
 - Non-goals:
 
-## Canonical context
+## 3. Interfaces
 
 - Authoritative source or repository precedent:
 - Lead-resolved assumptions:
+- Public signatures, schemas, compatibility, and shared-surface contracts:
 
-## Observable acceptance
+## 4. Constraints
 
-- `SB-01` action or inspection:
-- Expected result:
-- Required evidence:
-
-## Frozen contracts and invariants
-
-- Interfaces, compatibility, lifecycle ownership, and behavior that must not change:
-
-## Allowed local judgment and escalation
-
+- Frozen behavior, invariants, lifecycle, authority, and non-local boundaries:
 - Observationally equivalent choices allowed:
 - Decisions or discoveries that return to the Lead:
 
-## Validation
+## 5. Verification
 
-- Exact commands, scenarios, artifacts, and requirement mapping:
+- `SB-01` decisive action or inspection:
+- Expected observable:
+- Exact command, scenario, target, artifact, and evidence layer:
+- Requirement mapping and invalidation condition:
 
 ## Session continuity
 

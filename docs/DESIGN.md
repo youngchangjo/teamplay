@@ -1,4 +1,4 @@
-# Teamplay 0.12 design rationale
+# Teamplay 0.13 design rationale
 
 Teamplay is a cost-first manager pattern. The current main agent keeps product
 authority, specification, integration, final diff review, acceptance QA, and
@@ -34,7 +34,7 @@ QA, and Gate cost remains unchanged. These are estimates, not billing claims.
 
 ## No Sol children
 
-Teamplay 0.12 prohibits GPT-5.6 Sol for every child role and preset. The highest
+Teamplay 0.13 prohibits GPT-5.6 Sol for every child role and preset. The highest
 child configuration is Terra xhigh. This applies to Coder, Reviewer, QA, and
 rescue paths. Final Gate is a phase performed by the current main Lead, not a
 child role. Teamplay does not alter the user's already-selected main Lead.
@@ -87,6 +87,12 @@ the work shape requires them.
 Hard work generally changes specification depth, not model choice. The Lead
 resolves consequential architecture, security, concurrency, migration, and
 lifecycle decisions before Luna mutates code.
+
+The ordinary Brief presents a compact five-part implementation surface:
+objective, ownership, interfaces, constraints, and verification. Route,
+authority, requirement anchors, acceptance, and continuity remain in a small
+control header. Detailed contracts are loaded progressively at their stage
+instead of all being mandatory up-front context.
 
 ## Writer pool
 
@@ -143,6 +149,25 @@ Review and QA share two in-spec repair slots. A repeated failure of one
 requirement or changed frozen boundary means the plan must be revised rather
 than adding hidden retries or stronger agents.
 
+An optional fresh-context Terra-high reviewer may scan the complete locked spec
+and actual diff only after an explicit independent-audit request or a recorded
+Critical-run reason. It uses `fork_turns: none` and remains advisory. Its result
+cannot approve, veto, repair, or replace the Lead's review, QA, or Gate. Ordinary
+runs do not pay for this extra context.
+
+## Installation and runtime identity
+
+Installation performs a complete destination preflight before target mutation.
+It installs missing files, migrates byte-exact 0.12.2 files, refuses modified or
+symlinked destinations, and removes obsolete Lead/Gate files only when their
+historical digest is known. `--check` is non-mutating for the destination.
+
+Static role files prove configured intent only. Public native metadata is the
+first runtime source; an allowlisted local inspector may fill omitted role,
+model, effort, tier, sandbox, and permission fields for one exact child thread.
+It never emits prompt payloads. Read-only review isolation requires an observed
+read-only sandbox and an observed permission profile, not merely a TOML request.
+
 ## Fast
 
 Fast remains Luna-only and child-local. It changes speed and consumption, not
@@ -151,7 +176,7 @@ Because Fast may consume credits at a higher rate, it is selected explicitly.
 
 ## Verifiable contract
 
-Version 0.12 validation requires:
+Version 0.13 validation requires:
 
 - Luna max as the declared economic and initial implementation default, with
   every Luna child fixed at max reasoning;
@@ -164,7 +189,14 @@ Version 0.12 validation requires:
 - final specification review, engineering review, QA, Lead-owned Gate, and
   evidence separation;
 - no distributed or installed `teamplay-gate` role;
-- installed skill and role bytes matching the bundle.
+- installed skill and role bytes matching the bundle;
+- conflict-safe clean install, idempotence, exact 0.12.2 migration, and refusal
+  without partial destination mutation for modified, unsafe, or unknown files;
+- allowlisted runtime inspection with missing/conflicting identity refusal and
+  strict isolation evidence for fresh advisory review;
+- a compact five-part Brief and progressively loaded detailed contracts;
+- optional fresh-context review that remains spec-first, Terra-only,
+  advisory-only, and subordinate to Lead review, QA, and Gate.
 
 Static configuration proves configured intent only. Live model identity and
 runtime behavior remain host-observed evidence.

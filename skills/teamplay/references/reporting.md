@@ -33,6 +33,10 @@ Report:
 15. the current main Lead's final Gate over requirement coverage, evidence
     layers, residual risk, rollback/recovery, external claims, and authority,
     with explicit confirmation that no Gate child was used.
+16. when a fresh advisory audit is used: its explicit selection reason,
+    `fork_turns: none`, complete-spec and actual-diff inputs, host-observed
+    route/isolation, before/after state evidence when needed, and Lead
+    adjudication. Report `not used` for ordinary runs.
 
 The initial assignment records one canonical execution capsule. A same-session
 continuation records zero capsule copies and references the unchanged session

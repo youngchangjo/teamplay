@@ -188,6 +188,7 @@ permission to create one.
 git clone https://github.com/youngchangjo/teamplay.git
 cd teamplay
 ./scripts/install.sh
+./scripts/install.sh --check
 ```
 
 Restart Codex or open a new task after installation so custom-agent
@@ -317,6 +318,12 @@ outcome. Use [spec-contract.md](skills/teamplay/templates/spec-contract.md) when
 parallel ownership, consequential shared contracts, migration/recovery, or
 critical evidence requires a Full Spec Lock.
 
+The ordinary Brief has one compact control header and five implementation-facing
+sections: objective, ownership, interfaces, constraints, and verification. It
+retains stable requirement IDs and acceptance evidence without prescribing a
+file-by-file recipe. Detailed routing, lifecycle, rendering, runtime identity,
+QA, and reporting references are loaded progressively when their stage begins.
+
 Shared child policy lives once in
 [execution-policy.md](skills/teamplay/references/execution-policy.md). The Lead
 renders it with the task capsule:
@@ -346,6 +353,13 @@ same requirement, changed frozen boundary, or need for another repair returns to
 replanning. Child tests and advisory reports are supporting evidence only. No
 Gate child exists.
 
+An optional fresh-context audit is available only when the user explicitly asks
+for independent review, or a Critical run records why one additional Terra-high
+scan is worth its cost. It uses `teamplay-reviewer` with `fork_turns: none`, the
+complete locked specification, actual diff, and Lead verification evidence. It
+is advisory-only: it cannot approve, veto, repair, or replace Lead review, QA,
+or Gate. Ordinary runs do not create this reviewer.
+
 ## Installed roles
 
 | Role | Configuration | Purpose |
@@ -357,7 +371,7 @@ Gate child exists.
 | `teamplay-scout` | Luna max, read-only | Targeted repository discovery |
 | `teamplay-researcher` | Terra medium, read-only | Current primary-source verification |
 | `teamplay-plan-challenger` | Terra high, read-only | Optional pre-lock contradiction challenge |
-| `teamplay-reviewer` | Terra high, read-only | Optional advisory findings |
+| `teamplay-reviewer` | Terra high, fresh-context, read-only | Optional spec-first advisory findings |
 | `teamplay-qa` | Luna max | Optional evidence collection |
 
 No installed Teamplay role uses Sol, and no Gate role is installed.
@@ -367,13 +381,23 @@ No installed Teamplay role uses Sol, and no Gate role is installed.
 ```bash
 ./scripts/validate.sh --bundle
 ./scripts/install.sh
+./scripts/install.sh --check
 ./scripts/validate.sh --installed
 ```
 
 Validation parses every role, rejects all Sol child models, verifies Luna max,
 Terra xhigh ceilings, and Fast-only settings, renders representative assignments,
 checks capsule hashes and prompt pressure, classifies routing/lifecycle fixtures,
-and compares installed bytes.
+tests conflict-safe installation and allowlisted runtime inspection, and
+compares installed bytes.
+
+The installer never overwrites a modified local Teamplay file. It migrates only
+byte-exact 0.12.2 files, refuses symlinks and unknown obsolete-name files before
+target mutation, and provides a non-mutating `--check`. Runtime claims use native
+spawn metadata first and the privacy-limited
+[runtime inspector](skills/teamplay/scripts/inspect-agent-runtime.sh) only for
+fields the host omits. Requested read-only sandboxing is not reported as
+enforced unless the actual sandbox and permission profile are observed.
 
 Configured models prove intent only. Live runtime identity requires host or
 agent-registry evidence; otherwise report `NOT_PROVEN`.

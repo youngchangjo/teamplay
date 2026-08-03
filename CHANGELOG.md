@@ -2,6 +2,46 @@
 
 All notable changes to Teamplay are documented here.
 
+## 0.13.0 — 2026-08-03
+
+- Status: `complete`; installation, runtime route evidence, fresh-context
+  advisory review, and default specification ergonomics are hardened.
+- Preserve Luna max as the economic implementation default, prohibit every Sol
+  child, keep Terra implementation at zero allocation budget, and retain the
+  current main Lead's specification review, acceptance QA, and final Gate.
+- Replaced the overwrite-based installer with full destination preflight,
+  byte-exact 0.12.2 migration, modified/symlink/conflict refusal, exact-digest
+  obsolete-role removal, race recheck, idempotence, and non-mutating `--check`.
+- Added an allowlisted one-thread runtime inspector for role, model, effort,
+  tier, sandbox, permission, parent, and cwd evidence. Prompts and arbitrary
+  rollout payloads are excluded; missing/conflicting identity and incomplete
+  reviewer isolation fail closed.
+- Added an optional `fork_turns: none` Terra-high advisory audit for explicit
+  independent-review requests or recorded Critical reasons. It requires the
+  complete locked spec and actual diff and cannot approve, veto, repair, Gate,
+  or replace the Main Lead.
+- Reworked the ordinary Brief around objective, ownership, interfaces,
+  constraints, and verification while preserving requirement anchors,
+  acceptance, route, authority, and continuity controls.
+- Changed detailed policy loading from all-up-front to stage-progressive. The
+  static route-stage instruction surface is 21,377 characters versus 32,694
+  characters for the former all-required set, a 34.6% reduction; this is a
+  source-size observation, not a host token or billing claim.
+- Added clean/install/check/idempotence, exact migration, modified-file,
+  symlink, unknown-obsolete, prompt-leakage, missing-isolation, missing-model,
+  and conflicting-model fixtures.
+- Validation evidence: bundle and installed validation, safe installer check,
+  operational-hardening fixtures, ShellCheck, shell parsing, `git diff --check`,
+  and local `teamplay_deepseek` static/full entitlement validation pass.
+- Installed public Teamplay is synchronized to 0.13.0; local
+  `teamplay_deepseek` is synchronized to 0.4.1-local without changing its
+  OpenCode Free model or max reasoning.
+- Limitation and next gate: no live Luna, Fast, Terra, or fresh-review child was
+  spawned, so runtime identity and real review quality remain per-task evidence.
+  Open a new Codex task to refresh registered agent bytes. No commit, push,
+  merge, or release was performed.
+- Canonical specification: `docs/specs/TP-OPERATIONS-HARDENING-001-r1.md`.
+
 ## 0.12.2 — 2026-08-03
 
 - Status: `complete`; Sol-baseline economics, estimated-savings scenarios,

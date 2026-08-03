@@ -1,7 +1,7 @@
 ---
 name: teamplay-critical
 description: Run Teamplay with threat-, rollback-, and evidence-aware specification for security, privacy, auth, payment, migration, release, or irreversible-risk work. Use when the user invokes "$teamplay-critical" or requests a critical gate.
-version: 0.13.0
+version: 0.12.2
 ---
 
 # Teamplay Critical
@@ -19,8 +19,5 @@ requested_preset: critical
 - The current main Lead directly performs the critical Gate after final spec
   review and acceptance QA. Never create a Gate or Sol child.
 - The current main Lead owns final spec review, QA, Gate, and completion.
-- A fresh-context Terra advisory audit is optional when the Lead records a
-  material independent-review reason. It uses `fork_turns: none`, the complete
-  locked spec and actual diff, and never becomes a Gate or Sol route.
 - Lifecycle continuity never expands authority: reuse the same Coder only while
   the locked session key, ownership, and frozen contracts remain unchanged.

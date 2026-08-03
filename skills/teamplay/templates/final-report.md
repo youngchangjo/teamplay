@@ -122,6 +122,11 @@ Token diagnostics, when exposed by the host, are observations only:
 
 ## Advisory findings
 
+- Fresh-context audit selected: no | explicit user request | recorded Critical reason
+- Reviewer context: `fork_turns: none | N/A`
+- Complete locked spec and actual diff supplied: PASS | NOT_APPLICABLE | BLOCKED
+- Runtime role/model/effort/isolation evidence:
+- Advisory authority only; Lead Gate retained: yes
 - Finding and Lead adjudication:
 
 ## External and release state

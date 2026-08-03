@@ -177,6 +177,7 @@ Terra에는 배정 예산이 없습니다. “10% 미만이니 하나 써도 된
 git clone https://github.com/youngchangjo/teamplay.git
 cd teamplay
 ./scripts/install.sh
+./scripts/install.sh --check
 ```
 
 설치 후 Codex를 재시작하거나 새 작업을 열어 사용자 에이전트 등록을
@@ -292,6 +293,11 @@ stall 복구는 Terra나 Sol을 만들지 않고 결과를 미세 분할하지�
 [spec-contract.md](skills/teamplay/templates/spec-contract.md)로 Full Spec Lock을
 만듭니다.
 
+일반 Brief는 하나의 짧은 제어 header와 목표, 소유권, 인터페이스, 제약,
+검증의 다섯 구현 섹션으로 구성됩니다. 안정적인 요구사항 ID와 인수 증거는
+유지하지만 파일별 구현 순서는 지시하지 않습니다. 라우팅, 생명주기, 렌더링,
+런타임 identity, QA, 보고 계약은 해당 단계가 시작될 때 점진적으로 읽습니다.
+
 공유 자식 정책은
 [execution-policy.md](skills/teamplay/references/execution-policy.md)에 한 번만
 있습니다. 본체 Lead가 task capsule과 함께 렌더링합니다.
@@ -316,6 +322,13 @@ python3 skills/teamplay/scripts/render-task-packet.py \
 반복 실패하거나 잠긴 경계가 바뀌면 재계획합니다. 자식 테스트와 자문 보고는
 보조 증거일 뿐이며 Gate 자식은 없습니다.
 
+fresh-context 감사는 사용자가 독립 리뷰를 명시적으로 요청했거나 Critical
+실행에서 추가 Terra-high 검사의 비용 가치가 기록된 경우에만 선택할 수
+있습니다. `teamplay-reviewer`를 `fork_turns: none`으로 실행하고, 완전한 잠긴
+사양, 실제 diff, 본체 검증 증거를 전달합니다. 이 감사는 자문일 뿐 승인,
+거부권, 수리, 본체 리뷰·QA·Gate 대체 권한이 없습니다. 일반 실행에서는
+만들지 않습니다.
+
 ## 설치되는 역할
 
 | 역할 | 설정 | 목적 |
@@ -327,7 +340,7 @@ python3 skills/teamplay/scripts/render-task-packet.py \
 | `teamplay-scout` | Luna max, 읽기 전용 | 제한된 저장소 탐색 |
 | `teamplay-researcher` | Terra medium, 읽기 전용 | 최신 1차 출처 확인 |
 | `teamplay-plan-challenger` | Terra high, 읽기 전용 | 선택적 사양 모순 점검 |
-| `teamplay-reviewer` | Terra high, 읽기 전용 | 선택적 자문 finding |
+| `teamplay-reviewer` | Terra high, fresh-context, 읽기 전용 | 선택적 사양 기반 자문 finding |
 | `teamplay-qa` | Luna max | 선택적 증거 수집 |
 
 설치되는 Teamplay 역할에는 Sol도 Gate도 없습니다.
@@ -337,12 +350,24 @@ python3 skills/teamplay/scripts/render-task-packet.py \
 ```bash
 ./scripts/validate.sh --bundle
 ./scripts/install.sh
+./scripts/install.sh --check
 ./scripts/validate.sh --installed
 ```
 
 검증기는 모든 역할을 파싱하고 Sol 자식을 거부하며, 모든 Luna max, Terra
 xhigh 상한, Fast 전용 설정, 렌더링 hash, prompt pressure, 라우팅/생명주기
 fixture, 영문/한글 README 핵심 계약, 설치본 byte 일치를 확인합니다.
+
+설치기는 수정된 로컬 Teamplay 파일을 덮어쓰지 않습니다. 정확히 일치하는
+0.12.2 파일만 마이그레이션하고, symlink나 출처를 확인할 수 없는 과거 역할
+파일은 대상 변경 전에 거부합니다. `--check`는 설치본을 변경하지 않고
+byte 일치만 확인합니다.
+
+실제 경로 주장은 먼저 native spawn metadata를 사용하고, 호스트가 생략한
+필드만 개인정보 제한
+[runtime inspector](skills/teamplay/scripts/inspect-agent-runtime.sh)로 확인합니다.
+요청한 read-only 설정만으로 격리를 주장하지 않으며 실제 sandbox와 permission
+profile이 관측되어야 합니다.
 
 설정된 모델은 의도만 증명합니다. 실제 런타임 모델은 호스트나 에이전트
 레지스트리 증거가 필요하며, 없으면 `NOT_PROVEN`입니다.

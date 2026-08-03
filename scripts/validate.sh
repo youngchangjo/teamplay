@@ -1,8 +1,8 @@
 #!/bin/sh
 set -eu
 
-SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-PACKAGE_DIR=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)
+SCRIPT_DIR=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
+PACKAGE_DIR=$(CDPATH='' cd -- "$SCRIPT_DIR/.." && pwd)
 MODE=${1:-"--bundle"}
 
 case "$MODE" in
@@ -77,16 +77,17 @@ for name, data in agents.items():
         assert features.get("fast_mode") is not True, f"unexpected Fast feature: {name}"
 
 version = (package / "VERSION").read_text().strip()
-assert version == "0.12.2", version
+assert version == "0.13.0", version
 
 skill = (package / "skills/teamplay/SKILL.md").read_text()
 assert skill.startswith("---\nname: teamplay\n")
-assert "\nversion: 0.12.2\n---\n" in skill
+assert "\nversion: 0.13.0\n---\n" in skill
 for phrase in (
     "references/execution-policy.md",
     "references/session-continuity.md",
     "references/spec-contract.md",
     "references/routing.md",
+    "references/runtime-identity.md",
     "R0-R3 order",
     "code review",
     "acceptance QA",
@@ -107,6 +108,9 @@ for phrase in (
     "CODER_STALLED",
     "Lead directly finish",
     "Teamplay Run Report",
+    "Read contracts progressively",
+    "fork_turns: none",
+    "complete revision-locked",
 ):
     assert phrase in skill, f"core skill missing: {phrase}"
 
@@ -118,7 +122,7 @@ shortcut_presets = {
 for shortcut, preset in shortcut_presets.items():
     text = (package / f"skills/{shortcut}/SKILL.md").read_text()
     assert text.startswith(f"---\nname: {shortcut}\n")
-    assert "\nversion: 0.12.2\n---\n" in text
+    assert "\nversion: 0.13.0\n---\n" in text
     assert "../teamplay/SKILL.md" in text
     assert f"requested_preset: {preset}" in text
 
@@ -133,10 +137,13 @@ required_files = (
     "docs/specs/TP-COST-FIRST-001-r2.md",
     "docs/specs/TP-COST-FIRST-001-r3.md",
     "docs/specs/TP-CODER-LIFECYCLE-001-r2.md",
+    "docs/specs/TP-OPERATIONS-HARDENING-001-r1.md",
+    "scripts/legacy-0.12.2.sha256",
     "skills/teamplay/references/execution-policy.md",
     "skills/teamplay/references/session-continuity.md",
     "skills/teamplay/references/routing.md",
     "skills/teamplay/references/spec-contract.md",
+    "skills/teamplay/references/runtime-identity.md",
     "skills/teamplay/references/delivery-speed.md",
     "skills/teamplay/templates/spec-brief.md",
     "skills/teamplay/templates/spec-contract.md",
@@ -146,6 +153,10 @@ required_files = (
     "skills/teamplay/templates/qa-packet.md",
     "skills/teamplay/templates/final-report.md",
     "skills/teamplay/scripts/render-task-packet.py",
+    "skills/teamplay/scripts/inspect-agent-runtime.sh",
+    "tests/fixtures/install/teamplay-critical-0.12.2.md",
+    "tests/fixtures/install/teamplay-gate-obsolete.toml",
+    "tests/fixtures/install/teamplay-lead-obsolete.toml",
     "tests/routing-fixtures.md",
     "tests/routing-results-v0.10.md",
     "tests/routing-results-v0.11.md",
@@ -346,6 +357,9 @@ for phrase in (
     "NOT_MEANINGFUL_SAMPLE",
     "Lead final Gate",
     "Gate child used: no",
+    "Fresh-context audit selected",
+    "fork_turns: none",
+    "Advisory authority only; Lead Gate retained: yes",
 ):
     assert phrase in final_report, f"final report missing: {phrase}"
 
@@ -355,6 +369,57 @@ brief_template = (package / "skills/teamplay/templates/spec-brief.md").read_text
 full_template = (package / "skills/teamplay/templates/spec-contract.md").read_text()
 for text in (brief_template, full_template):
     assert "Must be empty before any mutating Coder starts" in text
+for phrase in (
+    "Compact five-part Spec Brief",
+    "## 1. Objective",
+    "## 2. Ownership",
+    "## 3. Interfaces",
+    "## 4. Constraints",
+    "## 5. Verification",
+    "Stable requirements",
+    "Requirement mapping and invalidation condition",
+):
+    assert phrase in brief_template, f"compact Brief missing: {phrase}"
+
+reviewer = agents["teamplay-reviewer"]
+for phrase in (
+    "complete revision-locked specification",
+    "only code or a prose goal summary",
+    "cannot approve, veto, repair, or Gate",
+    "current main Lead",
+):
+    assert phrase in reviewer["developer_instructions"], phrase
+review_packet = (package / "skills/teamplay/templates/review-packet.md").read_text()
+for phrase in (
+    "context_policy: fresh",
+    "fork_turns: none",
+    "complete_spec_available: true",
+    "runtime_identity_evidence",
+    "only a code diff or prose goal summary",
+    "never Lead approval",
+):
+    assert phrase in review_packet, f"review packet missing: {phrase}"
+
+legacy_manifest = (package / "scripts/legacy-0.12.2.sha256").read_text().splitlines()
+legacy_entries = {
+    parts[1]: parts[0]
+    for line in legacy_manifest
+    if line.strip()
+    for parts in [line.split(maxsplit=1)]
+}
+critical_legacy = package / "tests/fixtures/install/teamplay-critical-0.12.2.md"
+assert legacy_entries["skills/teamplay-critical/SKILL.md"] == hashlib.sha256(
+    critical_legacy.read_bytes()
+).hexdigest()
+installer_text = (package / "scripts/install.sh").read_text()
+for fixture_name, expected_var in (
+    ("teamplay-lead-obsolete.toml", "LEAD_OBSOLETE_SHA"),
+    ("teamplay-gate-obsolete.toml", "GATE_OBSOLETE_SHA"),
+):
+    digest = hashlib.sha256(
+        (package / "tests/fixtures/install" / fixture_name).read_bytes()
+    ).hexdigest()
+    assert f"{expected_var}={digest}" in installer_text
 
 delivery = (package / "skills/teamplay/references/delivery-speed.md").read_text()
 assert "Pool count, writer independence, and isolation are defined only" in delivery
@@ -459,6 +524,11 @@ for phrase in (
     "If no T1 or T2 exception",
     "## Why the Main Lead reviews, runs QA, and performs Gate",
     "Coder approving or rationalizing its own work",
+    "five implementation-facing",
+    "fork_turns: none",
+    "Ordinary runs do not create this reviewer",
+    "never overwrites a modified local Teamplay file",
+    "inspect-agent-runtime.sh",
 ):
     assert phrase in readme, f"README missing cost-first contract: {phrase}"
 for stale in ("$0.20/$0.02/$1.20", "`1/25` ratio", "Sol max |"):
@@ -466,7 +536,16 @@ for stale in ("$0.20/$0.02/$1.20", "`1/25` ratio", "Sol max |"):
 assert "`teamplay-gate`" not in readme
 assert not (package / "agents/teamplay-gate.toml").exists()
 installer = (package / "scripts/install.sh").read_text()
-assert 'rm -f "$TARGET_AGENTS_DIR/teamplay-gate.toml"' in installer
+for phrase in (
+    "--check",
+    "legacy-0.12.2.sha256",
+    "preflight failed; target was not changed",
+    "will not be replaced",
+    "classify_obsolete",
+    "REMOVED EXACT OBSOLETE",
+):
+    assert phrase in installer, f"installer missing safety contract: {phrase}"
+assert 'rm -f "$TARGET_AGENTS_DIR/teamplay-gate.toml"' not in installer
 
 readme_ko = (package / "README.ko.md").read_text()
 for phrase in (
@@ -482,6 +561,10 @@ for phrase in (
     "왜 본체가 리뷰·QA·Gate를 하나",
     "```mermaid",
     "설치되는 Teamplay 역할에는 Sol도 Gate도 없습니다",
+    "다섯 구현 섹션",
+    "fork_turns: none",
+    "수정된 로컬 Teamplay 파일을 덮어쓰지 않습니다",
+    "runtime inspector",
 ):
     assert phrase in readme_ko, f"Korean README missing contract: {phrase}"
 for role_name in expected:
@@ -531,3 +614,135 @@ print("Prompt pressure:", json.dumps(pressure, sort_keys=True))
 PY
 
 sh -n "$PACKAGE_DIR/scripts/install.sh"
+sh -n "$PACKAGE_DIR/skills/teamplay/scripts/inspect-agent-runtime.sh"
+
+TEST_ROOT=$(mktemp -d "${TMPDIR:-/tmp}/teamplay-validate.XXXXXX")
+cleanup_tests() {
+  case "$TEST_ROOT" in
+    "${TMPDIR:-/tmp}"/teamplay-validate.*) rm -rf "$TEST_ROOT" ;;
+    *) printf '%s\n' "ERROR: refusing cleanup of unexpected validation path" >&2 ;;
+  esac
+}
+trap cleanup_tests 0 HUP INT TERM
+
+snapshot_target() {
+  target=$1
+  find "$target" -type f -print | LC_ALL=C sort | while IFS= read -r file; do
+    printf '%s  %s\n' "$(shasum -a 256 "$file" | awk '{print $1}')" "${file#"$target"/}"
+  done
+}
+
+INSTALLER="$PACKAGE_DIR/scripts/install.sh"
+CLEAN_TARGET="$TEST_ROOT/clean"
+"$INSTALLER" --target-codex-dir "$CLEAN_TARGET" >/dev/null
+"$INSTALLER" --target-codex-dir "$CLEAN_TARGET" --check >/dev/null
+before=$(snapshot_target "$CLEAN_TARGET")
+"$INSTALLER" --target-codex-dir "$CLEAN_TARGET" >/dev/null
+after=$(snapshot_target "$CLEAN_TARGET")
+[ "$before" = "$after" ] || { printf '%s\n' "idempotent install changed files" >&2; exit 1; }
+
+MIGRATION_TARGET="$TEST_ROOT/migration"
+"$INSTALLER" --target-codex-dir "$MIGRATION_TARGET" >/dev/null
+cp "$PACKAGE_DIR/tests/fixtures/install/teamplay-critical-0.12.2.md" \
+  "$MIGRATION_TARGET/skills/teamplay-critical/SKILL.md"
+"$INSTALLER" --target-codex-dir "$MIGRATION_TARGET" >/dev/null
+cmp -s "$PACKAGE_DIR/skills/teamplay-critical/SKILL.md" \
+  "$MIGRATION_TARGET/skills/teamplay-critical/SKILL.md" || {
+  printf '%s\n' "exact 0.12.2 migration failed" >&2; exit 1;
+}
+
+CONFLICT_TARGET="$TEST_ROOT/conflict"
+"$INSTALLER" --target-codex-dir "$CONFLICT_TARGET" >/dev/null
+printf '%s\n' "user modification" >> "$CONFLICT_TARGET/agents/teamplay-coder.toml"
+before=$(snapshot_target "$CONFLICT_TARGET")
+if "$INSTALLER" --target-codex-dir "$CONFLICT_TARGET" >/dev/null 2>&1; then
+  printf '%s\n' "installer accepted a modified destination" >&2; exit 1
+fi
+after=$(snapshot_target "$CONFLICT_TARGET")
+[ "$before" = "$after" ] || { printf '%s\n' "conflict caused partial mutation" >&2; exit 1; }
+
+MISSING_TARGET="$TEST_ROOT/missing"
+if "$INSTALLER" --target-codex-dir "$MISSING_TARGET" --check >/dev/null 2>&1; then
+  printf '%s\n' "--check accepted a missing installation" >&2; exit 1
+fi
+[ ! -e "$MISSING_TARGET" ] || { printf '%s\n' "--check mutated missing target" >&2; exit 1; }
+
+SYMLINK_TARGET="$TEST_ROOT/symlink"
+mkdir -p "$SYMLINK_TARGET/agents"
+ln -s "$PACKAGE_DIR/agents/teamplay-coder.toml" "$SYMLINK_TARGET/agents/teamplay-coder.toml"
+if "$INSTALLER" --target-codex-dir "$SYMLINK_TARGET" >/dev/null 2>&1; then
+  printf '%s\n' "installer accepted a symlinked destination" >&2; exit 1
+fi
+[ ! -e "$SYMLINK_TARGET/skills" ] || { printf '%s\n' "symlink refusal partially installed skills" >&2; exit 1; }
+
+OBSOLETE_TARGET="$TEST_ROOT/obsolete"
+"$INSTALLER" --target-codex-dir "$OBSOLETE_TARGET" >/dev/null
+cp "$PACKAGE_DIR/tests/fixtures/install/teamplay-lead-obsolete.toml" "$OBSOLETE_TARGET/agents/teamplay-lead.toml"
+cp "$PACKAGE_DIR/tests/fixtures/install/teamplay-gate-obsolete.toml" "$OBSOLETE_TARGET/agents/teamplay-gate.toml"
+"$INSTALLER" --target-codex-dir "$OBSOLETE_TARGET" >/dev/null
+[ ! -e "$OBSOLETE_TARGET/agents/teamplay-lead.toml" ] || { printf '%s\n' "exact obsolete Lead remained" >&2; exit 1; }
+[ ! -e "$OBSOLETE_TARGET/agents/teamplay-gate.toml" ] || { printf '%s\n' "exact obsolete Gate remained" >&2; exit 1; }
+printf '%s\n' "user-owned gate" > "$OBSOLETE_TARGET/agents/teamplay-gate.toml"
+before=$(snapshot_target "$OBSOLETE_TARGET")
+if "$INSTALLER" --target-codex-dir "$OBSOLETE_TARGET" >/dev/null 2>&1; then
+  printf '%s\n' "installer removed an unknown obsolete-name file" >&2; exit 1
+fi
+after=$(snapshot_target "$OBSOLETE_TARGET")
+[ "$before" = "$after" ] || { printf '%s\n' "obsolete conflict caused partial mutation" >&2; exit 1; }
+
+INSPECTOR="$PACKAGE_DIR/skills/teamplay/scripts/inspect-agent-runtime.sh"
+SESSIONS="$TEST_ROOT/sessions"
+SESSION_DAY="$SESSIONS/2026/08/03"
+mkdir -p "$SESSION_DAY"
+GOOD_ID=11111111-1111-7111-8111-111111111111
+GOOD_FILE="$SESSION_DAY/rollout-2026-08-03T00-00-00-$GOOD_ID.jsonl"
+printf '%s\n' \
+  '{"type":"response_item","payload":{"prompt":"DO_NOT_LEAK_PROMPT"}}' \
+  "{\"type\":\"session_meta\",\"payload\":{\"id\":\"$GOOD_ID\",\"parent_thread_id\":\"00000000-0000-7000-8000-000000000000\",\"agent_role\":\"teamplay-reviewer\",\"agent_path\":\"/fixture\",\"model_provider\":\"openai\"}}" \
+  '{"type":"turn_context","payload":{"model":"gpt-5.6-terra","effort":"high","service_tier":"default","sandbox_policy":{"type":"read-only"},"permission_profile":{"type":"disabled"},"cwd":"/fixture"}}' \
+  > "$GOOD_FILE"
+runtime_output=$("$INSPECTOR" --sessions-dir "$SESSIONS" --expect-role teamplay-reviewer \
+  --expect-model gpt-5.6-terra --expect-effort high --expect-service-tier default \
+  --require-isolation "$GOOD_ID")
+printf '%s\n' "$runtime_output" | jq -e '
+  .agent_role == "teamplay-reviewer" and .model == "gpt-5.6-terra"
+  and .effort == "high" and .sandbox_policy_type == "read-only"
+  and .sandbox_observed and .permission_observed
+  and .sandbox_complete and .permission_complete
+' >/dev/null || { printf '%s\n' "runtime inspector returned wrong evidence" >&2; exit 1; }
+printf '%s\n' "$runtime_output" | grep -Fq DO_NOT_LEAK_PROMPT && {
+  printf '%s\n' "runtime inspector leaked prompt payload" >&2; exit 1;
+}
+
+NO_ISOLATION_ID=22222222-2222-7222-8222-222222222222
+printf '%s\n' \
+  "{\"type\":\"session_meta\",\"payload\":{\"id\":\"$NO_ISOLATION_ID\",\"agent_role\":\"teamplay-reviewer\"}}" \
+  '{"type":"turn_context","payload":{"model":"gpt-5.6-terra","effort":"high","cwd":"/fixture"}}' \
+  > "$SESSION_DAY/rollout-2026-08-03T00-00-01-$NO_ISOLATION_ID.jsonl"
+"$INSPECTOR" --sessions-dir "$SESSIONS" "$NO_ISOLATION_ID" | jq -e '
+  (.sandbox_observed == false) and (.permission_observed == false)
+' >/dev/null || { printf '%s\n' "unobserved isolation was not explicit" >&2; exit 1; }
+if "$INSPECTOR" --sessions-dir "$SESSIONS" --require-isolation "$NO_ISOLATION_ID" >/dev/null 2>&1; then
+  printf '%s\n' "isolation-required inspection accepted missing isolation" >&2; exit 1
+fi
+
+MISSING_MODEL_ID=33333333-3333-7333-8333-333333333333
+printf '%s\n' \
+  "{\"type\":\"session_meta\",\"payload\":{\"id\":\"$MISSING_MODEL_ID\",\"agent_role\":\"teamplay-reviewer\"}}" \
+  '{"type":"turn_context","payload":{"effort":"high","cwd":"/fixture"}}' \
+  > "$SESSION_DAY/rollout-2026-08-03T00-00-02-$MISSING_MODEL_ID.jsonl"
+if "$INSPECTOR" --sessions-dir "$SESSIONS" "$MISSING_MODEL_ID" >/dev/null 2>&1; then
+  printf '%s\n' "runtime inspector accepted a missing model" >&2; exit 1
+fi
+
+CONFLICT_MODEL_ID=44444444-4444-7444-8444-444444444444
+printf '%s\n' \
+  "{\"type\":\"session_meta\",\"payload\":{\"id\":\"$CONFLICT_MODEL_ID\",\"agent_role\":\"teamplay-reviewer\"}}" \
+  '{"type":"turn_context","payload":{"model":"gpt-5.6-terra","effort":"high","cwd":"/fixture"}}' \
+  '{"type":"turn_context","payload":{"model":"gpt-5.6-luna","effort":"high","cwd":"/fixture"}}' \
+  > "$SESSION_DAY/rollout-2026-08-03T00-00-03-$CONFLICT_MODEL_ID.jsonl"
+if "$INSPECTOR" --sessions-dir "$SESSIONS" "$CONFLICT_MODEL_ID" >/dev/null 2>&1; then
+  printf '%s\n' "runtime inspector accepted conflicting models" >&2; exit 1
+fi
+
+printf '%s\n' "Operational hardening fixtures: PASS"

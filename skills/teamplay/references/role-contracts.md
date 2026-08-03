@@ -49,8 +49,19 @@ No Teamplay role may select Sol at any effort.
 ## Reviewer
 
 Optional read-only scanner for spec-deviation and engineering-risk candidates.
-It does not approve the diff. The Lead independently inspects and adjudicates
-its findings.
+Use only for an explicit independent-audit request or a recorded Critical-run
+reason. Spawn with `fork_turns: none` so the audit has fresh context. Give it the
+complete revision-locked specification, assigned requirement IDs, actual diff,
+and Lead verification evidence; a code-only packet is invalid.
+
+Observe the actual Terra high route, sandbox policy, and permission profile.
+Requested `sandbox_mode = "read-only"` is not proof of enforced isolation. If
+the host broadens isolation, proceed only when hard isolation is unnecessary,
+the prompt forbids mutation, and the Lead captures and verifies exact before
+and after repository/artifact state. Otherwise stop the advisory lane.
+
+It does not approve, veto, repair, or Gate the diff. The Lead independently
+inspects and adjudicates its findings against the canonical specification.
 
 ## QA helper
 

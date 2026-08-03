@@ -40,3 +40,9 @@ Reports distinguish spawn, message/reuse, resume, redirect, restart, and close
 with the session key and host-observed identity or an honest limitation. Host
 token diagnostics keep input_cached, input_uncached, output, and reasoning
 separate; they never establish provider billing or cost.
+
+Use `scripts/inspect-agent-runtime.sh` only when public spawn/details metadata
+omits a claimed role, model, effort, tier, sandbox, or permission field. The
+helper must identify one exact thread and emits only allowlisted routing fields.
+For a read-only advisory claim, pass `--require-isolation`; null or unparseable
+sandbox/permission metadata cannot be treated as successful isolation.
