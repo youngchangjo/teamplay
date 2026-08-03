@@ -67,7 +67,12 @@
 | close |  |  |  |
 
 - Expected checkpoint and bounded wait condition:
+- Host status at each wait boundary:
+- Last activity timestamp and activity kinds:
+- `wait_agent` timeout treated as terminal failure: no
+- Redirect interruption mode: `interrupt:false` | forced with documented safety/authority reason
 - Progress observed at wait boundary:
+- Evidenced inactivity windows before takeover:
 - Stall verdict: `NONE | RECOVERED | CODER_STALLED`
 - Partial child work preserved or rejected against spec:
 

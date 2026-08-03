@@ -1,7 +1,7 @@
 ---
 name: teamplay
 description: Save implementation cost by defaulting specification-locked coding to GPT-5.6 Luna max while the current main Codex agent retains specification, integration, final review, acceptance QA, and final Gate judgment. Teamplay never selects Sol; Terra xhigh is the maximum child route and explicit or evidenced post-Luna exception only. Use when the user invokes Teamplay, asks for cost-efficient Luna implementation, requests optional Fast children, or wants bounded parallel implementation.
-version: 0.13.0
+version: 0.13.1
 ---
 
 # Teamplay
@@ -170,24 +170,35 @@ the full initial task.
 
 ### 7. Recover a stalled Coder without fragmenting the outcome
 
-For silence or no evidenced mutation, first wait one bounded window tied to a
-named expected checkpoint. At the boundary, inspect the actual repository diff
-and latest host-observed agent state. Do not repeatedly poll, spawn a duplicate,
-or infer failure from long reasoning alone.
+For apparent silence or no evidenced mutation, first inspect the Coder itself:
+host status, latest agent message, reasoning/tool/token activity, command state,
+and only then the repository diff. A `wait_agent` timeout means only that no
+terminal result arrived inside that wait; it is not silence, failure, or stall
+evidence. A running Coder with recent activity is making usable progress even
+when it has not mutated a file yet. Keep waiting on a named checkpoint with a
+minutes-scale window appropriate to the outcome. Do not reflexively poll,
+spawn a duplicate, or infer failure from pre-mutation analysis.
 
-If no usable progress exists, redirect the same agent ID once with the compact
-continuation packet. Request progress toward the original whole outcome or an
-explicit blocker by the next named boundary. An observable mutation checkpoint
-is allowed; component, file, command, and exact-edit packets are not.
+If the host shows no activity and no usable progress across the named inactivity
+window, send one non-interrupting (`interrupt:false`) redirect to the same agent
+ID with the compact continuation packet. Request progress toward the original
+whole outcome or an explicit blocker by the next named boundary. Never use
+`interrupt:true` merely because a wait timed out or no diff exists; reserve
+forced interruption for a known unsafe/wrong-direction action or explicit
+authority revocation. An observable mutation checkpoint is allowed; component,
+file, command, and exact-edit packets are not.
 
-If the redirect also yields no usable progress or blocker, record
-`CODER_STALLED`, stop the child's mutation authority, and let the current main
-Lead directly finish the same locked whole outcome. Preserve valid partial work
-and prevent a late child response from mutating concurrently. Before editing,
-the Lead reopens the canonical specification and records the applicable
-requirement and acceptance checklist. Lead takeover does not consume a repair
-slot and does not waive later spec review or QA. If safe completion is not
-possible under the locked contract, use `REPLAN` or `BLOCKED`.
+If the non-interrupting redirect also crosses a second evidenced inactivity
+window with no activity, progress, or blocker, record `CODER_STALLED`, stop the
+child's mutation authority, and let the current main Lead directly finish the
+same locked whole outcome. A host status of `running` plus recent activity
+forbids takeover. If activity visibility is unavailable, liveness is unproven:
+wait or ask the user rather than killing a possibly active Coder. Preserve valid
+partial work and prevent a late child response from mutating concurrently.
+Before editing, the Lead reopens the canonical specification and records the
+applicable requirement and acceptance checklist. Lead takeover does not consume
+a repair slot and does not waive later spec review or QA. If safe completion is
+not possible under the locked contract, use `REPLAN` or `BLOCKED`.
 
 ### 8. Integrate and review personally
 

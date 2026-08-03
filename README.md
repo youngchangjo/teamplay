@@ -295,13 +295,21 @@ task copy.
 For a silent or non-mutating Coder:
 
 ```text
-named bounded wait
--> inspect actual diff and agent state
--> one redirect to the same agent
+inspect Coder host status + recent message/reasoning/tool/token activity
+-> running with activity: keep waiting, even when diff is empty
+-> evidenced minutes-scale inactivity window
+-> one non-interrupting redirect to the same agent
+-> second evidenced inactivity window
 -> CODER_STALLED
 -> stop child mutation
 -> Lead finishes the unchanged whole outcome
 ```
+
+`wait_agent` timing out means only that no terminal result arrived during that
+wait. It is not a Coder failure. The Lead must never use `interrupt:true` merely
+because a diff is empty or a wait expired; active pre-mutation analysis is real
+progress. If the host cannot expose activity, the Lead waits or asks the user
+instead of killing a possibly active Coder.
 
 Stall recovery never creates a Terra or Sol Coder and never micro-splits the
 outcome. After Lead takeover, the Lead reopens the locked requirement checklist

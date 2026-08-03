@@ -105,22 +105,40 @@ is read back.
 
 ## LC-07: stalled Coder recovery and Lead takeover
 
-Silence or delayed mutation is not immediate failure. Before declaring a stall,
-the Lead records one expected checkpoint and one bounded wait condition, waits
-without reflexive polling, then inspects both the actual repository diff and the
-latest host-observed agent state.
+Silence or delayed mutation is not immediate failure. Diff is a delivery signal,
+not a liveness signal. Before declaring a stall, the Lead records one expected
+checkpoint and one minutes-scale inactivity window, then inspects the Coder's
+host status and recent agent-message, reasoning, tool-call/output, token, and
+command activity before inspecting the actual repository diff. Use the runtime
+inspector when rollout activity is available; it exposes timestamps and counts,
+not prompt content.
 
-If there is still no usable response or evidenced progress, send one redirect
-to the same agent ID. The redirect asks for progress toward the original whole
+`wait_agent` returning `timed_out: true` means only that the agent did not reach
+a terminal status during that call. It is never by itself evidence of silence,
+failure, or non-progress. `running` plus activity after the previous boundary is
+usable progress even when no file has changed. Pre-mutation repository reading,
+planning, and tool use count as activity. Set the wait window according to the
+whole outcome and prefer minutes over repeated 60-second polls.
+
+If there is still no activity, usable response, or evidenced progress across the
+named inactivity window, send one redirect to the same agent ID with
+`interrupt:false`. The redirect asks for progress toward the original whole
 outcome or an explicit blocker by the next named boundary. It may name an
 observable mutation checkpoint, but it must not prescribe keystrokes, split the
-outcome by file or component, or create another Coder.
+outcome by file or component, or create another Coder. `interrupt:true` is
+forbidden when the only evidence is a wait timeout or absent diff; forced
+interruption requires a known unsafe/wrong-direction action or explicit
+authority revocation.
 
-If the same Coder still produces neither usable progress nor a blocker, record
-`CODER_STALLED`, stop or close its mutation authority, and transfer the same
-locked whole outcome to the current main Lead. A late child response cannot
-mutate concurrently after takeover. Preserve and inspect any valid partial work
-rather than discarding it merely because the child stalled.
+If the same Coder crosses a second evidenced inactivity window after that
+non-interrupting redirect and still produces no activity, usable progress, or
+blocker, record `CODER_STALLED`, stop or close its mutation authority, and
+transfer the same locked whole outcome to the current main Lead. `running` with
+recent activity forbids takeover. When the host cannot expose activity, liveness
+is unproven; keep waiting or ask the user instead of closing a possibly active
+Coder. A late child response cannot mutate concurrently after takeover.
+Preserve and inspect valid partial work rather than discarding it merely because
+the child stalled.
 
 Lead takeover is an implementation-owner transition, not an automatic replan
 or repair slot. Before editing, the Lead reopens the canonical specification and

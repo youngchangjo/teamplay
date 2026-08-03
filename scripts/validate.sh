@@ -77,11 +77,11 @@ for name, data in agents.items():
         assert features.get("fast_mode") is not True, f"unexpected Fast feature: {name}"
 
 version = (package / "VERSION").read_text().strip()
-assert version == "0.13.0", version
+assert version == "0.13.1", version
 
 skill = (package / "skills/teamplay/SKILL.md").read_text()
 assert skill.startswith("---\nname: teamplay\n")
-assert "\nversion: 0.13.0\n---\n" in skill
+assert "\nversion: 0.13.1\n---\n" in skill
 for phrase in (
     "references/execution-policy.md",
     "references/session-continuity.md",
@@ -111,6 +111,9 @@ for phrase in (
     "Read contracts progressively",
     "fork_turns: none",
     "complete revision-locked",
+    "wait_agent",
+    "interrupt:false",
+    "`running` plus recent activity",
 ):
     assert phrase in skill, f"core skill missing: {phrase}"
 
@@ -122,7 +125,7 @@ shortcut_presets = {
 for shortcut, preset in shortcut_presets.items():
     text = (package / f"skills/{shortcut}/SKILL.md").read_text()
     assert text.startswith(f"---\nname: {shortcut}\n")
-    assert "\nversion: 0.13.0\n---\n" in text
+    assert "\nversion: 0.13.1\n---\n" in text
     assert "../teamplay/SKILL.md" in text
     assert f"requested_preset: {preset}" in text
 
@@ -137,6 +140,7 @@ required_files = (
     "docs/specs/TP-COST-FIRST-001-r2.md",
     "docs/specs/TP-COST-FIRST-001-r3.md",
     "docs/specs/TP-CODER-LIFECYCLE-001-r2.md",
+    "docs/specs/TP-CODER-LIFECYCLE-001-r3.md",
     "docs/specs/TP-OPERATIONS-HARDENING-001-r1.md",
     "scripts/legacy-0.12.2.sha256",
     "skills/teamplay/references/execution-policy.md",
@@ -170,6 +174,7 @@ required_files = (
     "tests/lifecycle-fixtures.md",
     "tests/lifecycle-results-v0.11.md",
     "tests/lifecycle-results-v0.11.1.md",
+    "tests/lifecycle-results-v0.13.1.md",
     "tests/baselines/prompt-pressure-v0.9.json",
     "tests/fixtures/task-standard.md",
     "tests/fixtures/task-fast.md",
@@ -340,6 +345,10 @@ for phrase in (
     "Closing a child to release capacity does not authorize a replacement",
     "locked whole outcome to the current main Lead",
     "must not prescribe keystrokes",
+    "wait_agent",
+    "interrupt:false",
+    "`running` with",
+    "liveness",
 ):
     assert phrase in continuity, f"continuity contract missing: {phrase}"
 
@@ -360,6 +369,9 @@ for phrase in (
     "Fresh-context audit selected",
     "fork_turns: none",
     "Advisory authority only; Lead Gate retained: yes",
+    "Host status at each wait boundary",
+    "wait_agent` timeout treated as terminal failure: no",
+    "Redirect interruption mode",
 ):
     assert phrase in final_report, f"final report missing: {phrase}"
 
@@ -401,16 +413,16 @@ for phrase in (
     assert phrase in review_packet, f"review packet missing: {phrase}"
 
 legacy_manifest = (package / "scripts/legacy-0.12.2.sha256").read_text().splitlines()
-legacy_entries = {
-    parts[1]: parts[0]
-    for line in legacy_manifest
-    if line.strip()
-    for parts in [line.split(maxsplit=1)]
-}
+legacy_entries = {}
+for line in legacy_manifest:
+    if not line.strip():
+        continue
+    digest, path = line.split(maxsplit=1)
+    legacy_entries.setdefault(path, set()).add(digest)
 critical_legacy = package / "tests/fixtures/install/teamplay-critical-0.12.2.md"
-assert legacy_entries["skills/teamplay-critical/SKILL.md"] == hashlib.sha256(
+assert hashlib.sha256(
     critical_legacy.read_bytes()
-).hexdigest()
+).hexdigest() in legacy_entries["skills/teamplay-critical/SKILL.md"]
 installer_text = (package / "scripts/install.sh").read_text()
 for fixture_name, expected_var in (
     ("teamplay-lead-obsolete.toml", "LEAD_OBSOLETE_SHA"),
@@ -467,7 +479,7 @@ for phrase in (
 lifecycle_fixtures = (package / "tests/lifecycle-fixtures.md").read_text()
 for fixture in (
     "LF-01", "LF-02", "LF-03", "LF-04", "LF-05", "LF-06", "LF-07",
-    "LF-08", "LF-09", "LF-10",
+    "LF-08", "LF-09", "LF-10", "LF-11", "LF-12", "LF-13",
 ):
     assert fixture in lifecycle_fixtures, f"lifecycle fixture missing: {fixture}"
 assert "spawn, wait, message/reuse, resume, redirect, restart," in lifecycle_fixtures
@@ -491,6 +503,17 @@ for phrase in (
     "Billing",
 ):
     assert phrase in lifecycle_results, f"lifecycle result missing: {phrase}"
+lifecycle_results_0131 = (
+    package / "tests/lifecycle-results-v0.13.1.md"
+).read_text()
+for phrase in (
+    "13/13 PASS",
+    "wait_agent",
+    "running/recent activity",
+    "interrupt:false",
+    "two evidenced inactivity windows",
+):
+    assert phrase in lifecycle_results_0131, f"0.13.1 lifecycle result missing: {phrase}"
 
 license_text = (package / "LICENSE").read_text()
 assert license_text.startswith("MIT License\n")
@@ -529,6 +552,9 @@ for phrase in (
     "Ordinary runs do not create this reviewer",
     "never overwrites a modified local Teamplay file",
     "inspect-agent-runtime.sh",
+    "wait_agent` timing out",
+    "interrupt:true",
+    "active pre-mutation analysis",
 ):
     assert phrase in readme, f"README missing cost-first contract: {phrase}"
 for stale in ("$0.20/$0.02/$1.20", "`1/25` ratio", "Sol max |"):
@@ -565,6 +591,9 @@ for phrase in (
     "fork_turns: none",
     "수정된 로컬 Teamplay 파일을 덮어쓰지 않습니다",
     "runtime inspector",
+    "`wait_agent` timeout",
+    "`interrupt:true`",
+    "파일 수정 전 분석",
 ):
     assert phrase in readme_ko, f"Korean README missing contract: {phrase}"
 for role_name in expected:
@@ -697,9 +726,12 @@ mkdir -p "$SESSION_DAY"
 GOOD_ID=11111111-1111-7111-8111-111111111111
 GOOD_FILE="$SESSION_DAY/rollout-2026-08-03T00-00-00-$GOOD_ID.jsonl"
 printf '%s\n' \
-  '{"type":"response_item","payload":{"prompt":"DO_NOT_LEAK_PROMPT"}}' \
-  "{\"type\":\"session_meta\",\"payload\":{\"id\":\"$GOOD_ID\",\"parent_thread_id\":\"00000000-0000-7000-8000-000000000000\",\"agent_role\":\"teamplay-reviewer\",\"agent_path\":\"/fixture\",\"model_provider\":\"openai\"}}" \
-  '{"type":"turn_context","payload":{"model":"gpt-5.6-terra","effort":"high","service_tier":"default","sandbox_policy":{"type":"read-only"},"permission_profile":{"type":"disabled"},"cwd":"/fixture"}}' \
+  '{"timestamp":"2026-08-03T00:00:00Z","type":"response_item","payload":{"prompt":"DO_NOT_LEAK_PROMPT"}}' \
+  "{\"timestamp\":\"2026-08-03T00:00:01Z\",\"type\":\"session_meta\",\"payload\":{\"id\":\"$GOOD_ID\",\"parent_thread_id\":\"00000000-0000-7000-8000-000000000000\",\"agent_role\":\"teamplay-reviewer\",\"agent_path\":\"/fixture\",\"model_provider\":\"openai\"}}" \
+  '{"timestamp":"2026-08-03T00:00:02Z","type":"turn_context","payload":{"model":"gpt-5.6-terra","effort":"high","service_tier":"default","sandbox_policy":{"type":"read-only"},"permission_profile":{"type":"disabled"},"cwd":"/fixture"}}' \
+  '{"timestamp":"2026-08-03T00:00:03Z","type":"response_item","payload":{"type":"reasoning","summary":"DO_NOT_LEAK_REASONING"}}' \
+  '{"timestamp":"2026-08-03T00:00:04Z","type":"response_item","payload":{"type":"custom_tool_call","input":"DO_NOT_LEAK_TOOL"}}' \
+  '{"timestamp":"2026-08-03T00:00:05Z","type":"event_msg","payload":{"type":"token_count","message":"DO_NOT_LEAK_TOKEN"}}' \
   > "$GOOD_FILE"
 runtime_output=$("$INSPECTOR" --sessions-dir "$SESSIONS" --expect-role teamplay-reviewer \
   --expect-model gpt-5.6-terra --expect-effort high --expect-service-tier default \
@@ -709,8 +741,11 @@ printf '%s\n' "$runtime_output" | jq -e '
   and .effort == "high" and .sandbox_policy_type == "read-only"
   and .sandbox_observed and .permission_observed
   and .sandbox_complete and .permission_complete
+  and .last_activity_at == "2026-08-03T00:00:05Z"
+  and .activity_event_count == 3 and .reasoning_event_count == 1
+  and .tool_call_count == 1 and .token_event_count == 1
 ' >/dev/null || { printf '%s\n' "runtime inspector returned wrong evidence" >&2; exit 1; }
-printf '%s\n' "$runtime_output" | grep -Fq DO_NOT_LEAK_PROMPT && {
+printf '%s\n' "$runtime_output" | grep -Eq 'DO_NOT_LEAK_(PROMPT|REASONING|TOOL|TOKEN)' && {
   printf '%s\n' "runtime inspector leaked prompt payload" >&2; exit 1;
 }
 

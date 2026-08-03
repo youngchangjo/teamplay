@@ -15,7 +15,8 @@ Options:
   --expect-service-tier TIER  Require an observed exact service tier.
   --require-isolation         Require observed read-only sandbox and permission type.
 
-The output is one compact JSON object containing only allowlisted routing fields.
+The output is one compact JSON object containing only allowlisted routing and
+liveness fields. Prompt, message, reasoning, and tool payload text is excluded.
 EOF
 }
 
@@ -111,6 +112,18 @@ if ! RUNTIME_OUTPUT=$(jq -ce -s --arg expected_thread_id "$THREAD_ID" '
 
   [ .[] | select(.type == "session_meta") | .payload ] as $sessions
   | [ .[] | select(.type == "turn_context") | .payload ] as $turns
+  | [ .[]
+      | .payload.type? as $payload_type
+      | select(
+          (.type == "event_msg" and
+            (["agent_message", "token_count"] | index($payload_type)))
+          or
+          (.type == "response_item" and
+            (["reasoning", "custom_tool_call", "custom_tool_call_output"] |
+              index($payload_type)))
+        )
+      | {timestamp, kind: .payload.type}
+    ] as $activities
   | if ($sessions | length) != 1 then error("missing or ambiguous session metadata")
     elif ($turns | length) == 0 then error("missing turn context")
     else
@@ -152,7 +165,14 @@ if ! RUNTIME_OUTPUT=$(jq -ce -s --arg expected_thread_id "$THREAD_ID" '
               permission_profile_type: $permission,
               permission_observed: ($permission != null),
               permission_complete: all($permissions[]; . != null),
-              cwd: $cwds[0]
+              cwd: $cwds[0],
+              last_activity_at: (($activities | map(.timestamp) | max) // null),
+              activity_event_count: ($activities | length),
+              agent_message_count: ([ $activities[] | select(.kind == "agent_message") ] | length),
+              reasoning_event_count: ([ $activities[] | select(.kind == "reasoning") ] | length),
+              tool_call_count: ([ $activities[] | select(.kind == "custom_tool_call") ] | length),
+              tool_output_count: ([ $activities[] | select(.kind == "custom_tool_call_output") ] | length),
+              token_event_count: ([ $activities[] | select(.kind == "token_count") ] | length)
             }
         end
     end

@@ -1,7 +1,7 @@
 ---
 name: teamplay-fast
 description: Run Teamplay with child-local Fast when an authorized, spec-ready implementation qualifies for GPT-5.6 Luna max. Use when the user invokes "$teamplay-fast" or requests accelerated Luna children without changing the Lead.
-version: 0.13.0
+version: 0.13.1
 ---
 
 # Teamplay Fast

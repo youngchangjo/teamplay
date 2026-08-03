@@ -2,6 +2,29 @@
 
 All notable changes to Teamplay are documented here.
 
+## 0.13.1 — 2026-08-03
+
+- Status: `complete`; live Coder liveness misclassification is corrected and the
+  bundle, installer, installed copy, and static regressions pass.
+- Root cause: two Luna max Coders were closed as `CODER_STALLED` while both were
+  still host-`running` with recent reasoning and tool activity. A 60-second wait
+  timeout and empty diff were incorrectly treated as failure, and
+  `interrupt:true` aborted each active turn before another short wait.
+- Lead now checks host status plus recent message, reasoning, tool, token, and
+  command activity before diff. Wait timeout is explicitly non-terminal;
+  running/recent activity requires continued minutes-scale waiting.
+- Stall redirects are non-interrupting. Forced interruption is restricted to a
+  known unsafe/wrong-direction action or explicit authority revocation.
+- Lead takeover requires two evidenced inactivity windows. If activity cannot be
+  observed, liveness fails closed to waiting or user direction.
+- Runtime inspection now emits only allowlisted liveness timestamps/counts in
+  addition to routing identity; prompt and event payload text remain excluded.
+- Added LF-11..LF-13 and revision-3 lifecycle specification.
+- Validation evidence: bundle/installed validation, safe migration and
+  idempotence fixtures, runtime liveness fixture, shell parsing, and
+  `git diff --check` pass.
+- Canonical specification: `docs/specs/TP-CODER-LIFECYCLE-001-r3.md`.
+
 ## 0.13.0 — 2026-08-03
 
 - Status: `complete`; installation, runtime route evidence, fresh-context

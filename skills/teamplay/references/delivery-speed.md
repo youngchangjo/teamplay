@@ -22,10 +22,12 @@ a ratio is quoted or derived. Do not embed current prices in routing logic.
 - Do not start a new mutating wave faster than the Lead can integrate it.
 - Keep implementation, coupled checks, Lead feedback, and in-spec repairs on
   the same Coder identity while the session key is unchanged.
-- Use message/reuse or resume for an unchanged key. Redirect once for bounded
-  non-progress after waiting for a named result or host condition and inspecting
-  the actual diff and agent state; do not reflexively poll or duplicate active
-  work.
+- Use message/reuse or resume for an unchanged key. Before redirecting, inspect
+  host status plus recent agent-message, reasoning, tool, token, and command
+  activity; diff alone is not liveness. A wait timeout is not failure. Prefer a
+  minutes-scale wait appropriate to the outcome over repeated 60-second polls.
+- Redirect once only after an evidenced inactivity window, and send it with
+  `interrupt:false`. Never abort active reasoning merely because no diff exists.
 - Closing a child may free a concurrency slot, but it does not create a fresh
   assignment boundary. Retain and resume the same agent ID for in-spec repair.
 - If the redirect still yields no usable progress or blocker, record

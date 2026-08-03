@@ -1,4 +1,4 @@
-# Teamplay 0.11.1 lifecycle fixtures
+# Teamplay lifecycle fixtures
 
 These static fixtures test lifecycle semantics separately from model routing and
 from runtime or billing proof.
@@ -71,3 +71,24 @@ separate spec-conformance review, engineering-integrity review, and acceptance
 QA against the real artifact.
 Expected: Lead authorship and passing implementation checks are not accepted as
 review or QA evidence by themselves.
+
+## LF-11 — Wait timeout while Coder is active
+
+`wait_agent` times out after 60 seconds with no terminal result and the diff is
+empty. The Coder rollout shows recent reasoning, tool calls, token events, and
+host status `running`. Expected: active progress; continue waiting. No redirect,
+interrupt, stall verdict, close, or Lead takeover.
+
+## LF-12 — Non-interrupting liveness redirect
+
+The Coder has no activity, response, blocker, or diff across a named
+minutes-scale inactivity window. Expected: one same-ID redirect with
+`interrupt:false`. A wait timeout or empty diff by itself does not satisfy this
+fixture.
+
+## LF-13 — Takeover requires two evidenced inactivity windows
+
+After LF-12, a second named inactivity window also has no activity, progress, or
+blocker. Expected: `CODER_STALLED` and Lead takeover are allowed. If status is
+`running` with recent activity, or activity visibility is unavailable, takeover
+is forbidden; wait or ask the user.

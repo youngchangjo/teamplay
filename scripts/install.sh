@@ -6,7 +6,7 @@ usage() {
 Usage: scripts/install.sh [--check] [--target-codex-dir PATH]
 
 Install Teamplay without overwriting modified local files. Normal mode installs
-missing files and migrates only byte-exact 0.12.2 files. --check verifies that
+missing files and migrates only byte-exact known prior-release files. --check verifies that
 the installed copy is byte-identical without changing the target.
 EOF
 }
@@ -115,9 +115,13 @@ for shortcut in teamplay-fast teamplay-deep teamplay-critical; do
   append_inventory "$PACKAGE_DIR/LICENSE" "skills/$shortcut/LICENSE" 0644
 done
 
-legacy_digest_for() {
+legacy_digest_matches() {
   relative_path=$1
-  awk -v path="$relative_path" '$2 == path { print $1; exit }' "$LEGACY_MANIFEST"
+  actual_digest=$2
+  awk -v path="$relative_path" -v digest="$actual_digest" '
+    $2 == path && $1 == digest { found = 1 }
+    END { exit(found ? 0 : 1) }
+  ' "$LEGACY_MANIFEST"
 }
 
 classify_destination() {
@@ -132,8 +136,7 @@ classify_destination() {
     printf '%s\n' current
   else
     actual_digest=$(sha256_file "$destination")
-    legacy_digest=$(legacy_digest_for "$relative_path")
-    if [ -n "$legacy_digest" ] && [ "$actual_digest" = "$legacy_digest" ]; then
+    if [ -n "$actual_digest" ] && legacy_digest_matches "$relative_path" "$actual_digest"; then
       printf '%s\n' legacy
     elif [ -z "$actual_digest" ]; then
       printf '%s\n' unreadable
@@ -212,7 +215,7 @@ done
 [ "$PREFLIGHT_FAILED" -eq 0 ] || fail "preflight failed; target was not changed"
 
 if [ "$CHECK_ONLY" -eq 1 ]; then
-  printf '%s\n' "Teamplay check passed: installed files exactly match 0.13.0"
+  printf '%s\n' "Teamplay check passed: installed files exactly match 0.13.1"
   exit 0
 fi
 
