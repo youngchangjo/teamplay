@@ -120,6 +120,13 @@ usable progress even when no file has changed. Pre-mutation repository reading,
 planning, and tool use count as activity. Set the wait window according to the
 whole outcome and prefer minutes over repeated 60-second polls.
 
+Waiting itself consumes no model tokens; token events occur only when the model
+generates. Batch repeated waits inside one command loop so timeouts do not
+multiply wake-ups, and treat a short timeout plus a running Coder as a reason to
+wait again rather than to make a decision. Measured evidence: coordination for a
+four-Coder run was about 1-2% of the total, and an early takeover's dominant
+cost was the Lead implementing at its own rate, not the Coder's wasted tokens.
+
 If there is still no activity, usable response, or evidenced progress across the
 named inactivity window, send one redirect to the same agent ID with
 `interrupt:false`. The redirect asks for progress toward the original whole

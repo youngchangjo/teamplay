@@ -77,11 +77,11 @@ for name, data in agents.items():
         assert features.get("fast_mode") is not True, f"unexpected Fast feature: {name}"
 
 version = (package / "VERSION").read_text().strip()
-assert version == "0.13.1", version
+assert version == "0.13.2", version
 
 skill = (package / "skills/teamplay/SKILL.md").read_text()
 assert skill.startswith("---\nname: teamplay\n")
-assert "\nversion: 0.13.1\n---\n" in skill
+assert "\nversion: 0.13.2\n---\n" in skill
 for phrase in (
     "references/execution-policy.md",
     "references/session-continuity.md",
@@ -114,6 +114,7 @@ for phrase in (
     "wait_agent",
     "interrupt:false",
     "`running` plus recent activity",
+    "Waiting itself consumes no model tokens",
 ):
     assert phrase in skill, f"core skill missing: {phrase}"
 
@@ -125,7 +126,7 @@ shortcut_presets = {
 for shortcut, preset in shortcut_presets.items():
     text = (package / f"skills/{shortcut}/SKILL.md").read_text()
     assert text.startswith(f"---\nname: {shortcut}\n")
-    assert "\nversion: 0.13.1\n---\n" in text
+    assert "\nversion: 0.13.2\n---\n" in text
     assert "../teamplay/SKILL.md" in text
     assert f"requested_preset: {preset}" in text
 
@@ -175,6 +176,7 @@ required_files = (
     "tests/lifecycle-results-v0.11.md",
     "tests/lifecycle-results-v0.11.1.md",
     "tests/lifecycle-results-v0.13.1.md",
+    "tests/measured-results-v0.13.2.md",
     "tests/baselines/prompt-pressure-v0.9.json",
     "tests/fixtures/task-standard.md",
     "tests/fixtures/task-fast.md",
@@ -349,6 +351,8 @@ for phrase in (
     "interrupt:false",
     "`running` with",
     "liveness",
+    "Waiting itself consumes no model tokens",
+    "Batch repeated waits",
 ):
     assert phrase in continuity, f"continuity contract missing: {phrase}"
 
@@ -515,6 +519,18 @@ for phrase in (
 ):
     assert phrase in lifecycle_results_0131, f"0.13.1 lifecycle result missing: {phrase}"
 
+measured_results_0132 = (
+    package / "tests/measured-results-v0.13.2.md"
+).read_text()
+for phrase in (
+    "~76%",
+    "$30.14 / 753 credits",
+    "$7.34 / 184 credits",
+    "Full-run coordination",
+    "not a billing surface",
+):
+    assert phrase in measured_results_0132, f"measured result missing: {phrase}"
+
 license_text = (package / "LICENSE").read_text()
 assert license_text.startswith("MIT License\n")
 assert "Copyright (c) 2026 Young Changjo" in license_text
@@ -555,6 +571,7 @@ for phrase in (
     "wait_agent` timing out",
     "interrupt:true",
     "active pre-mutation analysis",
+    "Measured effectiveness (one live run)",
 ):
     assert phrase in readme, f"README missing cost-first contract: {phrase}"
 for stale in ("$0.20/$0.02/$1.20", "`1/25` ratio", "Sol max |"):
@@ -594,6 +611,7 @@ for phrase in (
     "`wait_agent` timeout",
     "`interrupt:true`",
     "파일 수정 전 분석",
+    "실측 효과 (라이브 실행 1회)",
 ):
     assert phrase in readme_ko, f"Korean README missing contract: {phrase}"
 for role_name in expected:

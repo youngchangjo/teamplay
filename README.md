@@ -129,6 +129,17 @@ input/cached/output tokens, reasoning and retry behavior, context reuse, the
 amount of direct Lead implementation, and any Fast premium. Use host-observed
 usage and an independently verified billing surface for an actual result.
 
+### Measured effectiveness (one live run)
+
+A 2026-08-03 Itssle Link run compared adjacent NATIVE slices: the Lead
+implementing two slices directly (Sol rates) cost $30.14 / 753 credits, while
+two comparable slices completed by Luna max plus Lead orchestration cost
+$7.34 / 184 credits — about **76% less** on both API dollars and Codex credits.
+Waiting and checking cost $1.26 for the whole four-Coder run (63 waits), about
+1-2% of the total; waiting itself consumes no tokens. One run with
+comparable-but-not-identical slices and volatile rates: measured evidence, not
+a billing claim.
+
 ## Model policy
 
 ### Default: Luna max

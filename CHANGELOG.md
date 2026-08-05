@@ -2,6 +2,33 @@
 
 All notable changes to Teamplay are documented here.
 
+## 0.13.2 — 2026-08-03
+
+- Status: `complete`; first measured-effectiveness evidence and two
+  data-backed lifecycle refinements are bundled and validated.
+- Measured from host logs of the 2026-08-03 Itssle Link NATIVE run: two slices
+  implemented directly by the Lead at Sol rates cost $30.14 / 753 credits,
+  while two comparable slices completed by Luna max plus orchestration cost
+  $7.34 / 184 credits — about 76% less on both API dollars and Codex credits.
+- Waiting itself consumes no model tokens; only wake-up steps that generate
+  messages or tool calls are billed. Repeated `wait_agent` calls inside one
+  exec loop add no per-call cost. Measured coordination for the four-Coder run
+  (63 waits) was $1.26 / 31 credits, roughly 1-2% of the total.
+- Data-backed lifecycle refinement: an avoidable early takeover's dominant cost
+  is the Lead implementing at its own rate, not the Coder's wasted tokens; the
+  observed stall bug cost about $0.40 in lost Luna tokens and about $23 in
+  forced Lead implementation.
+- README and README.ko now carry a brief measured-effectiveness section next to
+  the existing estimate tables, with one-run, similar-slice, volatile-rate
+  limits stated. Added measured-results-v0.13.2 evidence file.
+- Validation evidence: bundle/installed validation, installer migration and
+  idempotence fixtures, shell parsing, `git diff --check`, and installed-byte
+  comparison pass.
+- Limitation and next gate: single-run evidence with comparable-but-not-identical
+  slices; host counters are not a billing surface. A second independent run or
+  a billing-surface readback would strengthen the measurement. No push, merge,
+  or release was performed.
+
 ## 0.13.1 — 2026-08-03
 
 - Status: `complete`; live Coder liveness misclassification is corrected and the

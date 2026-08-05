@@ -1,7 +1,7 @@
 ---
 name: teamplay
 description: Save implementation cost by defaulting specification-locked coding to GPT-5.6 Luna max while the current main Codex agent retains specification, integration, final review, acceptance QA, and final Gate judgment. Teamplay never selects Sol; Terra xhigh is the maximum child route and explicit or evidenced post-Luna exception only. Use when the user invokes Teamplay, asks for cost-efficient Luna implementation, requests optional Fast children, or wants bounded parallel implementation.
-version: 0.13.1
+version: 0.13.2
 ---
 
 # Teamplay
@@ -178,6 +178,13 @@ evidence. A running Coder with recent activity is making usable progress even
 when it has not mutated a file yet. Keep waiting on a named checkpoint with a
 minutes-scale window appropriate to the outcome. Do not reflexively poll,
 spawn a duplicate, or infer failure from pre-mutation analysis.
+
+Waiting itself consumes no model tokens; only wake-up steps that generate
+messages or tool calls are billed, and repeated `wait_agent` calls inside one
+exec loop add no per-call cost. Measured coordination was about 1-2% of a
+four-Coder run's total, while an avoidable early takeover made the Lead
+implement the same work at its full rate — the dominant cost of the observed
+stall bug.
 
 If the host shows no activity and no usable progress across the named inactivity
 window, send one non-interrupting (`interrupt:false`) redirect to the same agent

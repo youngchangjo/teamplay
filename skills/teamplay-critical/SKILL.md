@@ -1,7 +1,7 @@
 ---
 name: teamplay-critical
 description: Run Teamplay with threat-, rollback-, and evidence-aware specification for security, privacy, auth, payment, migration, release, or irreversible-risk work. Use when the user invokes "$teamplay-critical" or requests a critical gate.
-version: 0.13.1
+version: 0.13.2
 ---
 
 # Teamplay Critical

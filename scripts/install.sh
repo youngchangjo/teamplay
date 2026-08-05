@@ -215,7 +215,7 @@ done
 [ "$PREFLIGHT_FAILED" -eq 0 ] || fail "preflight failed; target was not changed"
 
 if [ "$CHECK_ONLY" -eq 1 ]; then
-  printf '%s\n' "Teamplay check passed: installed files exactly match 0.13.1"
+  printf '%s\n' "Teamplay check passed: installed files exactly match 0.13.2"
   exit 0
 fi
 
